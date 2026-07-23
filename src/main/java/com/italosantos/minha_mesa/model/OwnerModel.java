@@ -18,6 +18,9 @@ public class OwnerModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @OneToOne(mappedBy = "ownerModel")
+    private RestaurantModel restaurantModel;
+
     @OneToOne
     @JoinColumn(name = "user_id")
     private UserModel userModel;
