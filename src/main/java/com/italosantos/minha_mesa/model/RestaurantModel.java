@@ -31,6 +31,9 @@ public class RestaurantModel {
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
+    @Column(name = "address", nullable = false)
+    private String address;
+
     @OneToMany(mappedBy = "restaurantModel")
     private List<WorkingScheduleModel> workingScheduleModels = new ArrayList<>();
 

@@ -5,7 +5,7 @@ import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.service.AuthService;
-import com.italosantos.minha_mesa.service.UserMapper;
+import com.italosantos.minha_mesa.mapper.UserMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

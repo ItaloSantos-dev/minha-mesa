@@ -1,4 +1,4 @@
-package com.italosantos.minha_mesa.service;
+package com.italosantos.minha_mesa.mapper;
 
 import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
