@@ -1,5 +1,6 @@
 package com.italosantos.minha_mesa.service;
 
+import com.italosantos.minha_mesa.dto.exception.UserAlreadyIsOwnerException;
 import com.italosantos.minha_mesa.dto.owner.CreateOwnerDTO;
 import com.italosantos.minha_mesa.mapper.OwnerMapper;
 import com.italosantos.minha_mesa.model.OwnerModel;
@@ -26,7 +27,7 @@ public class OwnerService {
     @Transactional
     public OwnerModel createOwner(UserModel userModel, CreateOwnerDTO createOwnerDTO){
         if (userModel.getRole()== UserRole.OWNER)
-            throw new RuntimeException("User ja é um OWNER");
+            throw new UserAlreadyIsOwnerException();
         OwnerModel ownerModel = this.ownerMapper.createToModel(userModel, createOwnerDTO);
         this.ownerRepository.save(ownerModel);
         userModel.setRole(UserRole.OWNER);
