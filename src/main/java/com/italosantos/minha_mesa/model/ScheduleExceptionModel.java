@@ -18,6 +18,10 @@ public class ScheduleExceptionModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private RestaurantModel restaurantModel;
+
     @Column(name = "date", nullable = false)
     private LocalDate date;
 

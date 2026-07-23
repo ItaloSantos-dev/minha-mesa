@@ -18,6 +18,9 @@ public class RestaurantModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @OneToMany(mappedBy = "restaurantModel")
+    private List<ScheduleExceptionModel> scheduleExceptionModelList = new ArrayList<>();
+
     @OneToOne
     @JoinColumn(name = "owner_id")
     private OwnerModel ownerModel;
