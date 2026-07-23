@@ -1,6 +1,7 @@
 package com.italosantos.minha_mesa.service;
 
-import com.italosantos.minha_mesa.dto.exception.UserAlreadyIsOwnerException;
+import com.italosantos.minha_mesa.exception.RestaurantNotFoundException;
+import com.italosantos.minha_mesa.exception.UserAlreadyIsOwnerException;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
 import com.italosantos.minha_mesa.model.OwnerModel;
@@ -31,5 +32,10 @@ public class RestaurantService {
         OwnerModel ownerModel = this.ownerService.createOwner(userModel, createRestaurantRequestDTO.ownerData());
         RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel);
         return this.restaurantRepository.save(restaurantModel);
+    }
+
+    public RestaurantModel getRestaurantById(Integer id){
+        return this.restaurantRepository.findById(id)
+                .orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 }

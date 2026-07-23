@@ -1,6 +1,6 @@
 package com.italosantos.minha_mesa.service;
 
-import com.italosantos.minha_mesa.dto.exception.UserAlreadyIsOwnerException;
+import com.italosantos.minha_mesa.exception.UserAlreadyIsOwnerException;
 import com.italosantos.minha_mesa.dto.owner.CreateOwnerDTO;
 import com.italosantos.minha_mesa.mapper.OwnerMapper;
 import com.italosantos.minha_mesa.model.OwnerModel;

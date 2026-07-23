@@ -8,10 +8,7 @@ import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.service.RestaurantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("restaurant")
@@ -22,6 +19,12 @@ public class RestaurantController {
     public RestaurantController(RestaurantMapper restaurantMapper, RestaurantService restaurantService) {
         this.restaurantMapper = restaurantMapper;
         this.restaurantService = restaurantService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RestaurantResponseDTO> getRestaurantBydId(@PathVariable Integer id){
+        RestaurantModel restaurantModel = this.restaurantService.getRestaurantById(id);
+        return ResponseEntity.ok(this.restaurantMapper.modelToResponse(restaurantModel));
     }
 
     @PostMapping
