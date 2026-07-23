@@ -19,4 +19,6 @@ public enum DayOfWeek {
     String getDayOfWeek(){
         return this.dayOfWeek;
     }
+
+
 }

@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
-@RequestMapping("restaurant")
+@RequestMapping("restaurants")
 public class RestaurantController {
     private final RestaurantMapper restaurantMapper;
     private final RestaurantService restaurantService;
@@ -33,6 +35,6 @@ public class RestaurantController {
             @RequestBody CreateRestaurantRequestDTO createRestaurantRequestDTO
             ){
         RestaurantModel restaurantModel = this.restaurantService.createRestaurant(userModel, createRestaurantRequestDTO);
-        return ResponseEntity.ok(this.restaurantMapper.modelToResponse(restaurantModel));
+        return ResponseEntity.created(URI.create("/restaurants" + restaurantModel.getId())).body(this.restaurantMapper.modelToResponse(restaurantModel));
     }
 }
