@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TableRepository extends JpaRepository<TableModel, Integer> {
+    boolean existsByNumberAndRestaurantModelOwnerModelId(Integer number, Integer ownerId);
 }

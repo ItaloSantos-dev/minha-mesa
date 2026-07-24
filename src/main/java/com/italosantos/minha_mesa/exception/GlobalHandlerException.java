@@ -27,4 +27,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> hanlderNotPermitedException(NotPermitedException exception){
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage()));
     }
+
+    @ExceptionHandler(AlreadyExistTableWithNumberException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistTableWithNumberException(AlreadyExistTableWithNumberException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
 }
