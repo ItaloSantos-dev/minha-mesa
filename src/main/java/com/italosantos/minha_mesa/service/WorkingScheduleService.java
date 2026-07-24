@@ -2,6 +2,8 @@ package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.working_schedule.CreateWorkingScheduleResquestDTO;
 import com.italosantos.minha_mesa.exception.AlreadyExistsThisWorkingScheduleException;
+import com.italosantos.minha_mesa.exception.NotPermitedException;
+import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
 import com.italosantos.minha_mesa.exception.RestaurantNotFoundException;
 import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.RestaurantModel;
@@ -37,5 +39,14 @@ public class WorkingScheduleService {
 
         WorkingScheduleModel workingScheduleModel = this.workingScheduleMapper.createToModel(createWorkingScheduleResquestDTO, restaurantModel);
         return this.workingScheduleRepository.save(workingScheduleModel);
+    }
+
+    public void deleteWorkingScheduleById(UserModel userModel, Integer id){
+        WorkingScheduleModel workingScheduleModel = this.workingScheduleRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        if (! workingScheduleModel.getRestaurantModel().getOwnerModel().getUserModel().getId().equals(userModel.getId()))
+            throw new NotPermitedException();
+        this.workingScheduleRepository.deleteById(id);
+
     }
 }

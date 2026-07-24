@@ -17,4 +17,14 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerRestaurantNotFoundException(RestaurantNotFoundException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage()));
     }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> hanlderResourceNotFoundException(ResourceNotFoundException exception){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage()));
+    }
+
+    @ExceptionHandler(NotPermitedException.class)
+    public ResponseEntity<ExceptionResponse> hanlderNotPermitedException(NotPermitedException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage()));
+    }
 }
