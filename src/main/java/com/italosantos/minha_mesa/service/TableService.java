@@ -47,4 +47,9 @@ public class TableService {
         tableModel.setActive(false);
         this.tableRepository.save(tableModel);
     }
+
+    public TableModel getTableById(Integer id){
+        return this.tableRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+    }
 }

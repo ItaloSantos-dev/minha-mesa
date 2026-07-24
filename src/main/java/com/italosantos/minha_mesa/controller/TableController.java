@@ -23,6 +23,12 @@ public class TableController {
         this.tableMapper = tableMapper;
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<TableResponseDTO> getTableById(@PathVariable Integer id){
+        TableModel tableModel = this.tableService.getTableById(id);
+        return ResponseEntity.ok(this.tableMapper.modelToResponse(tableModel));
+    }
+
     @PostMapping
     public ResponseEntity<TableResponseDTO> createTable(@AuthenticationPrincipal UserModel userModel, @RequestBody CreateTableRequestDTO createTableRequestDTO){
         TableModel tableModel = this.tableService.createTable(createTableRequestDTO, userModel);
