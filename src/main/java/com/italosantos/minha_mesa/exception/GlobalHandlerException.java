@@ -32,4 +32,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerAlreadyExistTableWithNumberException(AlreadyExistTableWithNumberException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
+
+    @ExceptionHandler(ThisDateOfReserveIsNotPermitedException.class)
+    public ResponseEntity<ExceptionResponse> handlerThisDateOfReserveIsNotPermitedException(ThisDateOfReserveIsNotPermitedException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
 }

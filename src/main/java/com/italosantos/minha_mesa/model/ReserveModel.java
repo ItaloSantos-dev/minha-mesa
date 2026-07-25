@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,10 +34,10 @@ public class ReserveModel {
     private LocalDate date;
 
     @Column(name = "time_start", nullable = false)
-    private LocalTime time_start;
+    private LocalTime timeStart;
 
     @Column(name = "time_end", nullable = false)
-    private LocalTime time_end;
+    private LocalTime timeEnd;
 
     @Column(name = "number_of_people", nullable = false)
     private Integer numberOfPeople;
@@ -44,6 +46,7 @@ public class ReserveModel {
     private String observation;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false)
     private ReserveStatus status;
 

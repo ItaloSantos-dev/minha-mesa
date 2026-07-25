@@ -11,6 +11,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("tables")
@@ -21,6 +24,22 @@ public class TableController {
     public TableController(TableService tableService, TableMapper tableMapper) {
         this.tableService = tableService;
         this.tableMapper = tableMapper;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TableResponseDTO>> getTablesAvaliables(
+            @RequestParam Integer restaurantId,
+            @RequestParam Integer capacity,
+            @RequestParam LocalDate date,
+            @RequestParam LocalTime timeStart,
+            @RequestParam LocalTime timeEnd
+    ){
+        List<TableModel> tables = this.tableService.getTablesAvaliables(restaurantId, capacity, date, timeStart, timeEnd);
+        List<TableResponseDTO> response = tables.stream()
+                .map(this.tableMapper::modelToResponse)
+                .toList();
+        return ResponseEntity.ok(response);
+
     }
 
     @GetMapping("/{id}")
