@@ -37,4 +37,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerThisDateOfReserveIsNotPermitedException(ThisDateOfReserveIsNotPermitedException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
+
+    @ExceptionHandler(UserIsNotOwnerException.class)
+    public ResponseEntity<ExceptionResponse> handlerUserIsNotOwnerException(UserIsNotOwnerException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage()));
+    }
 }
