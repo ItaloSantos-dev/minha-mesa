@@ -1,5 +1,6 @@
 package com.italosantos.minha_mesa.service;
 
+import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
 import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
@@ -28,5 +29,10 @@ public class UserService implements UserDetailsService {
 
     public List<ReserveModel> getReservesOfUser(UserModel userModel){
         return this.reserveRepository.findByUserModelId(userModel.getId());
+    }
+
+    public ReserveModel getReserveOfUserById(UserModel userModel, Integer id){
+        return this.reserveRepository.findByIdAndUserModelId(id, userModel.getId())
+                .orElseThrow(ResourceNotFoundException::new);
     }
 }

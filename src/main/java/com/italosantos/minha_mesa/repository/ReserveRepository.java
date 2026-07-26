@@ -24,5 +24,6 @@ public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> 
     List<ReserveModel> findByTableModelRestaurantModelId(Integer id);
 
     Optional<ReserveModel> findByIdAndTableModelRestaurantModelId(Integer id, Integer restaurantId);
+    Optional<ReserveModel> findByIdAndUserModelId(Integer id, Integer userId);
 
 }

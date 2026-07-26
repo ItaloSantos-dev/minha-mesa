@@ -8,6 +8,7 @@ import com.italosantos.minha_mesa.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,5 +33,12 @@ public class UserController {
                 .toList();
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/reserves/{id}")
+    public ResponseEntity<ReserveResponseDTO> getReserveOfUserById(@AuthenticationPrincipal UserModel userModel, @PathVariable Integer id){
+        ReserveModel reserveModel = this.userService.getReserveOfUserById(userModel, id);
+
+        return ResponseEntity.ok(this.reserveMapper.modelToResponse(reserveModel));
     }
 }
