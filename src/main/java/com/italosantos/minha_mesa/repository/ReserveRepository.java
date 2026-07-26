@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Repository
 public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> {
@@ -17,4 +18,6 @@ public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> 
             LocalTime timeEnd,
             ReserveStatus status
     );
+
+    List<ReserveModel> findByUserModelId(Integer id);
 }
