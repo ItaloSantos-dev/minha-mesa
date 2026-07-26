@@ -20,4 +20,5 @@ public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> 
     );
 
     List<ReserveModel> findByUserModelId(Integer id);
+    List<ReserveModel> findByTableModelRestaurantModelId(Integer id);
 }
