@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> {
@@ -21,4 +22,7 @@ public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> 
 
     List<ReserveModel> findByUserModelId(Integer id);
     List<ReserveModel> findByTableModelRestaurantModelId(Integer id);
+
+    Optional<ReserveModel> findByIdAndTableModelRestaurantModelId(Integer id, Integer restaurantId);
+
 }

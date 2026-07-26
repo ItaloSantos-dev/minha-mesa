@@ -53,4 +53,10 @@ public class RestaurantController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/reserves/{id}")
+    public ResponseEntity<ReserveResponseDTO> getReserveOfRestaurantById(@AuthenticationPrincipal UserModel userModel, @PathVariable Integer id){
+        ReserveModel reserveModel = this.restaurantService.getReserveOfRestaurantById(userModel, id);
+        return ResponseEntity.ok(this.reserveMapper.modelToResponse(reserveModel));
+    }
 }

@@ -1,5 +1,6 @@
 package com.italosantos.minha_mesa.service;
 
+import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
 import com.italosantos.minha_mesa.exception.RestaurantNotFoundException;
 import com.italosantos.minha_mesa.exception.UserAlreadyIsOwnerException;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
@@ -53,5 +54,13 @@ public class RestaurantService {
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
         return this.reserveRepository.findByTableModelRestaurantModelId(ownerModel.getRestaurantModel().getId());
+    }
+
+    public ReserveModel getReserveOfRestaurantById(UserModel userModel, Integer id){
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+        return this.reserveRepository.findByIdAndTableModelRestaurantModelId(id, ownerModel.getRestaurantModel().getId())
+                .orElseThrow(ResourceNotFoundException::new);
     }
 }
