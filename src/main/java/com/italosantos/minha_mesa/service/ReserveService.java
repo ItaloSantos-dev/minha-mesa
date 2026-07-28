@@ -48,11 +48,11 @@ public class ReserveService {
 
         Optional<ScheduleExceptionModel> scheduleExceptionModel = this.scheduleExceptionRepository.findByDateAndRestaurantModelId(createReserveRequestDTO.date(), tableModel.getRestaurantModel().getId());
 
-        if (!tableModel.getActive())
-            throw new IllegalParameterException();
-
         if (scheduleExceptionModel.isPresent())
             throw new ThisDateOfReserveIsNotPermitedException(scheduleExceptionModel.get());
+
+        if (!tableModel.getActive())
+            throw new IllegalParameterException();
 
         if (!this.workingScheduleRepository.existsByRestaurantModelIdAndDayOfWeekAndTimeStartAndTimeEnd(
                 tableModel.getRestaurantModel().getId(),
