@@ -42,4 +42,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerUserIsNotOwnerException(UserIsNotOwnerException exception){
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage()));
     }
+
+    @ExceptionHandler(IllegalParameterException.class)
+    public ResponseEntity<ExceptionResponse> handlerIllegalParameterException(IllegalParameterException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
 }

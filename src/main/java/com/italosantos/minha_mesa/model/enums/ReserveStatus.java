@@ -5,7 +5,7 @@ public enum ReserveStatus {
     CONFIRMED("CONFIRMED"),
     CANCELED("CANCELED"),
     COMPLETED("COMPLETED"),
-    NO_SHOW("NO-SHOW");
+    NO_SHOW("NO_SHOW");
 
     private final String reserveStatus;
 

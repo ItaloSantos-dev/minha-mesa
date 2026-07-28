@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface OwnerRepository extends JpaRepository<OwnerModel, Integer> {
     Optional<OwnerModel> findByUserModelId(Integer id);
+
+    boolean existsByUserModelId(Integer id);
 }

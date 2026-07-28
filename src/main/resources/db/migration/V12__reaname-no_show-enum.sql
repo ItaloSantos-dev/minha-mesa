@@ -1,0 +1,2 @@
+ALTER TYPE reserve_status
+    RENAME VALUE 'NO-SHOW' TO 'NO_SHOW';
