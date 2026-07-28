@@ -47,4 +47,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerIllegalParameterException(IllegalParameterException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
+
+    @ExceptionHandler(UserAlreadyRegisterException.class)
+    public ResponseEntity<ExceptionResponse> handlerUserAlreadyRegisterException(UserAlreadyRegisterException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
 }
