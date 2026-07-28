@@ -127,7 +127,10 @@ public class ReserveService {
                 .orElseThrow(ResourceNotFoundException::new);
 
         String menssage = null;
-        if (reserveModel.getDate().isBefore(LocalDate.now())) {
+        if (    reserveModel.getDate().isBefore(LocalDate.now()) &&
+                reserveModel.getStatus()!=ReserveStatus.CANCELED && reserveModel.getStatus()!=ReserveStatus.COMPLETED && reserveModel.getStatus()!=ReserveStatus.NO_SHOW
+
+        ) {
             reserveModel.setStatus(ReserveStatus.NO_SHOW);
             menssage = "A data da reserva já expirou. A reserva foi automáticamente alterada para ( não comparecido )";
         }
