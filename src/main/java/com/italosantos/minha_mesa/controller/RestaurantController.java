@@ -3,11 +3,14 @@ package com.italosantos.minha_mesa.controller;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
+import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.UserModel;
+import com.italosantos.minha_mesa.model.WorkingScheduleModel;
 import com.italosantos.minha_mesa.service.RestaurantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,11 +25,13 @@ public class RestaurantController {
     private final RestaurantMapper restaurantMapper;
     private final RestaurantService restaurantService;
     private final ReserveMapper reserveMapper;
+    private final WorkingScheduleMapper workingScheduleMapper;
 
-    public RestaurantController(RestaurantMapper restaurantMapper, RestaurantService restaurantService, ReserveMapper reserveMapper) {
+    public RestaurantController(RestaurantMapper restaurantMapper, RestaurantService restaurantService, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper) {
         this.restaurantMapper = restaurantMapper;
         this.restaurantService = restaurantService;
         this.reserveMapper = reserveMapper;
+        this.workingScheduleMapper = workingScheduleMapper;
     }
 
     @GetMapping("/{id}")
@@ -58,5 +63,17 @@ public class RestaurantController {
     public ResponseEntity<ReserveResponseDTO> getReserveOfRestaurantById(@AuthenticationPrincipal UserModel userModel, @PathVariable Integer id){
         ReserveModel reserveModel = this.restaurantService.getReserveOfRestaurantById(userModel, id);
         return ResponseEntity.ok(this.reserveMapper.modelToResponse(reserveModel));
+    }
+
+    @GetMapping("/{id}/working-scheduleds")
+    public ResponseEntity<List<WorkingScheduleResponseDTO>> getDaysWorkingOfRestaurantById(@PathVariable Integer id){
+
+        List<WorkingScheduleModel> workingScheduleModels = this.restaurantService.getDaysWorkingOfRestaurantById(id);
+
+        List<WorkingScheduleResponseDTO> response = workingScheduleModels.stream()
+                .map(working -> this.workingScheduleMapper.modelToResponse(working))
+                .toList();
+
+        return ResponseEntity.ok(response);
     }
 }

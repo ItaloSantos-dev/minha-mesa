@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Repository
 public interface WorkingScheduleRepository extends JpaRepository<WorkingScheduleModel, Integer> {
@@ -15,4 +16,6 @@ public interface WorkingScheduleRepository extends JpaRepository<WorkingSchedule
             LocalTime timeStart,
             LocalTime timeEnd
     );
+
+    List<WorkingScheduleModel> findByRestaurantModelId(Integer id);
 }

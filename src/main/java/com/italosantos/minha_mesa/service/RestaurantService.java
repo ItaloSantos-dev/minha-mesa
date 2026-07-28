@@ -6,13 +6,11 @@ import com.italosantos.minha_mesa.exception.UserAlreadyIsOwnerException;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.exception.UserIsNotOwnerException;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
-import com.italosantos.minha_mesa.model.OwnerModel;
-import com.italosantos.minha_mesa.model.ReserveModel;
-import com.italosantos.minha_mesa.model.RestaurantModel;
-import com.italosantos.minha_mesa.model.UserModel;
+import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.repository.OwnerRepository;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
 import com.italosantos.minha_mesa.repository.RestaurantRepository;
+import com.italosantos.minha_mesa.repository.WorkingScheduleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +23,15 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final OwnerRepository ownerRepository;
     private final ReserveRepository reserveRepository;
+    private final WorkingScheduleRepository workingScheduleRepository;
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository) {
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
         this.ownerRepository = ownerRepository;
         this.reserveRepository = reserveRepository;
+        this.workingScheduleRepository = workingScheduleRepository;
     }
 
 
@@ -62,5 +62,9 @@ public class RestaurantService {
 
         return this.reserveRepository.findByIdAndTableModelRestaurantModelId(id, ownerModel.getRestaurantModel().getId())
                 .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    public List<WorkingScheduleModel> getDaysWorkingOfRestaurantById(Integer id){
+        return this.workingScheduleRepository.findByRestaurantModelId(id);
     }
 }
