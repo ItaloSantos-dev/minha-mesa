@@ -85,11 +85,11 @@ public class ReserveService {
         if (userIsCliente && newStatus!=ReserveStatus.CANCELED)
             throw new NotPermitedException();
 
-        if (!reserveModel.getDate().isAfter(LocalDate.now().plusDays(1)) )
+        if (!reserveModel.getDate().isAfter(LocalDate.now().plusDays(1)) && newStatus ==ReserveStatus.CANCELED)
             throw new NotPermitedException("A data limite para cancelamento da reserva expirou");
 
         if ((newStatus==ReserveStatus.COMPLETED || newStatus==ReserveStatus.NO_SHOW) &&
-            reserveModel.getDate().isBefore(LocalDate.now())
+            reserveModel.getDate().isAfter(LocalDate.now())
         )
             throw new IllegalParameterException("Não possível alterar o status para " + newStatus + " antes da data marcada para reserva");
 
