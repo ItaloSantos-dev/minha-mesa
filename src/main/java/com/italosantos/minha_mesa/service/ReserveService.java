@@ -113,7 +113,7 @@ public class ReserveService {
 
         if (reserveModel.getUserModel().getId().equals(userModel.getId()))
             return true;
-        else if (reserveModel.getTableModel().getRestaurantModel().getOwnerModel().getId().equals(userModel.getId())) {
+        else if (reserveModel.getTableModel().getRestaurantModel().getOwnerModel().getUserModel().getId().equals(userModel.getId())) {
             return false;
         }
         else {
