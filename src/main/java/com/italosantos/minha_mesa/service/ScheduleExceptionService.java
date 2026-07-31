@@ -1,6 +1,8 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.schedule_exception.CreateScheduleExceptionDTO;
+import com.italosantos.minha_mesa.exception.AlreadyExistsScheduleExceptionException;
+import com.italosantos.minha_mesa.exception.AlreadyExistsThisWorkingScheduleException;
 import com.italosantos.minha_mesa.exception.IllegalParameterException;
 import com.italosantos.minha_mesa.exception.UserIsNotOwnerException;
 import com.italosantos.minha_mesa.mapper.ScheduleExceptionMapper;
@@ -30,6 +32,10 @@ public class ScheduleExceptionService {
                 .orElseThrow(UserIsNotOwnerException::new);
         if (createScheduleExceptionDTO.date().isBefore(LocalDate.now()))
             throw new IllegalParameterException("A data não pode ser antes da atual");
+
+        if (this.scheduleExceptionRepository.existsByDateAndRestaurantModelId(createScheduleExceptionDTO.date(), ownerModel.getRestaurantModel().getId()))
+            throw new AlreadyExistsScheduleExceptionException();
+
         if (createScheduleExceptionDTO.reason().isBlank())
             throw new IllegalParameterException("Você deve explicar o motivo");
 
