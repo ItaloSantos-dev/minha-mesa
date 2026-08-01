@@ -36,7 +36,7 @@ public class ScheduleExceptionService {
         if (this.scheduleExceptionRepository.existsByDateAndRestaurantModelId(createScheduleExceptionDTO.date(), ownerModel.getRestaurantModel().getId()))
             throw new AlreadyExistsScheduleExceptionException();
 
-        if (createScheduleExceptionDTO.reason().isBlank())
+        if (createScheduleExceptionDTO.reason() ==null || createScheduleExceptionDTO.reason().isBlank())
             throw new IllegalParameterException("Você deve explicar o motivo");
 
         ScheduleExceptionModel scheduleExceptionModel = this.scheduleExceptionMapper.createToModel(createScheduleExceptionDTO, ownerModel.getRestaurantModel());
