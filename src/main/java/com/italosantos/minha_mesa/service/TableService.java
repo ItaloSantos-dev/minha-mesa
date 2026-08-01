@@ -8,13 +8,10 @@ import com.italosantos.minha_mesa.model.enums.DayOfWeek;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.repository.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -95,7 +92,7 @@ public class TableService {
             throw new DateOfReserveIsInvalidException("A data não pode ser anterior á atual");
 
         if (timeEnd.isBefore(timeStart))
-            throw new TimeOfReserveIsInvalidException("A hora do fim não pode ser antes da hora do início");
+            throw new TimeIsInvalidException("A hora do fim não pode ser antes da hora do início");
 
     }
 

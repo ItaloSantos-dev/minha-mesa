@@ -1,10 +1,7 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.working_schedule.CreateWorkingScheduleResquestDTO;
-import com.italosantos.minha_mesa.exception.AlreadyExistsThisWorkingScheduleException;
-import com.italosantos.minha_mesa.exception.NotPermitedException;
-import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
-import com.italosantos.minha_mesa.exception.RestaurantNotFoundException;
+import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.UserModel;
@@ -28,6 +25,9 @@ public class WorkingScheduleService {
     public WorkingScheduleModel createWorkingSchedule(UserModel userModel, CreateWorkingScheduleResquestDTO createWorkingScheduleResquestDTO){
         RestaurantModel restaurantModel = this.restaurantRepository.findByOwnerModelUserModelId(userModel.getId())
                 .orElseThrow(RestaurantNotFoundException::new);
+
+        if (createWorkingScheduleResquestDTO.timeStart().isAfter(createWorkingScheduleResquestDTO.timeEnd()))
+            throw new TimeIsInvalidException("A hora de fim não pode ser antes da hora de ínicio");
 
         if (this.workingScheduleRepository.existsByRestaurantModelIdAndDayOfWeekAndTimeStartAndTimeEnd(
                 restaurantModel.getId(),

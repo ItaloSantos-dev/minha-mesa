@@ -63,8 +63,8 @@ public class GlobalHandlerException {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
 
-    @ExceptionHandler(TimeOfReserveIsInvalidException.class)
-    public ResponseEntity<ExceptionResponse> handlerTimeOfReserveIsInvalidException(TimeOfReserveIsInvalidException exception){
+    @ExceptionHandler(TimeIsInvalidException.class)
+    public ResponseEntity<ExceptionResponse> handlerTimeOfReserveIsInvalidException(TimeIsInvalidException exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
 }
