@@ -38,6 +38,9 @@ public class TableService {
     public TableModel createTable(CreateTableRequestDTO createTableRequestDTO, UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(NotPermitedException::new);
+        if (createTableRequestDTO.capacity()<1)
+            throw new IllegalParameterException("A capacidade mínima da mesa deve ser 1");
+
         if (this.tableRepository.existsByNumberAndRestaurantModelOwnerModelId(createTableRequestDTO.number(), ownerModel.getId()))
             throw new AlreadyExistTableWithNumberException();
         TableModel tableModel = this.tableMapper.createToModel(createTableRequestDTO, ownerModel.getRestaurantModel());
