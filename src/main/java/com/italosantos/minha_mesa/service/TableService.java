@@ -52,7 +52,7 @@ public class TableService {
         TableModel tableModel = this.tableRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
 
-        if (! ownerModel.getUserModel().getId().equals(userModel.getId()))
+        if (! tableModel.getRestaurantModel().getOwnerModel().getId().equals(ownerModel.getId()))
             throw new NotPermitedException();
 
         tableModel.setActive(false);
