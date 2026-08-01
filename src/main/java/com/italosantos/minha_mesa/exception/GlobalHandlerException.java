@@ -52,4 +52,19 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerUserAlreadyRegisterException(UserAlreadyRegisterException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
+
+    @ExceptionHandler(CapacityOfTableInvalidException.class)
+    public ResponseEntity<ExceptionResponse> hadlerCapacityOfTableInvalidException(CapacityOfTableInvalidException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
+
+    @ExceptionHandler(DateOfReserveIsInvalidException.class)
+    public ResponseEntity<ExceptionResponse> handlerDateOfReserveIsInvalidException(DateOfReserveIsInvalidException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
+
+    @ExceptionHandler(TimeOfReserveIsInvalidException.class)
+    public ResponseEntity<ExceptionResponse> handlerTimeOfReserveIsInvalidException(TimeOfReserveIsInvalidException exception){
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+    }
 }

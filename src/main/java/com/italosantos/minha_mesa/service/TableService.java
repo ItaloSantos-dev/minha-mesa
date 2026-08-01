@@ -39,7 +39,7 @@ public class TableService {
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(NotPermitedException::new);
         if (createTableRequestDTO.capacity()<1)
-            throw new IllegalParameterException("A capacidade mínima da mesa deve ser 1");
+            throw new CapacityOfTableInvalidException();
 
         if (this.tableRepository.existsByNumberAndRestaurantModelOwnerModelId(createTableRequestDTO.number(), ownerModel.getId()))
             throw new AlreadyExistTableWithNumberException();
@@ -89,13 +89,13 @@ public class TableService {
         System.out.println("AQUI");
 
         if (capacity != null && capacity<1)
-            throw new IllegalParameterException("A capacidade deve ser mair que 0");
+            throw new CapacityOfTableInvalidException();
 
         if (date.isBefore(LocalDate.now()))
-            throw new IllegalParameterException("A data não pode ser anterior á atual");
+            throw new DateOfReserveIsInvalidException("A data não pode ser anterior á atual");
 
         if (timeEnd.isBefore(timeStart))
-            throw new IllegalParameterException("A hora do fim não pode ser antes da hora do início");
+            throw new TimeOfReserveIsInvalidException("A hora do fim não pode ser antes da hora do início");
 
     }
 
