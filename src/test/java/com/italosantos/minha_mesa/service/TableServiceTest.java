@@ -241,7 +241,7 @@ class TableServiceTest {
                 ))
                 .thenReturn(true);
 
-        assertThrows(TimeOfReserveIsInvalidException.class, () -> this.tableService.getTablesAvaliables(
+        assertThrows(TimeIsInvalidException.class, () -> this.tableService.getTablesAvaliables(
                 restaurantId, capacity, date, timeStart, timeEnd
         ));
     }
