@@ -62,6 +62,8 @@ public class RestaurantService {
     }
 
     public List<WorkingScheduleModel> getDaysWorkingOfRestaurantById(Integer id){
+        if (! this.restaurantRepository.existsById(id))
+            throw new ResourceNotFoundException();
         return this.workingScheduleRepository.findByRestaurantModelId(id);
     }
 }
