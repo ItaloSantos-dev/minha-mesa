@@ -50,7 +50,7 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(UserAlreadyRegisterException.class)
     public ResponseEntity<ExceptionResponse> handlerUserAlreadyRegisterException(UserAlreadyRegisterException exception){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
 
     @ExceptionHandler(CapacityOfTableInvalidException.class)
