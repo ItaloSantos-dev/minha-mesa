@@ -50,12 +50,12 @@ public class GlobalHandlerException {
 
     @ExceptionHandler(IllegalParameterException.class)
     public ResponseEntity<ExceptionResponse> handlerIllegalParameterException(IllegalParameterException exception){
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
 
     @ExceptionHandler(UserAlreadyRegisterException.class)
     public ResponseEntity<ExceptionResponse> handlerUserAlreadyRegisterException(UserAlreadyRegisterException exception){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
 
     @ExceptionHandler(CapacityOfTableInvalidException.class)
