@@ -13,6 +13,11 @@ public class GlobalHandlerException {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
 
+    @ExceptionHandler(OwnerAlreadyHaveRestaurantException.class)
+    public ResponseEntity<ExceptionResponse> handlerOwnerAlreadyHaveRestaurantException(OwnerAlreadyHaveRestaurantException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
     @ExceptionHandler(RestaurantNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handlerRestaurantNotFoundException(RestaurantNotFoundException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(HttpStatus.NOT_FOUND, exception.getMessage()));
