@@ -72,4 +72,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerTimeOfReserveIsInvalidException(TimeIsInvalidException exception){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(HttpStatus.BAD_REQUEST, exception.getMessage()));
     }
+
+    @ExceptionHandler(AlreadyExistsScheduleExceptionException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistsScheduleExceptionException(AlreadyExistsScheduleExceptionException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
 }
