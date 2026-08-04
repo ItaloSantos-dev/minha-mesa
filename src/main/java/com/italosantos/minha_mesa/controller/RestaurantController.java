@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.FailedApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -106,8 +107,8 @@ public class RestaurantController {
             )
     })
     @GetMapping("/reserves")
-    public ResponseEntity<List<ReserveResponseDTO>> getReservesOfRestaurant(@AuthenticationPrincipal UserModel userModel){
-        List<ReserveModel> reserveModels = this.restaurantService.getReservesOfRestaurant(userModel);
+    public ResponseEntity<List<ReserveResponseDTO>> getReservesOfRestaurant(@AuthenticationPrincipal UserModel userModel, Pageable pageable){
+        List<ReserveModel> reserveModels = this.restaurantService.getReservesOfRestaurant(userModel, pageable);
         List<ReserveResponseDTO> response = reserveModels.stream()
                 .map(reserve -> this.reserveMapper.modelToResponse(reserve))
                 .toList();
@@ -155,9 +156,9 @@ public class RestaurantController {
             )
     })
     @GetMapping("/{id}/working-scheduleds")
-    public ResponseEntity<List<WorkingScheduleResponseDTO>> getDaysWorkingOfRestaurantById(@PathVariable Integer id){
+    public ResponseEntity<List<WorkingScheduleResponseDTO>> getDaysWorkingOfRestaurantById(@PathVariable Integer id, Pageable pageable){
 
-        List<WorkingScheduleModel> workingScheduleModels = this.restaurantService.getDaysWorkingOfRestaurantById(id);
+        List<WorkingScheduleModel> workingScheduleModels = this.restaurantService.getDaysWorkingOfRestaurantById(id, pageable);
 
         List<WorkingScheduleResponseDTO> response = workingScheduleModels.stream()
                 .map(working -> this.workingScheduleMapper.modelToResponse(working))

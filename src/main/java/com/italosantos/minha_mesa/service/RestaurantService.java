@@ -8,6 +8,7 @@ import com.italosantos.minha_mesa.repository.OwnerRepository;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
 import com.italosantos.minha_mesa.repository.RestaurantRepository;
 import com.italosantos.minha_mesa.repository.WorkingScheduleRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,10 +48,10 @@ public class RestaurantService {
                 .orElseThrow(() -> new RestaurantNotFoundException(id));
     }
 
-    public List<ReserveModel> getReservesOfRestaurant(UserModel userModel){
+    public List<ReserveModel> getReservesOfRestaurant(UserModel userModel, Pageable pageable){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
-        return this.reserveRepository.findByTableModelRestaurantModelId(ownerModel.getRestaurantModel().getId());
+        return this.reserveRepository.findByTableModelRestaurantModelId(ownerModel.getRestaurantModel().getId(), pageable).getContent();
     }
 
     public ReserveModel getReserveOfRestaurantById(UserModel userModel, Integer id){
@@ -61,9 +62,9 @@ public class RestaurantService {
                 .orElseThrow(ResourceNotFoundException::new);
     }
 
-    public List<WorkingScheduleModel> getDaysWorkingOfRestaurantById(Integer id){
+    public List<WorkingScheduleModel> getDaysWorkingOfRestaurantById(Integer id, Pageable pageable){
         if (! this.restaurantRepository.existsById(id))
             throw new ResourceNotFoundException();
-        return this.workingScheduleRepository.findByRestaurantModelId(id);
+        return this.workingScheduleRepository.findByRestaurantModelId(id, pageable).getContent();
     }
 }

@@ -2,6 +2,8 @@ package com.italosantos.minha_mesa.repository;
 
 import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,8 +22,8 @@ public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> 
             ReserveStatus status
     );
 
-    List<ReserveModel> findByUserModelId(Integer id);
-    List<ReserveModel> findByTableModelRestaurantModelId(Integer id);
+    Page<ReserveModel> findByUserModelId(Integer id, Pageable pageable);
+    Page<ReserveModel> findByTableModelRestaurantModelId(Integer id, Pageable pageable);
 
     Optional<ReserveModel> findByIdAndTableModelRestaurantModelId(Integer id, Integer restaurantId);
     Optional<ReserveModel> findByIdAndUserModelId(Integer id, Integer userId);

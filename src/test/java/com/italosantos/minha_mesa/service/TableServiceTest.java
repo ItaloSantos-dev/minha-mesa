@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -134,7 +135,7 @@ class TableServiceTest {
                 .thenReturn(Optional.of(new ScheduleExceptionModel()));
 
         assertThrows(ThisDateOfReserveIsNotPermitedException.class, () -> this.tableService.getTablesAvaliables(
-                restaurantId, capacity, date, timeStart, timeEnd
+                restaurantId, capacity, date, timeStart, timeEnd, null
         ));
     }
 
@@ -161,7 +162,7 @@ class TableServiceTest {
                 .thenReturn(false);
 
         assertThrows(ThisDateOfReserveIsNotPermitedException.class, () -> this.tableService.getTablesAvaliables(
-                restaurantId, capacity, date, timeStart, timeEnd
+                restaurantId, capacity, date, timeStart, timeEnd, null
         ));
     }
 
@@ -188,7 +189,7 @@ class TableServiceTest {
                 .thenReturn(true);
 
         assertThrows(CapacityOfTableInvalidException.class, () -> this.tableService.getTablesAvaliables(
-                restaurantId, capacity, date, timeStart, timeEnd
+                restaurantId, capacity, date, timeStart, timeEnd, null
         ));
     }
 
@@ -215,7 +216,7 @@ class TableServiceTest {
                 .thenReturn(true);
 
         assertThrows(DateOfReserveIsInvalidException.class, () -> this.tableService.getTablesAvaliables(
-                restaurantId, capacity, date, timeStart, timeEnd
+                restaurantId, capacity, date, timeStart, timeEnd, null
         ));
     }
 
@@ -242,7 +243,7 @@ class TableServiceTest {
                 .thenReturn(true);
 
         assertThrows(TimeIsInvalidException.class, () -> this.tableService.getTablesAvaliables(
-                restaurantId, capacity, date, timeStart, timeEnd
+                restaurantId, capacity, date, timeStart, timeEnd, null
         ));
     }
 }

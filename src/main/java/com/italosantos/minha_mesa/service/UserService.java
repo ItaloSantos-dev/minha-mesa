@@ -5,6 +5,7 @@ import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
 import com.italosantos.minha_mesa.repository.UserRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,8 +28,8 @@ public class UserService implements UserDetailsService {
         return this.userRepository.findByEmail(username);
     }
 
-    public List<ReserveModel> getReservesOfUser(UserModel userModel){
-        return this.reserveRepository.findByUserModelId(userModel.getId());
+    public List<ReserveModel> getReservesOfUser(UserModel userModel, Pageable pageable){
+        return this.reserveRepository.findByUserModelId(userModel.getId(), pageable).getContent();
     }
 
     public ReserveModel getReserveOfUserById(UserModel userModel, Integer id){

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -68,9 +69,10 @@ public class TableController {
             @RequestParam Integer capacity,
             @RequestParam LocalDate date,
             @RequestParam LocalTime timeStart,
-            @RequestParam LocalTime timeEnd
+            @RequestParam LocalTime timeEnd,
+            Pageable pageable
     ){
-        List<TableModel> tables = this.tableService.getTablesAvaliables(restaurantId, capacity, date, timeStart, timeEnd);
+        List<TableModel> tables = this.tableService.getTablesAvaliables(restaurantId, capacity, date, timeStart, timeEnd, pageable);
         List<TableResponseDTO> response = tables.stream()
                 .map(this.tableMapper::modelToResponse)
                 .toList();

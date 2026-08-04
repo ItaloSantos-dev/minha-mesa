@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,8 +44,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Reservas buscadas com sucesso")
     })
     @GetMapping("/reserves")
-    public ResponseEntity<List<ReserveResponseDTO>> getReservesOfUser(@AuthenticationPrincipal UserModel userModel){
-        List<ReserveModel> reserveResponseDTOS = this.userService.getReservesOfUser(userModel);
+    public ResponseEntity<List<ReserveResponseDTO>> getReservesOfUser(@AuthenticationPrincipal UserModel userModel, Pageable pageable){
+        List<ReserveModel> reserveResponseDTOS = this.userService.getReservesOfUser(userModel, pageable);
         List<ReserveResponseDTO> response = reserveResponseDTOS.stream()
                 .map(this.reserveMapper::modelToResponse)
                 .toList();

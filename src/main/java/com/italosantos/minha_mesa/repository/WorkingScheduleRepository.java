@@ -2,6 +2,8 @@ package com.italosantos.minha_mesa.repository;
 
 import com.italosantos.minha_mesa.model.WorkingScheduleModel;
 import com.italosantos.minha_mesa.model.enums.DayOfWeek;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +19,5 @@ public interface WorkingScheduleRepository extends JpaRepository<WorkingSchedule
             LocalTime timeEnd
     );
 
-    List<WorkingScheduleModel> findByRestaurantModelId(Integer id);
+    Page<WorkingScheduleModel> findByRestaurantModelId(Integer id, Pageable pageable);
 }

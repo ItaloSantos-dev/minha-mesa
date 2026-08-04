@@ -2,6 +2,8 @@ package com.italosantos.minha_mesa.repository;
 
 import com.italosantos.minha_mesa.model.TableModel;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,11 +32,12 @@ public interface TableRepository extends JpaRepository<TableModel, Integer> {
             AND t.restaurantModel.id = :restaurantId
             AND t.active = TRUE
 """)
-    List<TableModel> findAvailableTables(
+    Page<TableModel> findAvailableTables(
             @Param("date") LocalDate date,
             @Param("timeStart") LocalTime timeStart,
             @Param("status") ReserveStatus status,
             @Param("capacity") Integer capacity,
-            @Param("restaurantId") Integer restaurantId
+            @Param("restaurantId") Integer restaurantId,
+            Pageable pageable
     );
 }

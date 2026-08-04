@@ -7,6 +7,8 @@ import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.DayOfWeek;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.repository.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -101,7 +103,8 @@ public class TableService {
             Integer capacity,
             LocalDate date,
             LocalTime timeStart,
-            LocalTime timeEnd
+            LocalTime timeEnd,
+            Pageable pageable
     ){
         RestaurantModel restaurantModel = this.restaurantRepository.findById(restaurantId)
                 .orElseThrow(ResourceNotFoundException::new);
@@ -115,12 +118,13 @@ public class TableService {
         );
 
          return this.tableRepository.findAvailableTables(
-                date,
-                timeStart,
-                ReserveStatus.CANCELED,
-                capacity,
-                restaurantId
-        );
+                 date,
+                 timeStart,
+                 ReserveStatus.CANCELED,
+                 capacity,
+                 restaurantId,
+                 pageable
+        ).getContent();
 
 
 
