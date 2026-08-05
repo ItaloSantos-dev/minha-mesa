@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 @Tag(
-        name = "Exceções de funcionamento",
+        name = "7 - Exceções de funcionamento",
         description = "Operações relacionadas a exceções de funcionamento"
 )
 @RestController

@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 @Tag(
-        name = "Reserva",
+        name = "6 - Reserva",
         description = "Operações relacionadas a reservas de mesas"
 )
 @RestController
@@ -35,6 +36,7 @@ public class ReserveController {
         this.reserveMapper = reserveMapper;
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Cria uma reserva",
             description = "Cria uma nova reserva caso mesa, data e hora estejam disponíveis"
@@ -65,6 +67,8 @@ public class ReserveController {
         ReserveModel reserveModel = this.reserveService.createReserve(createReserveRequestDTO, userModel);
         return ResponseEntity.created(URI.create("/working-schedules"+reserveModel.getId().toString())).body(this.reserveMapper.modelToResponse(reserveModel));
     }
+
+    @SecurityRequirement(name = "Bearer Authentication")
 
     @Operation(
             summary = "Altera status de uma reserva",

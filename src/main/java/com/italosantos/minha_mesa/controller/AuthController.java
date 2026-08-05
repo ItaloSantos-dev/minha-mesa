@@ -12,12 +12,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 @Tag(
-        name = "Autentificação",
-        description = "Operações relacionadas a autentificação de usuário"
+        name = "01 - Autenticação",
+        description = "Operações relacionadas a autenticação de usuário"
 )
 @RestController
 @RequestMapping("auth")
@@ -30,7 +31,6 @@ public class AuthController {
         this.authService = authService;
         this.userMapper = userMapper;
     }
-
     @Operation(
             summary = "Login de usuário",
             description = "Retorna token temporario para usuário logado"

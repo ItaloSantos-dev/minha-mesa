@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 @Tag(
-        name = "Horários de funcionamento",
+        name = "4 - Horários de funcionamento",
         description = "Operações relacionadas aos horáriso de funcionamento de um restaurante"
 )
 @RestController
@@ -34,6 +35,7 @@ public class WorkingScheduleController {
         this.workingScheduleMapper = workingScheduleMapper;
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Cria um horário de funcionamento",
             description = "Retorna os dados do novo horário cadastrado"
@@ -68,6 +70,7 @@ public class WorkingScheduleController {
         return ResponseEntity.created(URI.create("working-schedules" + workingScheduleModel.getId())).body(this.workingScheduleMapper.modelToResponse(workingScheduleModel));
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Delete um horário de funcionamento",
             description = "Deleta um horário de funcionamento pelo id"

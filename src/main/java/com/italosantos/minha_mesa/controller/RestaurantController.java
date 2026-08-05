@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.FailedApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 @Tag(
-        name = "Restaurante",
+        name = "02 - Restaurantes",
         description = "Operaçãoes relacionadas aos restaurantes"
 )
 @RestController
@@ -39,11 +40,42 @@ public class RestaurantController {
     private final ReserveMapper reserveMapper;
     private final WorkingScheduleMapper workingScheduleMapper;
 
+
+
     public RestaurantController(RestaurantMapper restaurantMapper, RestaurantService restaurantService, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper) {
         this.restaurantMapper = restaurantMapper;
         this.restaurantService = restaurantService;
         this.reserveMapper = reserveMapper;
         this.workingScheduleMapper = workingScheduleMapper;
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Cria um novo restaurante",
+            description = "Retorna dados do novo restaurante cadastrado"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Restaurante criado com sucesso"),
+            @ApiResponse(
+                    responseCode = "404", description = "Restaurante não encontrado",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409", description = "Usuário já possui um restaurante cadastrado",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            ),
+    })
+    @PostMapping
+    public ResponseEntity<RestaurantResponseDTO> createRestaurant(
+            @AuthenticationPrincipal UserModel userModel,
+            @RequestBody CreateRestaurantRequestDTO createRestaurantRequestDTO
+    ){
+        RestaurantModel restaurantModel = this.restaurantService.createRestaurant(userModel, createRestaurantRequestDTO);
+        return ResponseEntity.created(URI.create("/restaurants" + restaurantModel.getId())).body(this.restaurantMapper.modelToResponse(restaurantModel));
     }
 
     @Operation(
@@ -65,33 +97,9 @@ public class RestaurantController {
         return ResponseEntity.ok(this.restaurantMapper.modelToResponse(restaurantModel));
     }
 
-    @Operation(
-            summary = "Cria um novo restaurante",
-            description = "Retorna dados do novo restaurante cadastrado"
-    )
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Restaurante criado com sucesso"),
-            @ApiResponse(
-                    responseCode = "404", description = "Restaurante não encontrado",
-                    content = @Content(
-                            schema = @Schema(implementation = ExceptionResponse.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "409", description = "Usuário já possui um restaurante cadastrado",
-                    content = @Content(
-                            schema = @Schema(implementation = ExceptionResponse.class)
-                    )
-            ),
-    })
-    @PostMapping
-    public ResponseEntity<RestaurantResponseDTO> createRestaurant(
-            @AuthenticationPrincipal UserModel userModel,
-            @RequestBody CreateRestaurantRequestDTO createRestaurantRequestDTO
-            ){
-        RestaurantModel restaurantModel = this.restaurantService.createRestaurant(userModel, createRestaurantRequestDTO);
-        return ResponseEntity.created(URI.create("/restaurants" + restaurantModel.getId())).body(this.restaurantMapper.modelToResponse(restaurantModel));
-    }
+
+
+    @SecurityRequirement(name = "Bearer Authentication")
 
     @Operation(
             summary = "Busca as reservas do restaurante pelo id do usuário que fez a requisição",
@@ -116,6 +124,8 @@ public class RestaurantController {
         return ResponseEntity.ok(response);
     }
 
+
+    @SecurityRequirement(name = "Bearer Authentication")
 
     @Operation(
             summary = "Busca uma reserva de um restaurante pelo id do usuário que fez a requisição e pelo id da reserva",

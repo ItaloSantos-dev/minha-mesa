@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 @Tag(
-        name = "Usuários",
+        name = "8 - Usuários",
         description = "Operações relacionadas aos usuários"
 )
 @RestController
@@ -36,6 +37,7 @@ public class UserController {
         this.reserveMapper = reserveMapper;
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Busca reversas de um usuário com base no token JWT",
             description = "Retorna lista de todas reversas do usuário que fez a requisição"
@@ -53,6 +55,7 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Busca uma reserva de um usuário com base no id",
             description = "Retorna os dados da reserva"

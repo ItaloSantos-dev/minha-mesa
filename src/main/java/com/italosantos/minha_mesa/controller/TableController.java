@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Tag(
-        name = "Mesas",
+        name = "3 - Mesas",
         description = "Operações relacionadas as mesas cadastradas"
 )
 @RestController
@@ -99,6 +100,7 @@ public class TableController {
         return ResponseEntity.ok(this.tableMapper.modelToResponse(tableModel));
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Cria uma nova mesa",
             description = "Retorna os dados da nova mesa criada"
@@ -131,6 +133,7 @@ public class TableController {
         return ResponseEntity.created(URI.create("/tables" + tableModel.getId())).body(this.tableMapper.modelToResponse(tableModel));
     }
 
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Desativa uma mesa pelo id",
             description = "Retorno vazio, se bem sucedido"
