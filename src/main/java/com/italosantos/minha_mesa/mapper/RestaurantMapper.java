@@ -8,6 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RestaurantMapper {
+    private final WorkingScheduleMapper workingScheduleMapper;
+
+    public RestaurantMapper(WorkingScheduleMapper workingScheduleMapper) {
+        this.workingScheduleMapper = workingScheduleMapper;
+    }
+
     public RestaurantModel createToModel(CreateRestaurantRequestDTO createRestaurantRequestDTO, OwnerModel ownerModel){
         RestaurantModel restaurantModel = new RestaurantModel();
         restaurantModel.setOwnerModel(ownerModel);
@@ -18,6 +24,15 @@ public class RestaurantMapper {
     }
 
     public RestaurantResponseDTO modelToResponse(RestaurantModel restaurantModel){
-        return new RestaurantResponseDTO(restaurantModel.getId(), restaurantModel.getName(), restaurantModel.getPhone(), restaurantModel.getAddress(), restaurantModel.getActive());
+        return new RestaurantResponseDTO(
+                restaurantModel.getId(),
+                restaurantModel.getName(),
+                restaurantModel.getPhone(),
+                restaurantModel.getAddress(),
+                restaurantModel.getActive(),
+                restaurantModel.getWorkingScheduleModels().stream()
+                        .map(this.workingScheduleMapper::modelToResponse)
+                        .toList()
+        );
     }
 }
