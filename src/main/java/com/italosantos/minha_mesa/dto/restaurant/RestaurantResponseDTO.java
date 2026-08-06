@@ -4,7 +4,8 @@ public record RestaurantResponseDTO(
         Integer id,
         String name,
         String phone,
-        String address
+        String address,
+        Boolean active
         //dias da semana aberto
 ) {
 }

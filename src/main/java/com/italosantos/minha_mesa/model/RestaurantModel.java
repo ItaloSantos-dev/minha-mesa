@@ -25,6 +25,9 @@ public class RestaurantModel {
     @JoinColumn(name = "owner_id")
     private OwnerModel ownerModel;
 
+    @Column(name = "active", nullable = false)
+    private Boolean active;
+
     @Column(name = "name", nullable = false)
     private String name;
 

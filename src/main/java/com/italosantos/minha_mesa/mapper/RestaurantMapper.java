@@ -18,6 +18,6 @@ public class RestaurantMapper {
     }
 
     public RestaurantResponseDTO modelToResponse(RestaurantModel restaurantModel){
-        return new RestaurantResponseDTO(restaurantModel.getId(), restaurantModel.getName(), restaurantModel.getPhone(), restaurantModel.getAddress());
+        return new RestaurantResponseDTO(restaurantModel.getId(), restaurantModel.getName(), restaurantModel.getPhone(), restaurantModel.getAddress(), restaurantModel.getActive());
     }
 }
