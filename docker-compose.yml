@@ -1,0 +1,51 @@
+services:
+  back:
+    container_name: back
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - private_network
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/minha-mesa
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1131
+      - SPRING_DATA_REDIS_PORT=6379
+      - SPRING_DATA_REDIS_HOST=cache
+      - SPRING_CACHE_TYPE=redis
+    depends_on:
+      - database
+      - cache
+
+  database:
+    container_name: database
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1131
+      - POSTGRES_DB=minha-mesa
+    ports:
+      - "5432:5432"
+    networks:
+      - private_network
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+  cache:
+    container_name: cache
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      private_network:
+
+volumes:
+  database_data:
+
+networks:
+  private_network:
+    driver: bridge
+  public_network:
+    driver: bridge
