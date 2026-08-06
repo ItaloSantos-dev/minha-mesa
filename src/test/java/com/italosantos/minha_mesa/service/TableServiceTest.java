@@ -226,8 +226,8 @@ class TableServiceTest {
         Integer restaurantId = 1;
         Integer capacity = 1;
         LocalDate date = LocalDate.now().plusDays(10);
-        LocalTime timeStart = LocalTime.now().plusHours(10);
-        LocalTime timeEnd = LocalTime.now().plusHours(9);
+        LocalTime timeStart = LocalTime.of(15, 0);
+        LocalTime timeEnd = LocalTime.of(14, 0);
 
         RestaurantModel restaurantModel = new RestaurantModel();
 
