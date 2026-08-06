@@ -67,4 +67,13 @@ public class RestaurantService {
             throw new ResourceNotFoundException();
         return this.workingScheduleRepository.findByRestaurantModelId(id, pageable).getContent();
     }
+
+    public void deleteRestaurantByUser(UserModel userModel){
+        RestaurantModel restaurantModel = this.restaurantRepository.findByOwnerModelUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+        if (!restaurantModel.getActive())
+            throw new RestaurantAlreadyHasDesactiveException();
+        restaurantModel.setActive(false);
+        this.restaurantRepository.save(restaurantModel);
+    }
 }

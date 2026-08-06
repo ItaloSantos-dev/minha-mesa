@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.responses.FailedApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -175,5 +176,22 @@ public class RestaurantController {
                 .toList();
 
         return ResponseEntity.ok(response);
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Desativa o restaurante do usuário que fez a requisição",
+            description = "Retorna void se tiver sucesso"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Restaurante desativado com suceso"),
+            @ApiResponse(responseCode = "409", description = "O restaurante do usuário já está desativado")
+    })
+    @DeleteMapping
+    public ResponseEntity<Void> deleteRestaurantByUser(
+            @AuthenticationPrincipal UserModel userModel
+    ){
+        this.restaurantService.deleteRestaurantByUser(userModel);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -77,4 +77,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerAlreadyExistsScheduleExceptionException(AlreadyExistsScheduleExceptionException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
+
+    @ExceptionHandler(RestaurantAlreadyHasDesactiveException.class)
+    public ResponseEntity<ExceptionResponse> handlerRestaurantAlreadyHasDesactiveException(RestaurantAlreadyHasDesactiveException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
 }
