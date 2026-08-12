@@ -1,6 +1,8 @@
 package com.italosantos.minha_mesa.service;
 
+import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
+import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
@@ -17,10 +19,12 @@ import java.util.List;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final ReserveRepository reserveRepository;
+    private final ReserveMapper reserveMapper;
 
-    public UserService(UserRepository userRepository, ReserveRepository reserveRepository) {
+    public UserService(UserRepository userRepository, ReserveRepository reserveRepository, ReserveMapper reserveMapper) {
         this.userRepository = userRepository;
         this.reserveRepository = reserveRepository;
+        this.reserveMapper = reserveMapper;
     }
 
     @Override
@@ -28,12 +32,17 @@ public class UserService implements UserDetailsService {
         return this.userRepository.findByEmail(username);
     }
 
-    public List<ReserveModel> getReservesOfUser(UserModel userModel, Pageable pageable){
-        return this.reserveRepository.findByUserModelId(userModel.getId(), pageable).getContent();
+    public List<ReserveResponseDTO> getReservesOfUser(UserModel userModel, Pageable pageable){
+        List<ReserveModel> reserves = this.reserveRepository.findByUserModelId(userModel.getId(), pageable).getContent();
+        return reserves.stream()
+                .map(this.reserveMapper::modelToResponse)
+                .toList();
     }
 
-    public ReserveModel getReserveOfUserById(UserModel userModel, Integer id){
-        return this.reserveRepository.findByIdAndUserModelId(id, userModel.getId())
-                .orElseThrow(ResourceNotFoundException::new);
+    public ReserveResponseDTO getReserveOfUserById(UserModel userModel, Integer id){
+        return this.reserveMapper.modelToResponse(
+                this.reserveRepository.findByIdAndUserModelId(id, userModel.getId())
+                        .orElseThrow(ResourceNotFoundException::new)
+        );
     }
 }

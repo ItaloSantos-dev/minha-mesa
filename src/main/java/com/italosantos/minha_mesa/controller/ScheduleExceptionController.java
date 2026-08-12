@@ -30,11 +30,9 @@ import java.net.URI;
 @RequestMapping("schedule-exceptions")
 public class ScheduleExceptionController {
     private final ScheduleExceptionService scheduleExceptionService;
-    private final ScheduleExceptionMapper scheduleExceptionMapper;
 
-    public ScheduleExceptionController(ScheduleExceptionService scheduleExceptionService, ScheduleExceptionMapper scheduleExceptionMapper) {
+    public ScheduleExceptionController(ScheduleExceptionService scheduleExceptionService) {
         this.scheduleExceptionService = scheduleExceptionService;
-        this.scheduleExceptionMapper = scheduleExceptionMapper;
     }
 
     @Operation(
@@ -68,7 +66,7 @@ public class ScheduleExceptionController {
             @AuthenticationPrincipal UserModel userModel,
             @RequestBody CreateScheduleExceptionDTO createScheduleExceptionDTO
             ){
-        ScheduleExceptionModel scheduleExceptionModel = this.scheduleExceptionService.createscheduleExceptionModel(createScheduleExceptionDTO, userModel);
-        return ResponseEntity.created(URI.create("/schedule-exceptions" + scheduleExceptionModel.getId())).body(this.scheduleExceptionMapper.modelToResponse(scheduleExceptionModel));
+        ScheduleExceptionResponseDTO scheduleExceptionResponseDTO = this.scheduleExceptionService.createscheduleExceptionModel(createScheduleExceptionDTO, userModel);
+        return ResponseEntity.created(URI.create("/schedule-exceptions" + scheduleExceptionResponseDTO.id())).body(scheduleExceptionResponseDTO);
     }
 }

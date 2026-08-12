@@ -27,12 +27,10 @@ import java.net.URI;
 @RequestMapping("working-schedules")
 public class WorkingScheduleController {
     private final WorkingScheduleService workingScheduleService;
-    private final WorkingScheduleMapper workingScheduleMapper;
 
 
-    public WorkingScheduleController(WorkingScheduleService workingScheduleService, WorkingScheduleMapper workingScheduleMapper) {
+    public WorkingScheduleController(WorkingScheduleService workingScheduleService) {
         this.workingScheduleService = workingScheduleService;
-        this.workingScheduleMapper = workingScheduleMapper;
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -66,8 +64,8 @@ public class WorkingScheduleController {
             @AuthenticationPrincipal UserModel userModel,
             @RequestBody CreateWorkingScheduleResquestDTO createWorkingScheduleResquestDTO
     ){
-        WorkingScheduleModel workingScheduleModel = this.workingScheduleService.createWorkingSchedule(userModel, createWorkingScheduleResquestDTO);
-        return ResponseEntity.created(URI.create("working-schedules" + workingScheduleModel.getId())).body(this.workingScheduleMapper.modelToResponse(workingScheduleModel));
+        WorkingScheduleResponseDTO workingScheduleResponseDTO = this.workingScheduleService.createWorkingSchedule(userModel, createWorkingScheduleResquestDTO);
+        return ResponseEntity.created(URI.create("working-schedules" + workingScheduleResponseDTO.id())).body(workingScheduleResponseDTO);
     }
 
     @SecurityRequirement(name = "Bearer Authentication")

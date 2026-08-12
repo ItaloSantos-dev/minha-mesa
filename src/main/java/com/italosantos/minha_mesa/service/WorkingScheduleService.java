@@ -1,6 +1,7 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.working_schedule.CreateWorkingScheduleResquestDTO;
+import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.RestaurantModel;
@@ -22,7 +23,7 @@ public class WorkingScheduleService {
         this.workingScheduleMapper = workingScheduleMapper;
     }
 
-    public WorkingScheduleModel createWorkingSchedule(UserModel userModel, CreateWorkingScheduleResquestDTO createWorkingScheduleResquestDTO){
+    public WorkingScheduleResponseDTO createWorkingSchedule(UserModel userModel, CreateWorkingScheduleResquestDTO createWorkingScheduleResquestDTO){
         RestaurantModel restaurantModel = this.restaurantRepository.findByOwnerModelUserModelId(userModel.getId())
                 .orElseThrow(RestaurantNotFoundException::new);
 
@@ -38,7 +39,7 @@ public class WorkingScheduleService {
             throw new AlreadyExistsThisWorkingScheduleException(createWorkingScheduleResquestDTO.dayOfWeek(), createWorkingScheduleResquestDTO.timeStart(),createWorkingScheduleResquestDTO.timeEnd());
 
         WorkingScheduleModel workingScheduleModel = this.workingScheduleMapper.createToModel(createWorkingScheduleResquestDTO, restaurantModel);
-        return this.workingScheduleRepository.save(workingScheduleModel);
+        return this.workingScheduleMapper.modelToResponse(this.workingScheduleRepository.save(workingScheduleModel));
     }
 
     public void deleteWorkingScheduleById(UserModel userModel, Integer id){

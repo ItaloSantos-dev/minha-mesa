@@ -30,11 +30,9 @@ import java.util.List;
 @RequestMapping("users")
 public class UserController {
     private final UserService userService;
-    private final ReserveMapper reserveMapper;
 
-    public UserController(UserService userService, ReserveMapper reserveMapper) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.reserveMapper = reserveMapper;
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -47,12 +45,8 @@ public class UserController {
     })
     @GetMapping("/reserves")
     public ResponseEntity<List<ReserveResponseDTO>> getReservesOfUser(@AuthenticationPrincipal UserModel userModel, Pageable pageable){
-        List<ReserveModel> reserveResponseDTOS = this.userService.getReservesOfUser(userModel, pageable);
-        List<ReserveResponseDTO> response = reserveResponseDTOS.stream()
-                .map(this.reserveMapper::modelToResponse)
-                .toList();
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(this.userService.getReservesOfUser(userModel, pageable));
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -71,8 +65,6 @@ public class UserController {
     })
     @GetMapping("/reserves/{id}")
     public ResponseEntity<ReserveResponseDTO> getReserveOfUserById(@AuthenticationPrincipal UserModel userModel, @PathVariable Integer id){
-        ReserveModel reserveModel = this.userService.getReserveOfUserById(userModel, id);
-
-        return ResponseEntity.ok(this.reserveMapper.modelToResponse(reserveModel));
+        return ResponseEntity.ok(this.userService.getReserveOfUserById(userModel, id));
     }
 }

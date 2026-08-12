@@ -29,11 +29,9 @@ import java.net.URI;
 @RequestMapping("reserves")
 public class ReserveController {
     private final ReserveService reserveService;
-    private final ReserveMapper reserveMapper;
 
-    public ReserveController(ReserveService reserveService, ReserveMapper reserveMapper) {
+    public ReserveController(ReserveService reserveService) {
         this.reserveService = reserveService;
-        this.reserveMapper = reserveMapper;
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -64,8 +62,8 @@ public class ReserveController {
     })
     @PostMapping
     public ResponseEntity<ReserveResponseDTO> createReserve(@AuthenticationPrincipal UserModel userModel, @RequestBody CreateReserveRequestDTO createReserveRequestDTO){
-        ReserveModel reserveModel = this.reserveService.createReserve(createReserveRequestDTO, userModel);
-        return ResponseEntity.created(URI.create("/working-schedules"+reserveModel.getId().toString())).body(this.reserveMapper.modelToResponse(reserveModel));
+        ReserveResponseDTO reserveResponseDTO = this.reserveService.createReserve(createReserveRequestDTO, userModel);
+        return ResponseEntity.created(URI.create("/working-schedules"+reserveResponseDTO.id().toString())).body(reserveResponseDTO);
     }
 
     @SecurityRequirement(name = "Bearer Authentication")

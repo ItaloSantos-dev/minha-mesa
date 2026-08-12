@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.auth.LoginRequestDTO;
 import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
+import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.exception.UserAlreadyRegisterException;
 import com.italosantos.minha_mesa.mapper.UserMapper;
 import com.italosantos.minha_mesa.model.UserModel;
@@ -36,10 +37,10 @@ public class AuthService {
         return token;
     }
 
-    public UserModel register(RegisterRequestDTO registerRequestDTO){
+    public UserResponseDTO register(RegisterRequestDTO registerRequestDTO){
         if (this.userRepository.existsByEmail(registerRequestDTO.email()))
             throw new UserAlreadyRegisterException();
         UserModel userModel = this.userMapper.registerToModel(registerRequestDTO, this.passwordEncoder);
-        return this.userRepository.save(userModel);
+        return this.userMapper.modelToResponse(this.userRepository.save(userModel));
     }
 }

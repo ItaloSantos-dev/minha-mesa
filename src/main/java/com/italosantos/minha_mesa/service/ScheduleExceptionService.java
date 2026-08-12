@@ -1,6 +1,7 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.schedule_exception.CreateScheduleExceptionDTO;
+import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.exception.AlreadyExistsScheduleExceptionException;
 import com.italosantos.minha_mesa.exception.AlreadyExistsThisWorkingScheduleException;
 import com.italosantos.minha_mesa.exception.IllegalParameterException;
@@ -27,7 +28,7 @@ public class ScheduleExceptionService {
         this.ownerRepository = ownerRepository;
     }
 
-    public ScheduleExceptionModel createscheduleExceptionModel(CreateScheduleExceptionDTO createScheduleExceptionDTO, UserModel userModel){
+    public ScheduleExceptionResponseDTO createscheduleExceptionModel(CreateScheduleExceptionDTO createScheduleExceptionDTO, UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
         if (createScheduleExceptionDTO.date().isBefore(LocalDate.now()))
@@ -40,7 +41,7 @@ public class ScheduleExceptionService {
             throw new IllegalParameterException("Você deve explicar o motivo");
 
         ScheduleExceptionModel scheduleExceptionModel = this.scheduleExceptionMapper.createToModel(createScheduleExceptionDTO, ownerModel.getRestaurantModel());
-        return this.scheduleExceptionRepository.save(scheduleExceptionModel);
+        return this.scheduleExceptionMapper.modelToResponse(this.scheduleExceptionRepository.save(scheduleExceptionModel));
 
     }
 }

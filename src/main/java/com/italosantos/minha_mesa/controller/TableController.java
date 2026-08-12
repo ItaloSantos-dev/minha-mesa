@@ -32,11 +32,9 @@ import java.util.List;
 @RequestMapping("tables")
 public class TableController {
     private final TableService tableService;
-    private final TableMapper tableMapper;
 
-    public TableController(TableService tableService, TableMapper tableMapper) {
+    public TableController(TableService tableService) {
         this.tableService = tableService;
-        this.tableMapper = tableMapper;
     }
 
     @Operation(
@@ -73,10 +71,8 @@ public class TableController {
             @RequestParam LocalTime timeEnd,
             Pageable pageable
     ){
-        List<TableModel> tables = this.tableService.getTablesAvaliables(restaurantId, capacity, date, timeStart, timeEnd, pageable);
-        List<TableResponseDTO> response = tables.stream()
-                .map(this.tableMapper::modelToResponse)
-                .toList();
+        List<TableResponseDTO> response = this.tableService.getTablesAvaliables(restaurantId, capacity, date, timeStart, timeEnd, pageable);
+
         return ResponseEntity.ok(response);
 
     }
@@ -96,8 +92,7 @@ public class TableController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<TableResponseDTO> getTableById(@PathVariable Integer id){
-        TableModel tableModel = this.tableService.getTableById(id);
-        return ResponseEntity.ok(this.tableMapper.modelToResponse(tableModel));
+        return ResponseEntity.ok(this.tableService.getTableById(id));
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -129,8 +124,8 @@ public class TableController {
     })
     @PostMapping
     public ResponseEntity<TableResponseDTO> createTable(@AuthenticationPrincipal UserModel userModel, @RequestBody CreateTableRequestDTO createTableRequestDTO){
-        TableModel tableModel = this.tableService.createTable(createTableRequestDTO, userModel);
-        return ResponseEntity.created(URI.create("/tables" + tableModel.getId())).body(this.tableMapper.modelToResponse(tableModel));
+        TableResponseDTO tableResponseDTO = this.tableService.createTable(createTableRequestDTO, userModel);
+        return ResponseEntity.created(URI.create("/tables" + tableResponseDTO.id())).body(tableResponseDTO);
     }
 
     @SecurityRequirement(name = "Bearer Authentication")

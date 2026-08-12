@@ -73,12 +73,12 @@ public class ReserveService {
 
     }
 
-    public ReserveModel createReserve(CreateReserveRequestDTO createReserveRequestDTO, UserModel userModel){
+    public ReserveResponseDTO createReserve(CreateReserveRequestDTO createReserveRequestDTO, UserModel userModel){
         TableModel tableModel = this.tableRepository.findById(createReserveRequestDTO.tableId())
                 .orElseThrow(ResourceNotFoundException::new);
         this.validateParams(createReserveRequestDTO, tableModel );
         ReserveModel reserveModel = this.reserveMapper.createToModel(createReserveRequestDTO, tableModel, userModel);
-        return this.reserveRepository.save(reserveModel);
+        return this.reserveMapper.modelToResponse(this.reserveRepository.save(reserveModel));
     }
 
     private void validateNewStatusOfreserve(ReserveModel reserveModel, ReserveStatus newStatus, boolean userIsCliente){

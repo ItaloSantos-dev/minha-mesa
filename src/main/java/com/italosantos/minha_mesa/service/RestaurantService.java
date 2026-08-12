@@ -1,8 +1,13 @@
 package com.italosantos.minha_mesa.service;
 
+import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
+import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
+import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.repository.OwnerRepository;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
@@ -22,50 +27,66 @@ public class RestaurantService {
     private final OwnerRepository ownerRepository;
     private final ReserveRepository reserveRepository;
     private final WorkingScheduleRepository workingScheduleRepository;
+    private final ReserveMapper reserveMapper;
+    private final WorkingScheduleMapper workingScheduleMapper;
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository) {
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
         this.ownerRepository = ownerRepository;
         this.reserveRepository = reserveRepository;
         this.workingScheduleRepository = workingScheduleRepository;
+        this.reserveMapper = reserveMapper;
+        this.workingScheduleMapper = workingScheduleMapper;
     }
 
 
     @Transactional
-    public RestaurantModel createRestaurant(UserModel userModel, CreateRestaurantRequestDTO createRestaurantRequestDTO){
+    public RestaurantResponseDTO createRestaurant(UserModel userModel, CreateRestaurantRequestDTO createRestaurantRequestDTO){
         if (this.restaurantRepository.existsByOwnerModelUserModelId(userModel.getId()))
             throw new OwnerAlreadyHaveRestaurantException();
 
         OwnerModel ownerModel = this.ownerService.createOwner(userModel, createRestaurantRequestDTO.ownerData());
         RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel);
-        return this.restaurantRepository.save(restaurantModel);
+        return this.restaurantMapper.modelToResponse(this.restaurantRepository.save(restaurantModel));
     }
 
-    public RestaurantModel getRestaurantById(Integer id){
-        return this.restaurantRepository.findById(id)
-                .orElseThrow(() -> new RestaurantNotFoundException(id));
+    public RestaurantResponseDTO getRestaurantById(Integer id){
+        return this.restaurantMapper.modelToResponse(
+                this.restaurantRepository.findById(id)
+                        .orElseThrow(() -> new RestaurantNotFoundException(id))
+        );
     }
 
-    public List<ReserveModel> getReservesOfRestaurant(UserModel userModel, Pageable pageable){
-        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
-                .orElseThrow(UserIsNotOwnerException::new);
-        return this.reserveRepository.findByTableModelRestaurantModelId(ownerModel.getRestaurantModel().getId(), pageable).getContent();
-    }
-
-    public ReserveModel getReserveOfRestaurantById(UserModel userModel, Integer id){
+    public List<ReserveResponseDTO> getReservesOfRestaurant(UserModel userModel, Pageable pageable){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
 
-        return this.reserveRepository.findByIdAndTableModelRestaurantModelId(id, ownerModel.getRestaurantModel().getId())
+        List<ReserveModel> reserves = this.reserveRepository.findByTableModelRestaurantModelId(ownerModel.getRestaurantModel().getId(), pageable).getContent();
+
+        return reserves.stream()
+                .map(this.reserveMapper::modelToResponse)
+                .toList();
+    }
+
+    public ReserveResponseDTO getReserveOfRestaurantById(UserModel userModel, Integer id){
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+        ReserveModel reserveModel = this.reserveRepository.findByIdAndTableModelRestaurantModelId(id, ownerModel.getRestaurantModel().getId())
                 .orElseThrow(ResourceNotFoundException::new);
+        return this.reserveMapper.modelToResponse(reserveModel);
     }
 
-    public List<WorkingScheduleModel> getDaysWorkingOfRestaurantById(Integer id, Pageable pageable){
+    public List<WorkingScheduleResponseDTO> getDaysWorkingOfRestaurantById(Integer id, Pageable pageable){
         if (! this.restaurantRepository.existsById(id))
             throw new ResourceNotFoundException();
-        return this.workingScheduleRepository.findByRestaurantModelId(id, pageable).getContent();
+        List<WorkingScheduleModel> workingScheduleModels = this.workingScheduleRepository.findByRestaurantModelId(id, pageable).getContent();
+
+        return workingScheduleModels.stream()
+                .map(this.workingScheduleMapper::modelToResponse)
+                .toList();
     }
 
     public void deleteRestaurantByUser(UserModel userModel){

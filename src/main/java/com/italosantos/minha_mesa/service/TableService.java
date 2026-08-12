@@ -1,6 +1,7 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.table.CreateTableRequestDTO;
+import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.mapper.TableMapper;
 import com.italosantos.minha_mesa.model.*;
@@ -34,7 +35,7 @@ public class TableService {
         this.workingScheduleRepository = workingScheduleRepository;
     }
 
-    public TableModel createTable(CreateTableRequestDTO createTableRequestDTO, UserModel userModel){
+    public TableResponseDTO createTable(CreateTableRequestDTO createTableRequestDTO, UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(NotPermitedException::new);
         if (createTableRequestDTO.capacity()<1)
@@ -44,7 +45,7 @@ public class TableService {
             throw new AlreadyExistTableWithNumberException();
         TableModel tableModel = this.tableMapper.createToModel(createTableRequestDTO, ownerModel.getRestaurantModel());
 
-        return this.tableRepository.save(tableModel);
+        return this.tableMapper.modelToResponse(this.tableRepository.save(tableModel));
     }
 
     public void deleteTableById(UserModel userModel, Integer id){
@@ -61,9 +62,9 @@ public class TableService {
         this.tableRepository.save(tableModel);
     }
 
-    public TableModel getTableById(Integer id){
-        return this.tableRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
+    public TableResponseDTO getTableById(Integer id){
+        return this.tableMapper.modelToResponse(this.tableRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new));
     }
 
     private void validateParams(
@@ -98,7 +99,7 @@ public class TableService {
 
     }
 
-    public List<TableModel> getTablesAvaliables(
+    public List<TableResponseDTO> getTablesAvaliables(
             Integer restaurantId,
             Integer capacity,
             LocalDate date,
@@ -117,7 +118,7 @@ public class TableService {
                 timeEnd
         );
 
-         return this.tableRepository.findAvailableTables(
+         List<TableModel> tables = this.tableRepository.findAvailableTables(
                  date,
                  timeStart,
                  ReserveStatus.CANCELED,
@@ -125,6 +126,10 @@ public class TableService {
                  restaurantId,
                  pageable
         ).getContent();
+
+         return tables.stream()
+                 .map(this.tableMapper::modelToResponse)
+                 .toList();
 
 
 

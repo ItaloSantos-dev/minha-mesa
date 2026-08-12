@@ -25,11 +25,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserMapper userMapper;
 
-    public AuthController(AuthService authService, UserMapper userMapper) {
+    public AuthController(AuthService authService) {
         this.authService = authService;
-        this.userMapper = userMapper;
     }
     @Operation(
             summary = "Login de usuário",
@@ -64,7 +62,6 @@ public class AuthController {
     })
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> register(@RequestBody RegisterRequestDTO registerRequestDTO){
-        UserModel userModel = this.authService.register(registerRequestDTO);
-        return ResponseEntity.ok(this.userMapper.modelToResponse(userModel));
+        return ResponseEntity.ok(this.authService.register(registerRequestDTO));
     }
 }

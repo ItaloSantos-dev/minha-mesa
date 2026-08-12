@@ -36,18 +36,13 @@ import java.util.List;
 @RestController
 @RequestMapping("restaurants")
 public class RestaurantController {
-    private final RestaurantMapper restaurantMapper;
     private final RestaurantService restaurantService;
-    private final ReserveMapper reserveMapper;
-    private final WorkingScheduleMapper workingScheduleMapper;
 
 
 
-    public RestaurantController(RestaurantMapper restaurantMapper, RestaurantService restaurantService, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper) {
-        this.restaurantMapper = restaurantMapper;
+    public RestaurantController(RestaurantService restaurantService) {
+
         this.restaurantService = restaurantService;
-        this.reserveMapper = reserveMapper;
-        this.workingScheduleMapper = workingScheduleMapper;
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -75,8 +70,8 @@ public class RestaurantController {
             @AuthenticationPrincipal UserModel userModel,
             @RequestBody CreateRestaurantRequestDTO createRestaurantRequestDTO
     ){
-        RestaurantModel restaurantModel = this.restaurantService.createRestaurant(userModel, createRestaurantRequestDTO);
-        return ResponseEntity.created(URI.create("/restaurants" + restaurantModel.getId())).body(this.restaurantMapper.modelToResponse(restaurantModel));
+        RestaurantResponseDTO restaurantResponseDTO = this.restaurantService.createRestaurant(userModel, createRestaurantRequestDTO);
+        return ResponseEntity.created(URI.create("/restaurants" + restaurantResponseDTO.id())).body(restaurantResponseDTO);
     }
 
     @Operation(
@@ -94,8 +89,7 @@ public class RestaurantController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponseDTO> getRestaurantBydId(@PathVariable Integer id){
-        RestaurantModel restaurantModel = this.restaurantService.getRestaurantById(id);
-        return ResponseEntity.ok(this.restaurantMapper.modelToResponse(restaurantModel));
+        return ResponseEntity.ok(this.restaurantService.getRestaurantById(id));
     }
 
 
@@ -117,12 +111,7 @@ public class RestaurantController {
     })
     @GetMapping("/reserves")
     public ResponseEntity<List<ReserveResponseDTO>> getReservesOfRestaurant(@AuthenticationPrincipal UserModel userModel, Pageable pageable){
-        List<ReserveModel> reserveModels = this.restaurantService.getReservesOfRestaurant(userModel, pageable);
-        List<ReserveResponseDTO> response = reserveModels.stream()
-                .map(reserve -> this.reserveMapper.modelToResponse(reserve))
-                .toList();
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(this.restaurantService.getReservesOfRestaurant(userModel, pageable));
     }
 
 
@@ -149,8 +138,7 @@ public class RestaurantController {
     })
     @GetMapping("/reserves/{id}")
     public ResponseEntity<ReserveResponseDTO> getReserveOfRestaurantById(@AuthenticationPrincipal UserModel userModel, @PathVariable Integer id){
-        ReserveModel reserveModel = this.restaurantService.getReserveOfRestaurantById(userModel, id);
-        return ResponseEntity.ok(this.reserveMapper.modelToResponse(reserveModel));
+        return ResponseEntity.ok(this.restaurantService.getReserveOfRestaurantById(userModel, id));
     }
 
     @Operation(
@@ -168,14 +156,7 @@ public class RestaurantController {
     })
     @GetMapping("/{id}/working-scheduleds")
     public ResponseEntity<List<WorkingScheduleResponseDTO>> getDaysWorkingOfRestaurantById(@PathVariable Integer id, Pageable pageable){
-
-        List<WorkingScheduleModel> workingScheduleModels = this.restaurantService.getDaysWorkingOfRestaurantById(id, pageable);
-
-        List<WorkingScheduleResponseDTO> response = workingScheduleModels.stream()
-                .map(working -> this.workingScheduleMapper.modelToResponse(working))
-                .toList();
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(this.restaurantService.getDaysWorkingOfRestaurantById(id, pageable));
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
