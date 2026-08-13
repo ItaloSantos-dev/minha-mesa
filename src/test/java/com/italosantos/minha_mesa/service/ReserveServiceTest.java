@@ -47,6 +47,9 @@ class ReserveServiceTest {
     @Mock
     ReserveMapper reserveMapper;
 
+    @Mock
+    CacheService cacheService;
+
 
 
     @Test

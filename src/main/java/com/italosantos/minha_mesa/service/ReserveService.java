@@ -4,6 +4,7 @@ import com.italosantos.minha_mesa.dto.reserve.CreateReserveRequestDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveUpdateResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
+import com.italosantos.minha_mesa.infra.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.DayOfWeek;
@@ -23,14 +24,16 @@ public class ReserveService {
     private final WorkingScheduleRepository workingScheduleRepository;
     private final ReserveMapper reserveMapper;
     private final OwnerRepository ownerRepository;
+    private final CacheService cacheService;
 
-    public ReserveService(ReserveRepository reserveRepository, TableRepository tableRepository, ScheduleExceptionRepository scheduleExceptionRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, OwnerRepository ownerRepository) {
+    public ReserveService(ReserveRepository reserveRepository, TableRepository tableRepository, ScheduleExceptionRepository scheduleExceptionRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, OwnerRepository ownerRepository, CacheService cacheService) {
         this.reserveRepository = reserveRepository;
         this.tableRepository = tableRepository;
         this.scheduleExceptionRepository = scheduleExceptionRepository;
         this.workingScheduleRepository = workingScheduleRepository;
         this.reserveMapper = reserveMapper;
         this.ownerRepository = ownerRepository;
+        this.cacheService = cacheService;
     }
 
     private void validateParams(
@@ -78,6 +81,7 @@ public class ReserveService {
                 .orElseThrow(ResourceNotFoundException::new);
         this.validateParams(createReserveRequestDTO, tableModel );
         ReserveModel reserveModel = this.reserveMapper.createToModel(createReserveRequestDTO, tableModel, userModel);
+        this.cacheService.deleteCache(RedisCacheConfig.RESERVESUSERSCACHENAME);
         return this.reserveMapper.modelToResponse(this.reserveRepository.save(reserveModel));
     }
 
@@ -142,6 +146,7 @@ public class ReserveService {
         }
 
         reserveModel = this.reserveRepository.save(reserveModel);
+        this.cacheService.deleteCache(RedisCacheConfig.RESERVESUSERSCACHENAME);
 
         return new ReserveUpdateResponseDTO(
                 menssage,
