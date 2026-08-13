@@ -52,7 +52,10 @@ public class RestaurantService {
         RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel);
         return this.restaurantMapper.modelToResponse(this.restaurantRepository.save(restaurantModel));
     }
-
+    @Cacheable(
+            value = "restaurant",
+            key = "#id"
+    )
     public RestaurantResponseDTO getRestaurantById(Integer id){
         return this.restaurantMapper.modelToResponse(
                 this.restaurantRepository.findById(id)
