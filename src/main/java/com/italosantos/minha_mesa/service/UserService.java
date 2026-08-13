@@ -7,6 +7,7 @@ import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
 import com.italosantos.minha_mesa.repository.UserRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,6 +33,11 @@ public class UserService implements UserDetailsService {
         return this.userRepository.findByEmail(username);
     }
 
+    @Cacheable(
+            value = "reservas-usuario",
+            key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
+
+    )
     public List<ReserveResponseDTO> getReservesOfUser(UserModel userModel, Pageable pageable){
         List<ReserveModel> reserves = this.reserveRepository.findByUserModelId(userModel.getId(), pageable).getContent();
         return reserves.stream()
