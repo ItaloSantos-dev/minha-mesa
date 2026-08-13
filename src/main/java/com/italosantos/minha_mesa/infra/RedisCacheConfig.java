@@ -19,6 +19,7 @@ import java.util.List;
 public class RedisCacheConfig {
     private final ObjectMapper objectMapper = new ObjectMapper();
     public final static String RESERVESUSERSCACHENAME = "reservas-usuario";
+    public final static String RESERVESRESTAURANTCACHENAME = "reservas-restaurante";
     @Bean
     public RedisCacheManager redisCacheManager(
             RedisConnectionFactory redisConnectionFactory
@@ -42,12 +43,16 @@ public class RedisCacheConfig {
                 .cacheDefaults(defaultConfig)
                 .withCacheConfiguration(
                         RESERVESUSERSCACHENAME,
-                        this.reservasUsuarioCacheConfig(defaultConfig)
+                        this.reserveListCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        RESERVESRESTAURANTCACHENAME,
+                        this.reserveListCacheConfig(defaultConfig)
                 )
                 .build();
     }
 
-    private RedisCacheConfiguration reservasUsuarioCacheConfig(RedisCacheConfiguration defaultConfig){
+    private RedisCacheConfiguration reserveListCacheConfig(RedisCacheConfiguration defaultConfig){
 
 
         JavaType reservasUsuarioType =

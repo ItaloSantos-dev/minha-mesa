@@ -13,6 +13,7 @@ import com.italosantos.minha_mesa.repository.OwnerRepository;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
 import com.italosantos.minha_mesa.repository.RestaurantRepository;
 import com.italosantos.minha_mesa.repository.WorkingScheduleRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +60,11 @@ public class RestaurantService {
         );
     }
 
+    @Cacheable(
+            value = "reservas-restaurante",
+            key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
+
+    )
     public List<ReserveResponseDTO> getReservesOfRestaurant(UserModel userModel, Pageable pageable){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);

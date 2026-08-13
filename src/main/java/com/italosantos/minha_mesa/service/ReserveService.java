@@ -82,6 +82,8 @@ public class ReserveService {
         this.validateParams(createReserveRequestDTO, tableModel );
         ReserveModel reserveModel = this.reserveMapper.createToModel(createReserveRequestDTO, tableModel, userModel);
         this.cacheService.deleteCache(RedisCacheConfig.RESERVESUSERSCACHENAME);
+        this.cacheService.deleteCache(RedisCacheConfig.RESERVESRESTAURANTCACHENAME);
+
         return this.reserveMapper.modelToResponse(this.reserveRepository.save(reserveModel));
     }
 
@@ -147,6 +149,7 @@ public class ReserveService {
 
         reserveModel = this.reserveRepository.save(reserveModel);
         this.cacheService.deleteCache(RedisCacheConfig.RESERVESUSERSCACHENAME);
+        this.cacheService.deleteCache(RedisCacheConfig.RESERVESRESTAURANTCACHENAME);
 
         return new ReserveUpdateResponseDTO(
                 menssage,
