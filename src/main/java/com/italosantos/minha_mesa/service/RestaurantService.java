@@ -5,6 +5,7 @@ import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
+import com.italosantos.minha_mesa.infra.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
 import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
@@ -53,7 +54,7 @@ public class RestaurantService {
         return this.restaurantMapper.modelToResponse(this.restaurantRepository.save(restaurantModel));
     }
     @Cacheable(
-            value = "restaurant",
+            value = RedisCacheConfig.RESTAURANTCACHENAME,
             key = "#id"
     )
     public RestaurantResponseDTO getRestaurantById(Integer id){
@@ -64,7 +65,7 @@ public class RestaurantService {
     }
 
     @Cacheable(
-            value = "reservas-restaurante",
+            value = RedisCacheConfig.RESERVESRESTAURANTCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
 
     )

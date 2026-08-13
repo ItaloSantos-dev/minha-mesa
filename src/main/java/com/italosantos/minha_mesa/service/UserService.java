@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
+import com.italosantos.minha_mesa.infra.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.UserModel;
@@ -34,7 +35,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Cacheable(
-            value = "reservas-usuario",
+            value = RedisCacheConfig.RESERVESUSERSCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
 
     )

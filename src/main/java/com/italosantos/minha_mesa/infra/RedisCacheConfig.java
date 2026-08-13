@@ -19,8 +19,8 @@ import java.util.List;
 @Configuration
 public class RedisCacheConfig {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    public final static String RESERVESUSERSCACHENAME = "reservas-usuario";
-    public final static String RESERVESRESTAURANTCACHENAME = "reservas-restaurante";
+    public final static String RESERVESUSERSCACHENAME = "reserves-user";
+    public final static String RESERVESRESTAURANTCACHENAME = "reserves-restaurant";
     public final static String RESTAURANTCACHENAME = "restaurant";
     @Bean
     public RedisCacheManager redisCacheManager(
