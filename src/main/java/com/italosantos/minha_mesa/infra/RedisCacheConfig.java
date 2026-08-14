@@ -22,6 +22,11 @@ public class RedisCacheConfig {
     public final static String RESERVESUSERSCACHENAME = "reserves-user";
     public final static String RESERVESRESTAURANTCACHENAME = "reserves-restaurant";
     public final static String RESTAURANTCACHENAME = "restaurant";
+    public final static String REQUESTSLOGINCACHENAME = "requests-login";
+    public final static String REQUESTSGETCACHENAME = "requests-get";
+    public final static String REQUESTSOTHERSMETHODSCACHENAME = "requests-";
+
+
     @Bean
     public RedisCacheManager redisCacheManager(
             RedisConnectionFactory redisConnectionFactory
@@ -49,6 +54,10 @@ public class RedisCacheConfig {
                 .withCacheConfiguration(
                         RESTAURANTCACHENAME,
                         this.restaurantCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        REQUESTSLOGINCACHENAME,
+                        this.requestLoginCacheConfig()
                 )
                 .build();
     }
@@ -93,6 +102,15 @@ public class RedisCacheConfig {
                         RedisSerializationContext.SerializationPair
                                 .fromSerializer(restaurantSerializer)
                 );
+    }
+
+    private RedisCacheConfiguration requestLoginCacheConfig(){
+        return RedisCacheConfiguration.defaultCacheConfig()
+                        .serializeKeysWith(
+                                RedisSerializationContext.SerializationPair
+                                        .fromSerializer(new StringRedisSerializer())
+                        )
+                        .entryTtl(Duration.ofMinutes(1));
     }
 }
 

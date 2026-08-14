@@ -82,4 +82,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerRestaurantAlreadyHasDesactiveException(RestaurantAlreadyHasDesactiveException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
+
+    @ExceptionHandler(RequestRateLimitExceededException.class)
+    public ResponseEntity<ExceptionResponse> handlerLoginAttemptsExceededException(RequestRateLimitExceededException exception){
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(new ExceptionResponse(HttpStatus.TOO_MANY_REQUESTS, exception.getMessage()));
+    }
 }

@@ -19,9 +19,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfiguration {
     private final SecurityTokenFilter securityTokenFilter;
+    private final RateLimitFilter rateLimitFilter;
 
-    public SecurityConfiguration(SecurityTokenFilter securityTokenFilter) {
+    public SecurityConfiguration(SecurityTokenFilter securityTokenFilter, RateLimitFilter rateLimitFilter) {
         this.securityTokenFilter = securityTokenFilter;
+        this.rateLimitFilter = rateLimitFilter;
     }
 
     @Bean
@@ -31,6 +33,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(this.securityTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(this.rateLimitFilter, SecurityTokenFilter.class)
                 .authorizeHttpRequests(authorization -> authorization
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/tables/*").permitAll()
