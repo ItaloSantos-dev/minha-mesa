@@ -18,6 +18,17 @@ services:
     depends_on:
       - database
       - cache
+  
+  front:
+    build:
+      context: ./frontend\minha-mesa
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    networks:
+      - public_network
+    depends_on:
+      - back
 
   database:
     container_name: database
