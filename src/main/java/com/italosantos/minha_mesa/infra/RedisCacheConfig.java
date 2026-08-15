@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.infra;
 
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -25,6 +26,7 @@ public class RedisCacheConfig {
     public final static String REQUESTSLOGINCACHENAME = "requests-login";
     public final static String REQUESTSGETCACHENAME = "requests-get";
     public final static String REQUESTSOTHERSMETHODSCACHENAME = "requests-";
+    public final static String TABLEAVALIABLECACHENAME = "table-avaliables";
 
 
     @Bean
@@ -58,6 +60,10 @@ public class RedisCacheConfig {
                 .withCacheConfiguration(
                         REQUESTSLOGINCACHENAME,
                         this.requestLoginCacheConfig()
+                )
+                .withCacheConfiguration(
+                        TABLEAVALIABLECACHENAME,
+                        this.tableListCacheConfig(defaultConfig)
                 )
                 .build();
     }
@@ -103,6 +109,31 @@ public class RedisCacheConfig {
                                 .fromSerializer(restaurantSerializer)
                 );
     }
+
+
+
+    private RedisCacheConfiguration tableListCacheConfig(RedisCacheConfiguration defaultConfig){
+
+        JavaType tableType =
+                this.objectMapper.getTypeFactory()
+                        .constructCollectionType(
+                                List.class,
+                                TableResponseDTO.class
+                        );
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> restaurantSerializer =
+                new JacksonJsonRedisSerializer<>(
+                        this.objectMapper,
+                        tableType
+                );
+
+        return
+                defaultConfig.serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(restaurantSerializer)
+                );
+    }
+
+
 
     private RedisCacheConfiguration requestLoginCacheConfig(){
         return RedisCacheConfiguration.defaultCacheConfig()

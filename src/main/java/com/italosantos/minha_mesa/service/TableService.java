@@ -3,11 +3,13 @@ package com.italosantos.minha_mesa.service;
 import com.italosantos.minha_mesa.dto.table.CreateTableRequestDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
+import com.italosantos.minha_mesa.infra.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.TableMapper;
 import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.DayOfWeek;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.repository.*;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,14 +27,16 @@ public class TableService {
     private final ScheduleExceptionRepository scheduleExceptionRepository;
     private final RestaurantRepository restaurantRepository;
     private final WorkingScheduleRepository workingScheduleRepository;
+    private final CacheService cacheService;
 
-    public TableService(TableRepository tableRepository, OwnerRepository ownerRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, RestaurantRepository restaurantRepository, WorkingScheduleRepository workingScheduleRepository) {
+    public TableService(TableRepository tableRepository, OwnerRepository ownerRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, RestaurantRepository restaurantRepository, WorkingScheduleRepository workingScheduleRepository, CacheService cacheService) {
         this.tableRepository = tableRepository;
         this.ownerRepository = ownerRepository;
         this.tableMapper = tableMapper;
         this.scheduleExceptionRepository = scheduleExceptionRepository;
         this.restaurantRepository = restaurantRepository;
         this.workingScheduleRepository = workingScheduleRepository;
+        this.cacheService = cacheService;
     }
 
     public TableResponseDTO createTable(CreateTableRequestDTO createTableRequestDTO, UserModel userModel){
@@ -44,7 +48,7 @@ public class TableService {
         if (this.tableRepository.existsByNumberAndRestaurantModelOwnerModelId(createTableRequestDTO.number(), ownerModel.getId()))
             throw new AlreadyExistTableWithNumberException();
         TableModel tableModel = this.tableMapper.createToModel(createTableRequestDTO, ownerModel.getRestaurantModel());
-
+        this.cacheService.deleteCache(RedisCacheConfig.TABLEAVALIABLECACHENAME);
         return this.tableMapper.modelToResponse(this.tableRepository.save(tableModel));
     }
 
@@ -59,6 +63,7 @@ public class TableService {
             throw new NotPermitedException();
 
         tableModel.setActive(false);
+        this.cacheService.deleteCache(RedisCacheConfig.TABLEAVALIABLECACHENAME);
         this.tableRepository.save(tableModel);
     }
 
@@ -99,6 +104,10 @@ public class TableService {
 
     }
 
+    @Cacheable(
+            value = RedisCacheConfig.TABLEAVALIABLECACHENAME,
+            key = "#restaurantId + '-' + #capacity + '-' + #date + '-' + #timeStart + '-' + #timeEnd + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
+    )
     public List<TableResponseDTO> getTablesAvaliables(
             Integer restaurantId,
             Integer capacity,
