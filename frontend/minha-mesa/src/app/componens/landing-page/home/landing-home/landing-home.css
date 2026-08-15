@@ -1,0 +1,31 @@
+@keyframes float-down {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(10px);
+  }
+}
+
+.animate-float-down {
+  animation: float-down 1s ease-in-out infinite;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: var(--color-brown2);
+  border-radius: 20px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: #78350f;
+}
