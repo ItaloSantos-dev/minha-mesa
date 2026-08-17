@@ -1,7 +1,9 @@
 package com.italosantos.minha_mesa.service;
 
+import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
@@ -10,10 +12,9 @@ import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
 import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.*;
-import com.italosantos.minha_mesa.repository.OwnerRepository;
-import com.italosantos.minha_mesa.repository.ReserveRepository;
-import com.italosantos.minha_mesa.repository.RestaurantRepository;
-import com.italosantos.minha_mesa.repository.WorkingScheduleRepository;
+import com.italosantos.minha_mesa.model.enums.UserRole;
+import com.italosantos.minha_mesa.repository.*;
+import org.jspecify.annotations.Nullable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,8 +32,10 @@ public class RestaurantService {
     private final WorkingScheduleRepository workingScheduleRepository;
     private final ReserveMapper reserveMapper;
     private final WorkingScheduleMapper workingScheduleMapper;
+    private final AuthService authService;
+    private final UserRepository userRepository;
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper) {
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
@@ -41,15 +44,29 @@ public class RestaurantService {
         this.workingScheduleRepository = workingScheduleRepository;
         this.reserveMapper = reserveMapper;
         this.workingScheduleMapper = workingScheduleMapper;
+        this.authService = authService;
+        this.userRepository = userRepository;
     }
 
 
     @Transactional
-    public RestaurantResponseDTO createRestaurant(CreateRestaurantRequestDTO createRestaurantRequestDTO){
-        if (this.restaurantRepository.existsByOwnerModelUserModelEmail(createRestaurantRequestDTO.ownerData().email()))
-            throw new OwnerAlreadyHaveRestaurantException();
+    public RestaurantResponseDTO createRestaurant(CreateRestaurantRequestDTO createRestaurantRequestDTO, @Nullable UserModel userModel){
+        UserModel realUser;
+        if (userModel!=null){
+            if (userModel.getRole()== UserRole.OWNER)
+                throw new OwnerAlreadyHaveRestaurantException();
+            realUser=userModel;
+        }
+        else if (createRestaurantRequestDTO.ownerData().userData()!=null) {
+            UserResponseDTO userResponseDTO = this.authService.register(createRestaurantRequestDTO.ownerData().userData());
+            realUser = this.userRepository.findById(userResponseDTO.id())
+                    .orElseThrow(ResourceNotFoundException::new);
+        }
+        else
+            throw new IllegalParameterException();
 
-        OwnerModel ownerModel = this.ownerService.createOwner(createRestaurantRequestDTO.ownerData());
+
+        OwnerModel ownerModel = this.ownerService.createOwner(createRestaurantRequestDTO.ownerData(), realUser);
         RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel);
         return this.restaurantMapper.modelToResponse(this.restaurantRepository.save(restaurantModel));
     }

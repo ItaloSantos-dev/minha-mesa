@@ -40,6 +40,8 @@ public class AuthService {
     public UserResponseDTO register(RegisterRequestDTO registerRequestDTO){
         if (this.userRepository.existsByEmail(registerRequestDTO.email()))
             throw new UserAlreadyRegisterException();
+        if (this.userRepository.existsByPhone(registerRequestDTO.phone()))
+            throw new UserAlreadyRegisterException();
         UserModel userModel = this.userMapper.registerToModel(registerRequestDTO, this.passwordEncoder);
         return this.userMapper.modelToResponse(this.userRepository.save(userModel));
     }

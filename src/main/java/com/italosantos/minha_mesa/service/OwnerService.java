@@ -30,15 +30,7 @@ public class OwnerService {
     }
 
     @Transactional
-    public OwnerModel createOwner(CreateOwnerDTO createOwnerDTO){
-        UserResponseDTO userResponseDTO = this.authService.register(new RegisterRequestDTO(
-                createOwnerDTO.name(),
-                createOwnerDTO.phone(),
-                createOwnerDTO.email(),
-                createOwnerDTO.password()
-        ));
-        UserModel userModel = this.userRepository.findById(userResponseDTO.id())
-                .orElseThrow(ResourceNotFoundException::new);
+    public OwnerModel createOwner(CreateOwnerDTO createOwnerDTO, UserModel userModel){
 
         OwnerModel ownerModel = this.ownerMapper.createToModel(userModel, createOwnerDTO);
         this.ownerRepository.save(ownerModel);
