@@ -45,11 +45,11 @@ public class RestaurantService {
 
 
     @Transactional
-    public RestaurantResponseDTO createRestaurant(UserModel userModel, CreateRestaurantRequestDTO createRestaurantRequestDTO){
-        if (this.restaurantRepository.existsByOwnerModelUserModelId(userModel.getId()))
+    public RestaurantResponseDTO createRestaurant(CreateRestaurantRequestDTO createRestaurantRequestDTO){
+        if (this.restaurantRepository.existsByOwnerModelUserModelEmail(createRestaurantRequestDTO.ownerData().email()))
             throw new OwnerAlreadyHaveRestaurantException();
 
-        OwnerModel ownerModel = this.ownerService.createOwner(userModel, createRestaurantRequestDTO.ownerData());
+        OwnerModel ownerModel = this.ownerService.createOwner(createRestaurantRequestDTO.ownerData());
         RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel);
         return this.restaurantMapper.modelToResponse(this.restaurantRepository.save(restaurantModel));
     }

@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface RestaurantRepository extends JpaRepository<RestaurantModel, Integer> {
     boolean existsByOwnerModelUserModelId(Integer userId);
-
+    boolean existsByOwnerModelUserModelEmail(String email);
     Optional<RestaurantModel> findByOwnerModelUserModelId(Integer userId);
 }

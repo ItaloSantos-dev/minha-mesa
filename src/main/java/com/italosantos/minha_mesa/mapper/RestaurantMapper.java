@@ -20,6 +20,7 @@ public class RestaurantMapper {
         restaurantModel.setName(createRestaurantRequestDTO.name());
         restaurantModel.setPhone(createRestaurantRequestDTO.phone());
         restaurantModel.setAddress(createRestaurantRequestDTO.address());
+        restaurantModel.setActive(true);
         return restaurantModel;
     }
 

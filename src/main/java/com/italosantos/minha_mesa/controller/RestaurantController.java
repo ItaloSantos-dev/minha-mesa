@@ -67,10 +67,9 @@ public class RestaurantController {
     })
     @PostMapping
     public ResponseEntity<RestaurantResponseDTO> createRestaurant(
-            @AuthenticationPrincipal UserModel userModel,
             @RequestBody CreateRestaurantRequestDTO createRestaurantRequestDTO
     ){
-        RestaurantResponseDTO restaurantResponseDTO = this.restaurantService.createRestaurant(userModel, createRestaurantRequestDTO);
+        RestaurantResponseDTO restaurantResponseDTO = this.restaurantService.createRestaurant(createRestaurantRequestDTO);
         return ResponseEntity.created(URI.create("/restaurants" + restaurantResponseDTO.id())).body(restaurantResponseDTO);
     }
 
