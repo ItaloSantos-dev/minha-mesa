@@ -1,0 +1,269 @@
+<main class="min-h-screen items-center justify-center flex  p-5">
+    <div class="backdrop-blur-xl bg-white/50 border border-white/40 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between relative  w-[50vw]">
+
+        <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-600/10 rounded-full blur-2xl"></div>
+
+        <div class="relative w-full bg-(--color-bege2) p-6 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.1)]">
+
+        <header class="text-3xl text-(--color-brown2) font-extrabold text-center">
+            REGISTRAR RESTAURANTE
+        </header>
+        
+
+        <!-- Aviso sobre dados já cadastrados -->
+            <div class="flex items-start gap-2.5 mt-4 bg-(--color-bege-yellow)/15 border border-(--color-bege-yellow)/40 rounded-xl p-3">
+                <i class="bi bi-info-circle-fill text-(--color-bege-yellow) text-base mt-0.5"></i>
+                <span class="text-(--color-brown2)/80 text-xs leading-relaxed">
+                    Caso possua uma conta cadastrada como usuário comum, faça login e cadastre seu restaurante
+                </span>
+                
+            </div>
+
+            <form [formGroup]="formRegisterOwner" class="mt-4 w-full overflow-hidden " action="#">
+                <div
+                    class="flex w-[200%] transition-transform duration-500 ease-in-out"
+                    [class.-translate-x-1/2]="formShow() === -1"
+                >
+                    <div class="w-1/2 shrink-0 flex flex-col px-1">
+                        <div class="w-full mt-2.5">
+                            @if(formRegisterOwner.get('userName')?.invalid && formRegisterOwner.get('userName')?.touched) {
+                                <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                    <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                    <span class="text-red-400 text-xs font-semibold">Nome inválido</span>
+                                </div>
+                            }
+                            <label for="userName" class="text-(--color-brown2) font-semibold">Seu nome</label>
+                            <input
+                                formControlName="userName"
+                                type="text"
+                                id="userName"
+                                class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                            >
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-full mt-2.5">
+                                @if(formRegisterOwner.get('email')?.invalid && formRegisterOwner.get('email')?.touched) {
+                                    <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                        <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                        <span class="text-red-400 text-xs font-semibold">Email inválido</span>
+                                    </div>
+                                }
+                                <label for="email" class="text-(--color-brown2) font-semibold">Email</label>
+                                <input
+                                formControlName="email"
+                                type="email"
+                                id="email"
+                                placeholder="example@example.com"
+                                class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                                >
+                        </div>
+                        <div class="w-full mt-2.5">
+                            @if(formRegisterOwner.get('userPhone')?.invalid && formRegisterOwner.get('userPhone')?.touched) {
+                                <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                    <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                    <span class="text-red-400 text-xs font-semibold">Telefone inválido</span>
+                                </div>
+                            }
+                            <label for="userPhone" class="text-(--color-brown2) font-semibold">Telefone</label>
+                            <input
+                            formControlName="userPhone"
+                            mask="(00) 0 0000-0000"
+                            type="tel"
+                            id="userPhone"
+                            placeholder="(00) 0 0000-0000"
+                            class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                            >
+                        </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-full mt-2.5">
+                                @if(formRegisterOwner.get('password')?.invalid && formRegisterOwner.get('password')?.touched) {
+                                    <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                        <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                        <span class="text-red-400 text-xs font-semibold">Senha inválida</span>
+                                    </div>
+                                }
+                                <label for="password" class="text-(--color-brown2) font-semibold">Senha</label>
+                                <div class="flex items-center gap-3">
+                                    <input
+                                    formControlName="password"
+                                    type="password"
+                                    [type]="showPassword() ? 'text' : 'password'"
+                                    name="password"
+                                    id="password"
+                                    class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                                    >
+                                    <button class="cursor-pointer" (click)="showPassword.set(!showPassword())">
+                                        <i class="bi bi-eye text-2xl hover:scale-110 inline-block transition-all hover:text-gray-500 hover:shadow-2xl"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-full mt-2.5">
+                                @if(formRegisterOwner.get('cpf')?.invalid && formRegisterOwner.get('cpf')?.touched) {
+                                    <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                        <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                        <span class="text-red-400 text-xs font-semibold">Cpf inválido</span>
+                                    </div>
+                                }
+                                <label for="cpf" class="text-(--color-brown2) font-semibold">Cpf</label>
+                                <input
+                                formControlName="cpf"
+                                type="text"
+                                mask="000.000.000-00"
+                                placeholder="000.000.000-00"
+                                name="cpf"
+                                id="cpf"
+                                class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-full mt-2.5">
+                                @if(formRegisterOwner.get('nasciment')?.invalid && formRegisterOwner.get('nasciment')?.touched) {
+                                    <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                        <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                        <span class="text-red-400 text-xs font-semibold">Data inválida</span>
+                                    </div>
+                                }
+                                <label for="nasciment" class="text-(--color-brown2) font-semibold">Nascimento</label>
+                                <input
+                                formControlName="nasciment"
+                                id="nasciment"
+                                required
+                                placeholder="Enter birth date"
+                                type="date"
+                                class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                                >
+                            </div>
+                        </div>
+
+                        <button
+                            (click)="formShow.set(formShow()*-1)"
+                            [disabled]="!ownerFormPartIsValid()"
+                            class="gradient-button relative h-10 w-full text-(--color-brown2) text-base font-normal mt-4 border-none rounded-md flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-no-drop disabled:text-(--color-bege2)"
+                            >
+                            Próximo
+                        </button>
+                    </div>
+
+                    <div class="w-1/2 shrink-0 flex flex-col px-1 justify-center">
+                        <div class="w-full mt-2.5">
+                            @if(formRegisterOwner.get('restaurantName')?.invalid && formRegisterOwner.get('restaurantName')?.touched) {
+                                <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                    <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                    <span class="text-red-400 text-xs font-semibold">Nome inválido</span>
+                                </div>
+                            }
+                            <label for="restaurantName" class="text-(--color-brown2) font-semibold">Nome do restaurante</label>
+                            <input
+                                formControlName="restaurantName"
+                                type="text"
+                                id="restaurantName"
+                                class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                            >
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-full mt-2.5">
+                                @if(formRegisterOwner.get('restaurantAddress')?.invalid && formRegisterOwner.get('restaurantAddress')?.touched) {
+                                    <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                        <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                        <span class="text-red-400 text-xs font-semibold">Endereço inválido</span>
+                                    </div>
+                                }
+                                <label for="restaurantAddress" class="text-(--color-brown2) font-semibold">Endereço do restaurante</label>
+                                
+                                <textarea
+                                    formControlName="restaurantAddress"
+                                    id="restaurantAddress"
+                                    rows="3"
+                                    placeholder="Digite o endereço do restaurante"
+                                    class="w-full min-h-[90px] resize-none outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 py-2.5 bg-(--color-bege2) transition-all duration-200 focus:border-(--color-brown2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)] placeholder:text-gray-400"
+                                ></textarea>
+                            </div>
+                        
+                        </div>
+
+                        <div class="flex gap-4">
+                            <div class="w-full mt-2.5">
+                                @if(formRegisterOwner.get('restaurantPhone')?.invalid && formRegisterOwner.get('restaurantPhone')?.touched) {
+                                <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                    <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                    <span class="text-red-400 text-xs font-semibold">Telefone inválido</span>
+                                </div>
+                                }
+                                <label for="restaurantPhone" class="text-(--color-brown2) font-semibold">Telefone do restaurante</label>
+                                <div class="flex items-center gap-2">
+                                    <input
+                                        
+                                        formControlName="restaurantPhone"
+                                        mask="(00) 0 0000-0000"
+                                        type="tel"
+                                        id="restaurantPhone"
+                                        placeholder="(00) 0 0000-0000"
+                                        class="h-[35px] w-full outline-none text-base text-(--color-gray2)
+                                            border border-(--color-bege-yellow) rounded-md px-4
+                                            bg-(--color-bege2)
+                                            focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                                    >
+                                    <label
+                                        for="userMyPhone"
+                                        class="flex items-center gap-2 cursor-pointer text-sm font-semibold text-(--color-brown2)"
+                                        >
+                                        <input
+                                            
+                                            [value]="this.useNumberOwnerInNuberRestaurant()"
+                                            (change)="this.updateNumberOfRestaurant()"
+                                            type="checkbox"
+                                            name="userMyPhone"
+                                            id="userMyPhone"
+                                            class="w-4 h-4 accent-(--color-bege-yellow) cursor-pointer"
+                                        >
+
+                                        Usar meu telefone
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3 mt-auto pt-4">
+
+                            <button
+
+                                type="button"
+                                (click)="formShow.set(1)"
+                                class="h-10 px-5 rounded-md border border-(--color-bege-yellow) bg-(--color-bege2) text-(--color-brown2) font-medium flex items-center justify-center gap-2 cursor-pointer transition-all duration-200 hover:bg-(--color-bege-yellow) hover:-translate-x-0.5"
+                            >
+                                <i class="bi bi-arrow-left"></i>
+                                Anterior
+                            </button>
+
+                            <button
+                                
+                                [disabled]="!formRegisterOwner.valid"
+                                (click)="ngOnSubmit()"
+                                class="gradient-button relative h-10 flex-1 text-(--color-brown2) text-base font-normal border-none rounded-md flex items-center justify-center gap-2 overflow-hidden cursor-pointer transition-all duration-200 disabled:cursor-not-allowed disabled:text-(--color-bege2)"
+                            >
+                                Registrar
+                                <i class="bi bi-check-lg"></i>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+            <div class="flex gap-5 justify-center items-center mt-3">
+                <i [class]="formShow() === 1 ? 'bi bi-circle-fill text-gray-600 shadow-2xl shadow-white transition-all' : 'bi bi-circle text-gray-600 transition-all'"></i>
+                <i [class]="formShow() === -1 ? 'bi bi-circle-fill text-gray-600 shadow-2xl shadow-white transition-all' : 'bi bi-circle text-gray-600 transition-all'"></i>
+
+            </div>
+        </div>
+    </div>
+</main>

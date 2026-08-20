@@ -1,0 +1,32 @@
+@keyframes gradient-slide {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
+}
+
+.gradient-button {
+  background: linear-gradient(
+    90deg,
+    var(--color-bege-yellow) 0%,
+    #D6B77A 45%,
+    #B8935A 50%,
+    #D6B77A 55%,
+    var(--color-bege-yellow) 100%
+  );
+  background-size: 250% 100%;
+  background-position: 100% 0;
+  transition: background-position 0.3s ease;
+}
+
+.gradient-button:hover:not(:disabled) {
+  animation: gradient-slide 0.9s ease-in-out infinite;
+}
+
+.gradient-button:disabled {
+  background: #6b7280; /* gray-500 */
+  background-size: auto;
+  animation: none;
+}

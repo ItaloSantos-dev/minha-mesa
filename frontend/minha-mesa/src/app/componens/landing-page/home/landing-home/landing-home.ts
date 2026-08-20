@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { RouterLink } from "@angular/router";
 interface Coment{
   userName:string,
   coment:string
@@ -6,7 +7,7 @@ interface Coment{
 }
 @Component({
   selector: 'app-landing-home',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './landing-home.html',
   styleUrl: './landing-home.css',
 })
