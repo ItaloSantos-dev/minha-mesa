@@ -3,5 +3,61 @@
     <app-boxes />
   </div>
 
-  <app-owner-register />
+  
+  <div class="min-h-screen items-center justify-center flex  p-5">
+    <div class="backdrop-blur-xl bg-white/50 border border-white/40 p-4 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between relative  w-[50vw]">
+      <div class="py-3">
+        <label class="relative flex h-10 w-40 cursor-pointer items-center rounded-xl bg-(--color-bege2) border border-(--color-bege-yellow)/50 p-1">
+
+        <input
+        [checked]="this.formShow()===1"
+          (change)="this.updateFormShow()"
+            type="checkbox"
+            class="peer sr-only"
+        >
+
+          <!-- Indicador -->
+          <span
+              class="absolute left-1 top-1 h-8 w-[calc(50%-0.25rem)]
+                    rounded-lg
+                    bg-(--color-bege-yellow)
+                    transition-transform duration-300 ease-in-out
+                    peer-checked:translate-x-full"
+          ></span>
+
+          <!-- Login -->
+          <span
+              class="relative z-10 flex h-full w-1/2 items-center justify-center
+                    text-sm font-semibold
+                    text-(--color-brown2)"
+          >
+              Registrar
+          </span>
+
+          <!-- Registrar -->
+          <span
+              class="relative z-10 flex h-full w-1/2 items-center justify-center
+                    text-sm font-semibold
+                    text-(--color-brown2)"
+          >
+              Login
+          </span>
+
+        </label>
+      </div>
+      <div class="w-ful overflow-hidden">
+        <div
+            class="flex w-[200%] transition-transform duration-500 ease-in-out"
+            [class.-translate-x-1/2]="formShow() === 1"
+            >
+                <div class="w-1/2 shrink-0 flex flex-col px-1">
+                  <app-owner-register  />
+                </div>
+                <div class="w-1/2 shrink-0  justify-center flex flex-col px-1">
+                  <app-owner-login  />
+                </div>
+          </div>
+      </div>
+    </div>
+  </div>
 </main>

@@ -1,0 +1,80 @@
+
+<div class="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-600/10 rounded-full blur-2xl"></div>
+
+<div class="relative w-full bg-(--color-bege2) p-6 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.1)]">
+
+    <header class="text-3xl text-(--color-brown2) font-extrabold text-center">
+        LOGIN RESTAURANTE
+    </header>
+    <div class="flex items-start gap-2.5 mt-4 bg-(--color-bege-yellow)/15 border border-(--color-bege-yellow)/40 rounded-xl p-3">
+        <i class="bi bi-info-circle-fill text-(--color-bege-yellow) text-base mt-0.5"></i>
+        <span class="text-(--color-brown2)/80 text-xs leading-relaxed">
+            Não possui uma conta cadastrada. Faça o registro do seu restaurante
+        </span>
+        
+    </div>
+
+
+
+    <form [formGroup]="formLoginOwner" class="mt-4 w-full overflow-hidden " action="#">
+        <div
+            class="flex w-[200%] transition-transform duration-500 ease-in-out"
+            
+        >
+            <div class="w-1/2 shrink-0 flex flex-col px-1">
+                
+                <div class="flex gap-4">
+                    <div class="w-full mt-2.5">
+                        @if(formLoginOwner.get('email')?.invalid && formLoginOwner.get('email')?.touched) {
+                            <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                <span class="text-red-400 text-xs font-semibold">Email inválido</span>
+                            </div>
+                        }
+                        <label for="email" class="text-(--color-brown2) font-semibold">Email</label>
+                        <input
+                        formControlName="email"
+                        type="email"
+                        id="email"
+                        placeholder="example@example.com"
+                        class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                        >
+                    </div>
+                </div>
+
+                <div class="flex gap-4">
+                    <div class="w-full mt-2.5">
+                        @if(formLoginOwner.get('password')?.invalid && formLoginOwner.get('password')?.touched) {
+                            <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
+                                <i class="bi bi-exclamation-circle-fill text-red-400"></i>
+                                <span class="text-red-400 text-xs font-semibold">Senha inválida</span>
+                            </div>
+                        }
+                        <label for="password" class="text-(--color-brown2) font-semibold">Senha</label>
+                        <div class="flex items-center gap-3">
+                            <input
+                            formControlName="password"
+                            type="password"
+                            [type]="showPassword() ? 'text' : 'password'"
+                            name="password"
+                            id="password"
+                            class="relative h-[35px] w-full outline-none text-base text-(--color-gray2) mt-1.5 border border-(--color-bege-yellow) rounded-md px-4 bg-(--color-bege2) focus:shadow-[0_1px_0_rgba(0,0,0,0.1)]"
+                            >
+                            <button class="cursor-pointer" (click)="showPassword.set(!showPassword())">
+                                <i class="bi bi-eye text-2xl hover:scale-110 inline-block transition-all hover:text-gray-500 hover:shadow-2xl"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button
+                    (click)="this.ngOnSubmit()"
+                    [disabled]="!formLoginOwner.valid"
+                    class="gradient-button relative h-10 w-full text-(--color-brown2) text-base font-normal mt-4 border-none rounded-md flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-no-drop disabled:text-(--color-bege2)"
+                    >
+                    Próximo
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-landing-header',
@@ -9,4 +9,13 @@ import { RouterLink } from "@angular/router";
 })
 export class LandingHeader {
 
+  private router = inject(Router);
+
+  navigateForLogin(){
+    this.router.navigate(['/auth','owner'], {
+      queryParams:{
+        form:'login'
+      }
+    })
+  }
 }

@@ -8,10 +8,11 @@ import { AuthService } from '../../../../service/auth-service/auth-service';
 import { RegisterRequestDTO } from '../../../../types/auth/register-request';
 import { CreateOwnerRequestDTO } from '../../../../types/owner/create-owner-request';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { Router, RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-owner-register',
-  imports: [ReactiveFormsModule, NgxMaskDirective],
+  imports: [ReactiveFormsModule, NgxMaskDirective, RouterLink],
   templateUrl: './owner-register.html',
   styleUrl: './owner-register.css',
 })
@@ -99,6 +100,8 @@ ownerFormPartIsValid = computed(() => {
       this.formRegisterOwner.controls.restaurantPhone.setValue(this.oldRestaurantNumber())
     }
   }
+
+  
 
   ngOnSubmit(){
     if (!this.formRegisterOwner.valid) 
