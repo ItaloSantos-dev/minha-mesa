@@ -1,33 +1,61 @@
-<header class="sticky top-0 bg-(--color-bege-yellow) flex justify-center p-3 ">
+<header class="fixed top-0 left-0 w-full z-100 backdrop-blur-2xl bg-white/10 py-3 transition-transform duration-300"
+[class.-translate-y-full]="!showHeader()">
+    <nav class="flex items-center justify-between px-4 md:px-10 py-3">
 
-    <!-- Conteúdo central -->
-    <div class="flex items-center justify-center w-[75vw] rounded-xl gap-10">
-
-        <button class="self-end mb-1 bg-(--color-brown2) p-2 px-4 font-medium rounded-xl text-(--color-bege2) hover:bg-amber-800 transition-all cursor-pointer">
-            Contato
-        </button>
-
-        <img
-            class="w-45 cursor-pointer hover:scale-105 transition-all"
-            src="/icon.png"
-            alt=""
+        <a
+            href="#"
+            class="font-(--font-heading) text-3xl font-extrabold tracking-tight shrink-0"
         >
-
-        <button class="self-end mb-1 bg-(--color-brown2) p-2 px-4 font-medium rounded-xl text-(--color-bege2) hover:bg-amber-800 transition-all cursor-pointer">
-            Buscar
-        </button>
-
-    </div>
-
-    <div class="absolute right-50 top-1/2 -translate-y-1/2 flex gap-5">
-        
-        <button (click)="this.navigateForLogin()" class="hidden sm:block px-4 py-2 rounded-full text-(--color-brown2) font-medium hover:bg-(--color-brown2)/10 transition-colors cursor-pointer">
-            Entrar
-        </button>
-
-        <a routerLink="/auth/owner" class="self-end mb-1 bg-(--color-brown2) p-2 px-4 rounded-xl font-medium text-(--color-bege2) hover:bg-amber-800 transition-all cursor-pointer">
-            Registrar
+            <span class="text-white">Minha</span>
+            <span class="text-(--color-highlight)"> Mesa</span>
         </a>
-    </div>
 
+        <div class="flex items-center gap-1 md:gap-4 lg:gap-70">
+
+            <button class="font-(--font-body) font-semibold text-white cursor-pointer p-2 px-3 rounded-2xl transition-all duration-300 hover:bg-gray-300/30">
+                INÍCIO
+            </button>
+
+            <button class="font-(--font-body) font-semibold text-white cursor-pointer p-2 px-3 rounded-2xl transition-all duration-300 hover:bg-gray-300/30">
+                CONTATO
+            </button>
+
+            <button class="font-(--font-body) font-semibold text-white cursor-pointer p-2 px-3 rounded-2xl transition-all duration-300 hover:bg-gray-300/30">
+                SOBRE
+            </button>
+
+            <button class="font-(--font-body) font-semibold text-white cursor-pointer p-2 px-3 rounded-2xl transition-all duration-300 hover:bg-gray-300/30">
+                RELATOS
+            </button>
+
+            <div class="relative group">
+                <button class="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-xl text-white transition-all duration-300 hover:bg-white/15">
+                    <i class="bi bi-person-circle text-2xl"></i>
+                    <i class="bi bi-chevron-down text-xs transition-transform duration-300 group-hover:rotate-180"></i>
+                </button>
+
+                <div class="absolute right-0 top-[calc(100%+10px)] w-44 p-2 rounded-2xl bg-white/95 backdrop-blur-md shadow-xl ring-1 ring-black/5 opacity-0 invisible translate-y-2 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-300">
+                    <p class="px-3 py-2 text-xs font-(--font-body) font-semibold uppercase tracking-wider text-gray-400">
+                        Acessar como
+                    </p>
+
+                    <ul class="flex flex-col gap-1">
+                        <li>
+                            <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-(--color-primary) font-(--font-body) font-semibold cursor-pointer transition-colors duration-200 hover:bg-(--color-primary)/10">
+                                <i class="bi bi-person"></i>
+                                Cliente
+                            </button>
+                        </li>
+
+                        <li>
+                            <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-left text-(--color-secondary) font-(--font-body) font-semibold cursor-pointer transition-colors duration-200 hover:bg-(--color-secondary)/10">
+                                <i class="bi bi-shop"></i>
+                                Dono
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
 </header>

@@ -1,11 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
 @import "tailwindcss";
-:root{
-    --color-bege-yellow: #D2AB65;
-    --color-bege2: #D9D1B8;
-    --color-gray2: #8C8270;
-    --color-brown2:#261A0F;
-    --color-white2: #F2F2F2;
-    --color-black2: #8C8270;
+:root {
+  /* Cores */
+  --color-primary: #F26716;
+  --color-primary-hover: #D94711;
+  --color-secondary: #0378A6;
+  --color-highlight: #F2B705;
+  --color-background: #F2F2F2;
+
+  /* Tipografia */
+  --font-heading: 'Poppins', sans-serif; /* títulos, nome do restaurante, headings. */ 
+  --font-body: 'Inter', sans-serif; /* textos, botões, inputs, tabelas e interface.*/
 }
