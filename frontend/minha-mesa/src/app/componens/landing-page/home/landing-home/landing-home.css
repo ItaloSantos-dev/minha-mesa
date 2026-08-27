@@ -29,3 +29,39 @@
 .scrollbar-custom::-webkit-scrollbar-thumb:hover {
   background: #78350f;
 }
+
+.btn-cadastro {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+
+    background: var(--color-secondary);
+    font-family: var(--font-body);
+
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-cadastro::before {
+    content: "";
+    position: absolute;
+
+    width: 60%;
+    height: 200%;
+
+    top: -50%;
+    left: -80%;
+
+    background: rgba(255, 255, 255, 0.25);
+
+    transform: skewX(-25deg);
+    transition: left 0.5s ease;
+
+    z-index: -1;
+}
+
+.btn-cadastro:hover::before {
+    left: 120%;
+}
+

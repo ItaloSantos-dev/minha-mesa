@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
 
 @import "tailwindcss";
 :root {
@@ -14,4 +15,5 @@
   /* Tipografia */
   --font-heading: 'Poppins', sans-serif; /* títulos, nome do restaurante, headings. */ 
   --font-body: 'Inter', sans-serif; /* textos, botões, inputs, tabelas e interface.*/
+  --font-display: 'DM Serif Display', serif;
 }
