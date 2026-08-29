@@ -7,13 +7,22 @@
 :root {
   /* Cores */
   --color-primary: #F26716;
-  --color-primary-hover: #D94711;
-  --color-secondary: #0378A6;
-  --color-highlight: #F2B705;
-  --color-background: #F2F2F2;
+    --color-primary-hover: #D94711;
+
+    --color-secondary: #0378A6;
+
+    --color-highlight: #F2B705;
+
+    --color-background: #faedd4;
 
   /* Tipografia */
   --font-heading: 'Poppins', sans-serif; /* títulos, nome do restaurante, headings. */ 
   --font-body: 'Inter', sans-serif; /* textos, botões, inputs, tabelas e interface.*/
   --font-display: 'DM Serif Display', serif;
+}
+html {
+  scroll-behavior: smooth;
+}
+.animate-scroll {
+  animation: scroll 20s linear infinite;
 }

@@ -1,6 +1,7 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
 
+
 @Component({
   selector: 'app-landing-header',
   imports: [RouterLink],
@@ -42,4 +43,6 @@ export class LandingHeader {
       }
     })
   }
+
+  
 }

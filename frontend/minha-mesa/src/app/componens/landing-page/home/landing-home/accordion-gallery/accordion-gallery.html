@@ -1,0 +1,98 @@
+<div
+  #rootRef
+  class="flex w-full max-w-full [perspective:1400px] max-[520px]:!flex-col max-[520px]:[perspective:none]"
+  [ngClass]="vertical ? 'flex-col' : 'flex-row'"
+  [style.gap.px]="gap"
+  [style.height]="containerHeight"
+  role="list"
+  aria-label="Image accordion gallery"
+>
+  <ng-container *ngFor="let item of items; let i = index">
+    <!-- Anchor Item -->
+    <a
+      *ngIf="item.link; else divPanel"
+      #panelRef
+      [href]="item.link"
+      (click)="handleClick(i, $event)"
+      (mouseenter)="handleEnter(i)"
+      (focus)="setActive(i)"
+      (keydown)="handleKeyDown(i, $event)"
+      role="listitem"
+      tabindex="0"
+      [attr.aria-current]="i === active ? 'true' : null"
+      [attr.aria-label]="item.label"
+      class="group relative block min-w-0 min-h-0 flex-[1_1_0]  overflow-hidden bg-[#0a0713] no-underline outline-none [transform-style:preserve-3d] [transform-origin:center] [box-shadow:0_10px_30px_-18px_rgba(0,0,0,0.8)] focus-visible:[box-shadow:0_0_0_2px_var(--ag-accent),0_10px_30px_-18px_rgba(0,0,0,0.8)] max-[520px]:min-h-[84px] max-[520px]:!transform-none"
+      [style.border-radius.px]="radius"
+      [style.--ag-accent]="accentColor"
+      style="will-change: flex-grow, transform;"
+    >
+      <ng-container *ngTemplateOutlet="panelContent; context: { $implicit: item, index: i }"></ng-container>
+    </a>
+
+    <!-- Div Item -->
+    <ng-template #divPanel>
+      <div
+        #panelRef
+        (click)="handleClick(i, $event)"
+        (mouseenter)="handleEnter(i)"
+        (focus)="setActive(i)"
+        (keydown)="handleKeyDown(i, $event)"
+        role="listitem"
+        tabindex="0"
+        [attr.aria-current]="i === active ? 'true' : null"
+        [attr.aria-label]="item.label"
+        class="group relative block min-w-0 min-h-0 flex-[1_1_0]  overflow-hidden bg-[#0a0713] no-underline outline-none [transform-style:preserve-3d] [transform-origin:center] [box-shadow:0_10px_30px_-18px_rgba(0,0,0,0.8)] focus-visible:[box-shadow:0_0_0_2px_var(--ag-accent),0_10px_30px_-18px_rgba(0,0,0,0.8)] max-[520px]:min-h-[84px] max-[520px]:!transform-none"
+        [style.border-radius.px]="radius"
+        [style.--ag-accent]="accentColor"
+        style="will-change: flex-grow, transform;"
+      >
+        <ng-container *ngTemplateOutlet="panelContent; context: { $implicit: item, index: i }"></ng-container>
+      </div>
+    </ng-template>
+
+    <!-- Content Template -->
+    <ng-template #panelContent let-item let-i="index">
+      <span class="absolute inset-0 overflow-hidden [border-radius:inherit]">
+        <span
+          #mediaRef
+          class="absolute top-1/2 left-1/2 [filter:grayscale(var(--ag-gray,1))]"
+          [style.width]="vertical ? '100%' : 'var(--ag-media-size, 320px)'"
+          [style.height]="vertical ? 'var(--ag-media-size, 320px)' : '100%'"
+          style="will-change: transform, filter;"
+        >
+          <img
+            [src]="item.image"
+            [alt]="item.alt || item.label || ''"
+            [attr.draggable]="false"
+            class="block h-full w-full select-none object-cover [-webkit-user-drag:none]"
+          />
+        </span>
+        <span
+          class="pointer-events-none absolute inset-0"
+          [style.background]="overlayBg"
+          aria-hidden="true"
+        ></span>
+      </span>
+
+      <span
+        *ngIf="showLabels"
+        class="pointer-events-none absolute bottom-5 left-5 right-5 z-[2] flex items-center gap-3"
+        aria-hidden="true"
+      >
+        <span
+          #barRef
+          class="h-[26px] w-[3px] flex-none rounded-[3px] opacity-0"
+          [style.background]="accentColor"
+          [style.box-shadow]="'0 0 12px color-mix(in srgb, ' + accentColor + ' 60%, transparent)'"
+        ></span>
+        <span
+          #textRef
+          class="overflow-hidden text-ellipsis whitespace-nowrap text-[clamp(1rem,1.4vw,1.4rem)] font-semibold tracking-[0.01em] opacity-0 [text-shadow:0_2px_14px_rgba(0,0,0,0.55)]"
+          [style.color]="textColor"
+        >
+          {{ item.label }}
+        </span>
+      </span>
+    </ng-template>
+  </ng-container>
+</div>
