@@ -1,5 +1,6 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterLink } from "@angular/router";
+import { ScrollNavigationService } from '../../../../service/scroll-navigation-service/scroll-navigation-service';
 
 
 @Component({
@@ -12,6 +13,8 @@ export class LandingHeader {
 
   showHeader = signal(true);
   private lastScrollY = 0;
+
+  scrollNavigationService = inject(ScrollNavigationService);
 
   @HostListener('window:scroll')
   onScroll() {

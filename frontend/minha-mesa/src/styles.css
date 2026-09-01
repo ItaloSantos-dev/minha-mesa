@@ -6,7 +6,7 @@
 @import "tailwindcss";
 :root {
   /* Cores */
-  --color-primary: #F26716;
+    --color-primary: #F26716;
     --color-primary-hover: #D94711;
 
     --color-secondary: #0378A6;
@@ -26,3 +26,4 @@ html {
 .animate-scroll {
   animation: scroll 20s linear infinite;
 }
+

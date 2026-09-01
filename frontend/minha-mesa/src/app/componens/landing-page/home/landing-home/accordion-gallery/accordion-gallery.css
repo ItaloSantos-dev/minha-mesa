@@ -1,5 +1,0 @@
-/* Classes dinâmicas tratadas via Tailwind ou inline-styles */
-:host {
-  display: block;
-  width: 100%;
-}

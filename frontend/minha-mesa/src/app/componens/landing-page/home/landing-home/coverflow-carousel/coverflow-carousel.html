@@ -1,0 +1,62 @@
+<div #coverflowCarousel class="w- " [style.--cf-card]="cardWidth" role="region" aria-roledescription="carousel">
+    <div class="relative">
+    
+        <div #frameRef
+                tabindex="0"
+                (pointerdown)="onPointerDown($event)"
+                (pointermove)="onPointerMove($event)"
+                (pointerup)="endDrag($event)"
+                (pointercancel)="endDrag($event)"
+                (keydown)="onKeyDown($event)"
+                class="cursor-grab overflow-hidden py-10 outline-none focus-visible:ring-2 active:cursor-grabbing"
+                [style.perspective]="'calc(var(--cf-card) * ' + perspective + ')'"
+                style="touch-action: pan-y;">
+            
+            <div class="relative select-none" style="height: var(--cf-card); transform-style: preserve-3d;">
+            
+            <!-- Loop dos Cartões (Dados vindo do TS) -->
+            @for (item of items; track $index; let i = $index) {
+                <div #cardRef
+                    role="group"
+                    class="absolute left-1/2 top-0 aspect-square overflow-hidden rounded-2xl shadow-xl will-change-transform bg-(--color-highlight)/30 backdrop-blur-2xl "
+                    style="width: var(--cf-card);">
+                    
+                    <app-testimonial-card [name]="item.name" [message]="item.message" [image]="item.image"></app-testimonial-card>
+                
+                </div>
+            }
+            
+            </div>
+        </div>
+
+        <!-- Botões de Navegação -->
+        @if (showNavigation) {
+            <button type="button" (click)="nudge(-1)" 
+                    class="absolute left-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-black/10 p-2 text-black backdrop-blur transition hover:bg-black/20">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+
+            <button type="button" (click)="nudge(1)" 
+                    class="absolute right-3 top-1/2 z-[200] -translate-y-1/2 rounded-full bg-black/10 p-2 text-black backdrop-blur transition hover:bg-black/20">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+        }
+
+    </div>
+
+
+    @if (showPagination) {
+        <div class="mt-6 flex items-center justify-center gap-2">
+            @for (item of items; track $index; let i = $index) {
+                <button type="button"
+                        (click)="goTo(i)"
+                        class="h-2 w-2 rounded-full bg-gray-800 transition-opacity"
+                        [class.opacity-100]="i === selected"
+                        [class.opacity-30]="i !== selected">
+                </button>
+            }
+        </div>
+    }
+
+
+</div>

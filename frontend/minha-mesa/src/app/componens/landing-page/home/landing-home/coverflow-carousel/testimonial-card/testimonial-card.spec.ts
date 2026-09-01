@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AccordionGallery } from './accordion-gallery';
+import { TestimonialCard } from './testimonial-card';
 
-describe('AccordionGallery', () => {
-  let component: AccordionGallery;
-  let fixture: ComponentFixture<AccordionGallery>;
+describe('TestimonialCard', () => {
+  let component: TestimonialCard;
+  let fixture: ComponentFixture<TestimonialCard>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccordionGallery]
+      imports: [TestimonialCard]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AccordionGallery);
+    fixture = TestBed.createComponent(TestimonialCard);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
