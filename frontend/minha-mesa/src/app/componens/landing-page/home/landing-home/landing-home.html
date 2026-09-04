@@ -157,15 +157,40 @@
                 </div>
 
             </section>
-            <section id="testimonialsSection" #testimonialsSection class="w-1/2 flex flex-col items-center justify-center">
-                <div>
-                    <h1 #testimonialH1 class="text-5xl font-(--font-heading) font-extrabold text-(--color-primary)">Opinião de alguns de nossos usuários</h1>
+            <section id="featuresSection" #featuresSection class="w-1/2 flex z-10 flex-col items-center justify-center relative">
+                <div #triangles class="w-full h-full absolute z-0">
+                    <div class="relative h-full w-full">
+                        <div class="absolute top-[8vh] left-[6vw] w-16 h-16 bg-(--color-primary) [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+                        <div class="absolute top-[42vh] left-[24vw] w-12 h-12 bg-(--color-primary) rotate-12 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+                        <div class="absolute top-[70vh] left-[78vw] w-14 h-14 bg-(--color-primary) -rotate-12 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+
+                        <div class="absolute top-[18vh] left-[38vw] w-14 h-14 bg-(--color-secondary) -rotate-12 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+                        <div class="absolute top-[58vh] left-[8vw] w-12 h-12 bg-(--color-secondary) rotate-12 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+                        <div class="absolute top-[76vh] left-[52vw] w-16 h-16 bg-(--color-secondary) [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+
+                        <div class="absolute top-[5vh] left-[68vw] w-12 h-12 bg-(--color-highlight) rotate-12 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+                        <div class="absolute top-[38vh] left-[50vw] w-16 h-16 bg-(--color-highlight) -rotate-12 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+                        <div class="absolute top-[68vh] left-[32vw] w-14 h-14 bg-(--color-highlight) rotate-6 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+
+                        <div class="absolute top-[28vh] left-[12vw] w-14 h-14 bg-(--color-primary-hover) rotate-12 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+                        <div class="absolute top-[52vh] left-[72vw] w-12 h-12 bg-(--color-primary-hover) -rotate-12 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+                        <div class="absolute top-[82vh] left-[88vw] w-16 h-16 bg-(--color-primary-hover) rotate-6 [clip-path:polygon(50%_0%,100%_100%,0%_100%)]"></div>
+
+                    </div>
                 </div>
-                <app-coverflow-carousel #carrousel class=" w-full"/>
+                <app-features #features class="w-full h-screen z-10" />
             </section>
         </div>
-       
     </div>
+
+    <section id="testimonialsSection" #testimonialsSection class=" flex flex-col items-center justify-center w-full h-screen ">
+        <div>
+            <h1 #testimonialH1 class="text-5xl font-(--font-heading) font-extrabold text-(--color-primary)">Opinião de alguns de nossos usuários</h1>
+        </div>
+        <app-coverflow-carousel #carrousel class="w-full  "/>
+    </section>
+
+    
 
 
     

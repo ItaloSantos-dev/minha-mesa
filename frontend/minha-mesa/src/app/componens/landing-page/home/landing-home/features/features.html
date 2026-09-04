@@ -1,0 +1,44 @@
+<div #main class="flex flex-col items-center justify-center h-screen gap-20">
+  <div>
+    <h1 #testimonialH1 class="text-center text-5xl font-(--font-heading) font-extrabold text-(--color-primary)">Mas por que eu usaria o <span class="animate-pulse text-(--color-secondary)">Minha</span> <span class="animate-pulse text-(--color-highlight)"> Mesa</span> ?</h1> 
+  </div>
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <app-feature-card #featureCard
+      title="Maior visbilidade"
+      description="O Minha Mesa conta com mais de 10000 usuários ativos atualmente, dando um grande alcance para seu estabelecimento"
+      [icon]="'bi bi-people-fill'"
+    />
+
+    <app-feature-card #featureCard
+    [icon]="'bi bi-card-text'"
+      title="Cardápio virtual"
+      description="Disponibilizamos um cardápio online (site e pdf) para que os clientes vejam seus pratos."
+    />
+
+    <app-feature-card #featureCard
+      icon="bi bi-columns"
+      title="Organização"
+      description="Esqueça lápis e papel para anotar reservas e clientes, o minha mesa centraliza tudo pra você"
+    />
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+    <app-feature-card #featureCard
+      icon="bi bi-calendar2-check"
+      title="Reservas fáceis"
+      description="Seus clientes podem reservar uma mesa de forma rápida e simples."
+    />
+
+    <app-feature-card #featureCard
+      icon="bi bi-sliders2"
+      title="Gestão completa"
+      description="Tenha controle das mesas, horários de funcionamento, exceções e reservas do seu restaurante."
+    />
+
+    <app-feature-card #featureCard
+      icon="bi bi-stars"
+      title="Experiência moderna"
+      description="Uma experiência agradável para seus clientes e sua equipe."
+    />
+  </div>
+</div>
