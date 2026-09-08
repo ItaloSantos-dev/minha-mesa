@@ -1,0 +1,35 @@
+<div class="flex flex-col h-full w-full">
+    
+    <div #mainDiv class="flex">
+        <div #formMenssageDiv class="flex h-full w-1/2 flex-col items-center justify-center gap-5 ">
+            
+            <div class="box-border h-[70vh] w-[35vw] rounded-[1vw] bg-white px-[2vw]  shadow-[rgba(0,0,0,0.35)_0_0.35vw_1vw] flex flex-col items-center gap-20 justify-center">
+                <h1 class="text-center text-xl font-extrabold text-(--color-secondary) font-(--font-heading)">Ficou com alguma dúvida? Envie-nos uma mensagem</h1>
+                <form class="mb-[1.5vh] flex w-full flex-col gap-[2vh]">
+                    <div class="bg-(--color-highlight) w-25 text-center rounded-full">
+
+                        <label class="font-extrabold" for="email">Seu email</label>
+                    </div>
+                    <input type="email" placeholder="E-mail" class="box-border rounded-[2vw] border border-[#c0c0c0] px-[1.5vw] py-[1.5vh] font-(--font-body) text-[1vw] outline-none transition focus:border-(--color-primary)">
+
+                    <div class="bg-(--color-highlight) w-35 text-center rounded-full">
+
+                        <label class="font-extrabold" for="email">Sua mensagem</label>
+                    </div>
+                    <textarea type="password" placeholder="Mensagem" class="box-border rounded-[2vw] border border-[#c0c0c0] px-[1.5vw] py-[1.5vh] font-(--font-body) text-[1vw] outline-none transition resize-none focus:border-(--color-primary)" rows="5"></textArea>
+                    <button type="submit" class="cursor-pointer rounded-[2vw] border-0 bg-(--color-primary) px-[1.5vw] py-[1.5vh] font-(--font-body) text-[1vw] text-white shadow-[rgba(0,0,0,0.24)_0_0.2vw_0.5vw] transition hover:bg-(--color-primary-hover) active:shadow-none">Enviar</button>
+                    <div class="flex w-full h-[15%] gap-5 text-xl items-center justify-center">
+                        <a class="bi bi-whatsapp inline-block hover:scale-150 transition-all cursor-pointer"></a>
+                        <a class="bi bi-instagram inline-block hover:scale-150 transition-all cursor-pointer"></a>
+                        <a class="bi bi-linkedin inline-block hover:scale-150 transition-all cursor-pointer"></a>
+
+                    </div>
+                </form>
+            
+            </div>
+        </div>
+        <div #imageDiv class="h-screen w-1/2">
+            <img class="h-full w-full object-cover rounded-2xl" src="images/restaurante-rua.jpg" alt="">
+        </div>
+    </div>
+</div>

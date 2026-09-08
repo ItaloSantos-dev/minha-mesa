@@ -6,12 +6,13 @@ import { ScrollNavigationService } from '../../../../service/scroll-navigation-s
 import { TestimonialCard } from "./coverflow-carousel/testimonial-card/testimonial-card";
 import { CoverflowCarousel } from "./coverflow-carousel/coverflow-carousel";
 import { Features } from "./features/features";
+import { ContactUs } from "./contact-us/contact-us";
 
 gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'app-landing-home',
-  imports: [RouterLink, TestimonialCard, CoverflowCarousel, Features],
+  imports: [RouterLink, TestimonialCard, CoverflowCarousel, Features, ContactUs],
   templateUrl: './landing-home.html',
   styleUrl: './landing-home.css',
 })
@@ -61,11 +62,6 @@ export class LandingHome implements AfterViewInit{
   @ViewChild('features', { read: ElementRef })
   featuresDiv!: ElementRef<HTMLElement>;
 
-  @ViewChild('featuresSection')
-  featuresSectionDiv !: ElementRef<HTMLElement>
-
-  @ViewChild('contactSection')
-  contactSectionDiv !: ElementRef<HTMLElement>
 
   @ViewChild('triangles')
   trianglesDiv !: ElementRef<HTMLElement>
@@ -75,6 +71,12 @@ export class LandingHome implements AfterViewInit{
 
   @ViewChild('testimonialsSection')
   testimonialsSection!: ElementRef<HTMLElement>;
+
+  @ViewChild(ContactUs)
+  contactUsComponent!: ContactUs;
+
+  @ViewChild('contactUs', { read: ElementRef })
+  contactUsDiv!: ElementRef<HTMLElement>;
 
    
 
@@ -231,7 +233,11 @@ export class LandingHome implements AfterViewInit{
         start:'101% top',
         end:'260% bottom',
         scrub:1,
-        markers: false
+        markers: false,
+        snap: {
+        snapTo: 1.8,
+        duration: 1
+        }
       }
     }).to(
       featureCards.first.nativeElement,
@@ -281,7 +287,43 @@ export class LandingHome implements AfterViewInit{
       '<'
     )
     
-
+    const formMessageContactUs = this.contactUsComponent.formMenssageDiv.nativeElement;
+    const contactUsImage = this.contactUsComponent.imageDiv.nativeElement;
+    
+    gsap.timeline({
+      scrollTrigger:{
+        trigger: this.contactUsDiv.nativeElement,
+        start: 'top bottom',
+        end: '-10% top',
+        scrub:1,
+        markers:true,
+        snap: {
+        snapTo: 1.2,
+        duration: 1
+        }
+      }
+    })
+    .fromTo(
+      formMessageContactUs,
+      {
+        x:'-50vw'
+      },
+      {
+        x:'0vw',
+        ease:'none'
+      }
+    )
+    .fromTo(
+      contactUsImage,
+      {
+        y:'50vh'
+      },
+      {
+        y:'0vh',
+        ease:'none'
+      },
+      '<'
+    )
     
 
     
@@ -312,6 +354,12 @@ export class LandingHome implements AfterViewInit{
         top: this.testimonialsSection.nativeElement.offsetTop,
         behavior: 'smooth'
       });
+    }
+    else if(section==='contactUsSection'){
+      window.scrollTo({
+        top:this.contactUsDiv.nativeElement.offsetTop,
+        behavior:'smooth'
+      })
     }
     
 
