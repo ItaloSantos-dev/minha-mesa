@@ -235,7 +235,7 @@ export class LandingHome implements AfterViewInit{
         scrub:1,
         markers: false,
         snap: {
-        snapTo: 1.8,
+        snapTo: 1.7,
         duration: 1
         }
       }
@@ -296,9 +296,9 @@ export class LandingHome implements AfterViewInit{
         start: 'top bottom',
         end: '-10% top',
         scrub:1,
-        markers:true,
+        markers:false,
         snap: {
-        snapTo: 1.2,
+        snapTo: 1.15,
         duration: 1
         }
       }

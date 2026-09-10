@@ -3,13 +3,13 @@
 
 <div class="relative w-full bg-(--color-bege2) p-6 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.1)]">
 
-    <header class="text-3xl text-(--color-brown2) font-extrabold text-center">
+    <header class="text-3xl text-(--color-secondary) font-extrabold text-center">
         LOGIN RESTAURANTE
     </header>
     <div class="flex items-start gap-2.5 mt-4 bg-(--color-bege-yellow)/15 border border-(--color-bege-yellow)/40 rounded-xl p-3">
         <i class="bi bi-info-circle-fill text-(--color-bege-yellow) text-base mt-0.5"></i>
-        <span class="text-(--color-brown2)/80 text-xs leading-relaxed">
-            Não possui uma conta cadastrada. Faça o registro do seu restaurante
+        <span class="text-amber-900 text-xs leading-relaxed font-semibold">
+            Não possui uma conta cadastrada? Faça o registro do seu restaurante
         </span>
         
     </div>
@@ -70,7 +70,7 @@
                 <button
                     (click)="this.ngOnSubmit()"
                     [disabled]="!formLoginOwner.valid"
-                    class="gradient-button relative h-10 w-full text-(--color-brown2) text-base font-normal mt-4 border-none rounded-md flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-no-drop disabled:text-(--color-bege2)"
+                    class="gradient-button relative h-10 w-full text-base font-normal mt-4 border-none rounded-md flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-no-drop disabled:text-"
                     >
                     Próximo
                 </button>

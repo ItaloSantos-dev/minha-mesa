@@ -1,10 +1,37 @@
-<main class="relative w-full min-h-screen bg-(--color-brown2)">
+<main class="relative w-full min-h-screen bg-(--color-background)">
   <div class="absolute inset-0 overflow-hidden">
     <app-boxes />
   </div>
+  <div class="h-screen w-full  absolute ">
+    <div class="absolute inset-0 overflow-hidden">
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-primary)' : 'fill-(--color-secondary)'" class="transition-all duration-300 w-40 h-40 absolute left-[2%] top-[8%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
 
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-secondary)' : 'fill-(--color-primary)'" class="transition-all duration-300 w-28 h-28 absolute left-[8%] top-[42%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-primary)' : 'fill-(--color-secondary)'" class="transition-all duration-300 w-48 h-48 absolute left-[0%] top-[72%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-secondary)' : 'fill-(--color-primary)'" class="transition-all duration-300 w-20 h-20 absolute left-[18%] top-[18%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-primary)' : 'fill-(--color-secondary)'" class="transition-all duration-300 w-32 h-32 absolute left-[22%] top-[78%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-secondary)' : 'fill-(--color-primary)'" class="transition-all duration-300 w-36 h-36 absolute right-[3%] top-[5%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-primary)' : 'fill-(--color-secondary)'" class="transition-all duration-300 w-24 h-24 absolute right-[12%] top-[38%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-secondary)' : 'fill-(--color-primary)'" class="transition-all duration-300 w-52 h-52 absolute right-[-2%] top-[68%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-primary)' : 'fill-(--color-secondary)'" class="transition-all duration-300 w-20 h-20 absolute right-[25%] top-[18%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+
+      <svg [ngClass]="formShow()==1 ? 'fill-(--color-secondary)' : 'fill-(--color-primary)'" class="transition-all duration-300 w-28 h-28 absolute right-[20%] top-[82%]" viewBox="0 0 200 200"><path #shape d="M100 20 L180 170 L20 170 Z" /></svg>
+    </div>
+  </div>
   
-  <div class="min-h-screen items-center justify-center flex  p-5">
+  <div class="min-h-screen items-center justify-center flex relative p-5">
+    <div class="absolute left-[2vw] top-[2vh]">
+      <a routerLink="/" class="group flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-(--color-highlight) text-white shadow-lg transition-all duration-300 hover:scale-110 hover:bg-(--color-primary-hover) hover:shadow-xl">
+          <i class="bi bi-house-fill text-xl transition-transform duration-300 group-hover:scale-110"></i>
+      </a>
+  </div>
     <div class="backdrop-blur-xl bg-white/50 border border-white/40 p-4 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col justify-between relative  w-[50vw]">
       <div class="py-3">
         <label class="relative flex h-10 w-40 cursor-pointer items-center rounded-xl bg-(--color-bege2) border border-(--color-bege-yellow)/50 p-1">
@@ -20,7 +47,7 @@
           <span
               class="absolute left-1 top-1 h-8 w-[calc(50%-0.25rem)]
                     rounded-lg
-                    bg-(--color-bege-yellow)
+                    bg-(--color-highlight)
                     transition-transform duration-300 ease-in-out
                     peer-checked:translate-x-full"
           ></span>
@@ -29,7 +56,7 @@
           <span
               class="relative z-10 flex h-full w-1/2 items-center justify-center
                     text-sm font-semibold
-                    text-(--color-brown2)"
+                    text-amber-950"
           >
               Registrar
           </span>

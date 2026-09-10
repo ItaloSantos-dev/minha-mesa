@@ -10,11 +10,11 @@
 .gradient-button {
   background: linear-gradient(
     90deg,
-    var(--color-bege-yellow) 0%,
+    var(--color-background) 0%,
     #D6B77A 45%,
     #B8935A 50%,
     #D6B77A 55%,
-    var(--color-bege-yellow) 100%
+    var(--color-background) 100%
   );
   background-size: 250% 100%;
   background-position: 100% 0;
