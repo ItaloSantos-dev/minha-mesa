@@ -1,0 +1,8 @@
+<div [ngClass]="formActive()===0 ? 'bg-(--color-coffee)' : 'bg-(--color-background)' " class class="h-screen w-full bg-(--color-background) flex items-center justify-center">
+    @if (this.formActive()===0) {
+        LOGIN
+    }
+    @else {
+        <app-user-register />
+    }
+</div>

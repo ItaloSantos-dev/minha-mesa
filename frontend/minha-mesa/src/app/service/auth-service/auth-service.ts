@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { API_BACK_CONFIG } from '../../config/api-back-config';
 import { LoginRequestDTO } from '../../types/auth/login-request';
+import { UserResponseDTO } from '../../types/user/user-response';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,10 @@ export class AuthService {
 
   login(data:LoginRequestDTO):Observable<string>{
     return this.httpClient.post(API_BACK_CONFIG.URL + API_BACK_CONFIG.ENDPOINTS.AUTH.LOGIN, data, {responseType:'text'});
+  }
+
+  register(data: RegisterRequestDTO):Observable<UserResponseDTO>{
+    return this.httpClient.post<UserResponseDTO>(API_BACK_CONFIG.URL + API_BACK_CONFIG.ENDPOINTS.AUTH.REGISTER, data);
   }
 
   setToken(token:string){

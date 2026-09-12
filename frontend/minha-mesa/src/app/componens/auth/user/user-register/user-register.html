@@ -1,0 +1,50 @@
+<div class="flex font-[Poppins] h-[65vh] w-[75vw] bg-(--color-highlight)/30 backdrop-blur-2xl rounded-2xl">
+    <div class="w-1/2 h-full flex items-center justify-center">
+        <div class=" h-[95%] w-[95%]">
+            <img class="h-full w-full object-cover rounded-2xl shadow-2xl" src="images/mulher-na-mesa.jpg" alt="">
+        </div>
+    </div>
+    <div class="w-1/2 h-full flex flex-col items-center justify-center p-10 py-10 gap-5">
+        <div class="flex w-full justify-between">
+            <div class="w-full mb-[5vh]">
+                <h1 class="font-semibold text-4xl ">Crie sua conta</h1>
+                <p class=" text-[.8em]">Já é cadastrado? Faça <a routerLink="/auth/user" [queryParams]="{q:'login'}" class="hover:underline hover:text-(--color-primary) transition-all">login</a></p>
+            </div>
+            <div class="w-full flex flex-col items-start gap-2">
+                @if(formRegisterUser.touched && formRegisterUser.invalid){
+                    @for (message of getErrorsMessagesForms(); track $index) {
+                        <div class="flex items-center gap-2 px-4  w-max max-w-sm bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm rounded-xl backdrop-blur-md shadow-sm transition-all animate-in fade-in slide-in-from-top-2 duration-300">
+                            <!-- Ícone de Alerta -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="8" x2="12" y2="12"></line>
+                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                            </svg>
+                            <!-- Mensagem -->
+                            <span class="font-medium">{{message}}</span>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+        <form [formGroup]="formRegisterUser" class="w-full ">
+            <div class="flex flex-col gap-5 w-full ">
+                <div class="grid grid-cols-2 gap-3">
+                    <input  formControlName="name" placeholder="NOME" type="text" formControlName="name" [classList]="inputClassList">
+                    <input formControlName="phone" placeholder="TELEFONE" [classList]="inputClassList" type="tel">
+                </div>
+                <input formControlName="email" placeholder="EMAIL" [classList]="inputClassList" type="email">
+                <input formControlName="password" placeholder="SENHA" [classList]="inputClassList" type="password">
+                <div class="flex gap-3">
+                    <input type="checkbox" (change)="userAcceptedTerms.set($any($event.target).checked)" name="iAmAccept" id="iAmAccept">
+                    <label for="iAmAccept">Eu ceito os termos e condições</label>
+                </div>
+                <div class="w-full flex justify-center">
+                    <button [disabled]="formIsValid()" (click)="ngOnSubmit()" class=" px-3 py-1 rounded cursor-pointer hover:scale-105 transition-all
+                    bg-(--color-coffee) text-(--color-background) hover:text-white 
+                    disabled:bg-gray-800 disabled:cursor-no-drop disabled:hover:scale-100">Registrar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -3,6 +3,7 @@ export const API_BACK_CONFIG = {
 
     ENDPOINTS: {
         AUTH:{
+            REGISTER:'/auth/register',
             LOGIN: '/auth/login'
         },
         RESTAURANT: {
