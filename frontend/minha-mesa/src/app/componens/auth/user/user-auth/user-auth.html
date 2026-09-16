@@ -1,8 +1,14 @@
-<div [ngClass]="formActive()===0 ? 'bg-(--color-coffee)' : 'bg-(--color-background)' " class class="h-screen w-full bg-(--color-background) flex items-center justify-center">
-    @if (this.formActive()===0) {
-        LOGIN
-    }
-    @else {
-        <app-user-register />
-    }
+<div #main [ngClass]="formActive()===1 ? 'bg-(--color-background)' : 'bg-(--color-coffee)' " class class="h-screen w-full bg-(--color-background) duration-[2s] flex items-center justify-center transition-all">
+    <div class="absolute h-full w-full flex justify-center">
+        <div [className]="divMenssageClassList" #divMenssage>
+            <p >{{textMenssage}}</p>
+            <i [classList]="iconMenssageClass" #iconMenssage></i>
+        </div>
+    </div>
+    <div class="flex font-[Poppins] h-[65vh] w-[75vw] relative  rounded-2xl">
+        <img #imageRegister src="images/duas-mulheres-na-mesa.jpg" class="h-full w-1/2 object-cover z-10 absolute rounded-2xl shadow-2xl transition-all duration-300 right-0" alt="">
+        <img #imageLogin src="images/mulher-na-mesa.jpg" class="h-full w-1/2 object-cover z-10 absolute rounded-2xl shadow-2xl transition-all duration-300 right-0" alt="">
+        <app-user-register (menssageForFather)="showMenssage($event[0], $event[1])" (registerActive)="updateForm(2)" class="w-1/2" />
+        <app-user-login (loginActive)="updateForm(1)" class="w-1/2"/>
+    </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, output, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { map } from 'rxjs';
@@ -15,6 +15,19 @@ export class UserRegister {
   userAcceptedTerms = signal(false);
   authService = inject(AuthService);
   router = inject(Router);
+
+  registerActive = output<void>();
+
+  updateForm(){
+    this.registerActive.emit();
+  }
+
+  menssageForFather = output<[string, boolean]>();
+
+  sendMenssageForFather(menssage:string, success:boolean){
+    this.menssageForFather.emit(["Login feito com sucesso", success])
+  }
+
 
   menssageOfErrosFormRegister = new Map<string, string>([
     ['name', 'Este nome é inválido'],
@@ -48,7 +61,6 @@ export class UserRegister {
   }
 
   formIsValid(){
-    
     return this.formRegisterUser.invalid || !this.userAcceptedTerms()
   }
 
@@ -60,14 +72,18 @@ export class UserRegister {
       password:this.formRegisterUser.get('password')?.value as string,
     }
   }
+  private mensageSuccessRegister = "Registro realizado com sucesso, agora faça seu login";
 
   ngOnSubmit(){
     if (this.formRegisterUser.invalid) {
       return
     }
+    console.log(this.generateRegisterRequest());
+    
     this.authService.register(this.generateRegisterRequest()).subscribe({
       next:(data) =>{
-        this.router.navigate(['/auth', 'user'], {queryParams:{q:'login'}})
+        this.updateForm();
+        this.sendMenssageForFather(this.mensageSuccessRegister, true);
       },
       error:(err)=>{
         console.log(err);
