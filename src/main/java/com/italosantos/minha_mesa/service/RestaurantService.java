@@ -3,6 +3,7 @@ package com.italosantos.minha_mesa.service;
 import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
@@ -12,6 +13,7 @@ import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
 import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.*;
+import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.model.enums.UserRole;
 import com.italosantos.minha_mesa.repository.*;
 import org.jspecify.annotations.Nullable;
@@ -79,6 +81,27 @@ public class RestaurantService {
                 this.restaurantRepository.findById(id)
                         .orElseThrow(() -> new RestaurantNotFoundException(id))
         );
+    }
+
+    public DashboardRestaurantResponseDTO getDasboardRestaurantByUserModel(UserModel userModel){
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+        return new DashboardRestaurantResponseDTO(
+                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelId(ownerModel.getId()),
+                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.SCHEDULED),
+                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.CONFIRMED),
+                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.COMPLETED),
+                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.CANCELED),
+                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.NO_SHOW),
+                (long)ownerModel.getRestaurantModel().getTableModels().size(),
+                (long)ownerModel.getRestaurantModel().getTableModels().stream().filter(TableModel::getActive).toList().size(),
+                (long)ownerModel.getRestaurantModel().getTableModels().size(),
+                0L //Adicionar relação de clientes e restaurantes
+
+        );
+
+
+
     }
 
     @Cacheable(

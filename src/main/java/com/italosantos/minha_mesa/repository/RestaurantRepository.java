@@ -11,4 +11,5 @@ public interface RestaurantRepository extends JpaRepository<RestaurantModel, Int
     boolean existsByOwnerModelUserModelId(Integer userId);
     boolean existsByOwnerModelUserModelEmail(String email);
     Optional<RestaurantModel> findByOwnerModelUserModelId(Integer userId);
+
 }

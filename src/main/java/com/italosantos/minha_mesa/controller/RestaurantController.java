@@ -4,6 +4,7 @@ import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
@@ -175,5 +176,19 @@ public class RestaurantController {
     ){
         this.restaurantService.deleteRestaurantByUser(userModel);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Busca o dahboard do restaurante de quem fez a requisição",
+            description = "Retorna o dashboard"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Dashboard feito com suceso"),
+            @ApiResponse(responseCode = "403", description = "Usuário não possui um restaurante cadastrado")
+    })
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashboardRestaurantResponseDTO> getDasboardRestaurantByUserModel(@AuthenticationPrincipal UserModel userModel){
+        return ResponseEntity.ok(this.restaurantService.getDasboardRestaurantByUserModel(userModel));
     }
 }
