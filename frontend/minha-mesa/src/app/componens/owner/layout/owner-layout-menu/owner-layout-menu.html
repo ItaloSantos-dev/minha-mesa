@@ -1,0 +1,86 @@
+<aside class="w-64 sticky top-0 h-screen overflow-hidden bg-(--color-secondary) border-r border-slate-200/80 min-h-screen flex flex-col justify-between shrink-0 font-sans antialiased">
+
+    
+        <!-- Parte Superior: Logo e Rotas -->
+        <div>
+            <!-- Brand / Logo Area -->
+            <div class="h-16 flex items-center px-6  gap-2.5 justify-center">
+            
+                <a
+                    href="#"
+                    class=" text-3xl font-extrabold tracking-tight shrink-0"
+                >
+                    <span class="text-white">Minha</span>
+                    <span class="text-(--color-highlight)"> Mesa</span>
+                </a>
+            </div>
+
+            <!-- Título de Seção do Menu -->
+            <div class="px-6 pt-6 pb-2">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Navegação Principal</p>
+            </div>
+
+            <!-- Links do Menu (Baseado no Sem título.png) -->
+            <nav class="px-3 space-y-1">
+            
+                <div class="relative flex flex-col w-full">
+  
+                    <div 
+                        [style.transform]="'translateY(' + (currentPage() * 100) + '%)'"
+                        class="absolute inset-x-0 top-0 h-11 text-white bg-emerald-500/35 border-l-4 border-emerald-600 z-0 transition-all duration-300 ease-out rounded-r-xl">
+                    </div>
+
+                    <a  
+                        [classList]="buttonMenuClassList">
+                        <div class="flex items-center gap-3">
+                            <svg  xmlns="http://www.w3.org/2000/svg" [classList]="svgMenuClassList" class="" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 13h4V4H4v9zm6 7h4V4h-4v16zm6-4h4V4h-4v12z" />
+                            </svg>
+                            Dashboard
+                        </div>
+                    </a>
+
+                    <a  
+                        [classList]="buttonMenuClassList">
+                        <div class="flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" [classList]="svgMenuClassList" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 3v2m10-2v2M4 8h16M5 5h14a1 1 0 011 1v13a1 1 0 01-1 1H5a1 1 0 01-1-1V6a1 1 0 011-1zm4 7h2m2 0h2m-6 4h2m2 0h2" />
+                            </svg>
+                            Reservas
+                        </div>
+                    </a>
+
+                    <a  
+                        [classList]="buttonMenuClassList">
+                        <div class="flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" [classList]="svgMenuClassList" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M5 7v2a2 2 0 002 2h10a2 2 0 002-2V7M7 11v6m10-6v6M6 17h12M8 7V5h8v2" />
+                            </svg>
+                            Mesas
+                        </div>
+                    </a>
+
+                    <a  
+                        [classList]="buttonMenuClassList">
+                        <svg xmlns="http://www.w3.org/2000/svg" [classList]="svgMenuClassList" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14m0-14a3 3 0 110 6 3 3 0 010-6zm0 8a3 3 0 110 6 3 3 0 010-6z" />
+                        </svg>
+                        Horários
+                    </a>
+
+                    <a  
+                        [classList]="buttonMenuClassList">
+                        <svg xmlns="http://www.w3.org/2000/svg" [classList]="svgMenuClassList" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 3v2m8-2v2M5 7h14M6 5h12a1 1 0 011 1v13a1 1 0 01-1 1H6a1 1 0 01-1-1V6a1 1 0 011-1zm3 6h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01M15 16h.01" />
+                        </svg>
+                        Exceções
+                    </a>
+
+                    
+
+                </div>
+
+            </nav>
+        </div>
+
+</aside>
