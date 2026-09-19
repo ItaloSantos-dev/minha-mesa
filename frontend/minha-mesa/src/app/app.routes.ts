@@ -4,6 +4,7 @@ import { LandingHome } from './componens/landing-page/home/landing-home/landing-
 import { OwnerAuth } from './componens/auth/owner/owner-auth/owner-auth';
 import { UserAuth } from './componens/auth/user/user-auth/user-auth';
 import { OwnerLayout } from './componens/owner/layout/owner-layout/owner-layout';
+import { OwnerDashboard } from './componens/owner/restaurant/owner-dashboard/owner-dashboard';
 
 export const routes: Routes = [
     {
@@ -28,7 +29,15 @@ export const routes: Routes = [
         path:'owner',
         component: OwnerLayout,
         children:[
-            
+            {
+                path:'restaurant',
+                children:[
+                    {
+                        path:'dashboard',
+                        component:OwnerDashboard
+                    }
+                ]
+            }
         ]
     },
 ];

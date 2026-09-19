@@ -11,4 +11,6 @@ export class UtilityService {
   updateCurrentPageOfOwnerMenu(value:number){
     this.updateCurrentPageSubject.next(value);
   }
+
+  
 }

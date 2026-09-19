@@ -1,0 +1,10 @@
+<article class="flex min-w-0 items-center gap-4 rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 p-[1.1rem] shadow-[0_.65rem_1.5rem_rgba(90,69,60,.06)] transition duration-200 hover:-translate-y-[3px] hover:shadow-[0_1rem_2rem_rgba(90,69,60,.1)]">
+    <div class="grid h-12 w-12 shrink-0 place-items-center rounded-[.8rem] bg-(--color-primary) text-xl text-white" [class]="accent() === 'highlight' ? 'grid h-12 w-12 shrink-0 place-items-center rounded-[.8rem] bg-(--color-highlight) text-xl text-(--color-coffee)' : accent() === 'secondary' ? 'grid h-12 w-12 shrink-0 place-items-center rounded-[.8rem] bg-(--color-secondary) text-xl text-white' : accent() === 'coffee' ? 'grid h-12 w-12 shrink-0 place-items-center rounded-[.8rem] bg-(--color-coffee) text-xl text-white' : 'grid h-12 w-12 shrink-0 place-items-center rounded-[.8rem] bg-(--color-primary) text-xl text-white'" aria-hidden="true">
+        <i [className]="icon()"></i>
+    </div>
+    <div class="min-w-0">
+        <p class="mb-1 overflow-hidden text-ellipsis whitespace-nowrap text-[.72rem] font-bold text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">{{ title() }}</p>
+        <strong class="block font-(--font-heading) text-[1.75rem] leading-none text-(--color-coffee)">{{ value() }}</strong>
+        
+    </div>
+</article>
