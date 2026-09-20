@@ -13,6 +13,7 @@ import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.model.WorkingScheduleModel;
+import com.italosantos.minha_mesa.service.DashboardService;
 import com.italosantos.minha_mesa.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,6 +31,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 @Tag(
         name = "02 - Restaurantes",
@@ -39,12 +42,14 @@ import java.util.List;
 @RequestMapping("restaurants")
 public class RestaurantController {
     private final RestaurantService restaurantService;
+    private final DashboardService dashboardService;
 
 
 
-    public RestaurantController(RestaurantService restaurantService) {
+    public RestaurantController(RestaurantService restaurantService, DashboardService dashboardService) {
 
         this.restaurantService = restaurantService;
+        this.dashboardService = dashboardService;
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -188,7 +193,10 @@ public class RestaurantController {
             @ApiResponse(responseCode = "403", description = "Usuário não possui um restaurante cadastrado")
     })
     @GetMapping("/dashboard")
-    public ResponseEntity<DashboardRestaurantResponseDTO> getDasboardRestaurantByUserModel(@AuthenticationPrincipal UserModel userModel){
-        return ResponseEntity.ok(this.restaurantService.getDasboardRestaurantByUserModel(userModel));
+    public ResponseEntity<DashboardRestaurantResponseDTO> getDasboardRestaurantByUserModel(
+            @AuthenticationPrincipal UserModel userModel,
+            @RequestParam LocalDate date
+            ){
+        return ResponseEntity.ok(this.dashboardService.getDashboardRestaurantByUserModel(userModel, date));
     }
 }

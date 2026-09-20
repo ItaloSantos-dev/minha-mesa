@@ -40,4 +40,22 @@ public interface TableRepository extends JpaRepository<TableModel, Integer> {
             @Param("restaurantId") Integer restaurantId,
             Pageable pageable
     );
+
+    @Query("""
+        SELECT COUNT (DISTINCT t.id)
+        FROM TableModel t
+        JOIN ReserveModel r
+        ON r.tableModel.id = t.id
+        WHERE t.restaurantModel.id = :restaurantId
+        AND r.date = :date
+        AND :actualTime BETWEEN r.timeStart AND r.timeEnd
+        AND r.status IN :statuses
+    """)
+    Long countOccupiedTablesByRestaurantIdAndDateAndActualTimeAndStatus(
+            Integer restaurantId,
+            LocalDate date,
+            LocalTime actualTime,
+            List<ReserveStatus> statuses
+    );
+
 }

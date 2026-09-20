@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.infra;
 
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,7 @@ public class RedisCacheConfig {
     public final static String REQUESTSGETCACHENAME = "requests-get";
     public final static String REQUESTSOTHERSMETHODSCACHENAME = "requests-";
     public final static String TABLEAVALIABLECACHENAME = "table-avaliables";
+    public final static String DASHBOARDRESTAURANTCACHENAME = "dashboard-restaurant";
 
 
     @Bean
@@ -65,12 +67,14 @@ public class RedisCacheConfig {
                         TABLEAVALIABLECACHENAME,
                         this.tableListCacheConfig(defaultConfig)
                 )
+                .withCacheConfiguration(
+                        DASHBOARDRESTAURANTCACHENAME,
+                        this.dashboardRestaurantCacheConfig(defaultConfig)
+                )
                 .build();
     }
 
     private RedisCacheConfiguration reserveListCacheConfig(RedisCacheConfiguration defaultConfig){
-
-
         JavaType reservasUsuarioType =
                 this.objectMapper.getTypeFactory()
                         .constructCollectionType(
@@ -142,6 +146,26 @@ public class RedisCacheConfig {
                                         .fromSerializer(new StringRedisSerializer())
                         )
                         .entryTtl(Duration.ofMinutes(1));
+    }
+
+    private RedisCacheConfiguration dashboardRestaurantCacheConfig(RedisCacheConfiguration defaultConfig){
+
+        JavaType dashboardRestaurantType =
+                this.objectMapper.getTypeFactory()
+                        .constructType(
+                                DashboardRestaurantResponseDTO.class
+                        );
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> restaurantSerializer =
+                new JacksonJsonRedisSerializer<>(
+                        this.objectMapper,
+                        dashboardRestaurantType
+                );
+
+        return
+                defaultConfig.serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(restaurantSerializer)
+                ).entryTtl(Duration.ofMinutes(5));
     }
 }
 

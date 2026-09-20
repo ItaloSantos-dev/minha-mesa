@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -83,31 +85,11 @@ public class RestaurantService {
         );
     }
 
-    public DashboardRestaurantResponseDTO getDasboardRestaurantByUserModel(UserModel userModel){
-        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
-                .orElseThrow(UserIsNotOwnerException::new);
-        return new DashboardRestaurantResponseDTO(
-                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelId(ownerModel.getId()),
-                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.SCHEDULED),
-                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.CONFIRMED),
-                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.COMPLETED),
-                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.CANCELED),
-                 this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.NO_SHOW),
-                (long)ownerModel.getRestaurantModel().getTableModels().size(),
-                (long)ownerModel.getRestaurantModel().getTableModels().stream().filter(TableModel::getActive).toList().size(),
-                (long)ownerModel.getRestaurantModel().getTableModels().size(),
-                0L //Adicionar relação de clientes e restaurantes
 
-        );
-
-
-
-    }
 
     @Cacheable(
             value = RedisCacheConfig.RESERVESRESTAURANTCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
-
     )
     public List<ReserveResponseDTO> getReservesOfRestaurant(UserModel userModel, Pageable pageable){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
