@@ -39,9 +39,9 @@ public class DashboardService {
 
     @Cacheable(
             value = RedisCacheConfig.DASHBOARDRESTAURANTCACHENAME,
-            key = "#userModel.id + '-' + #dateOfDashboard"
+            key = "#userModel.id"
     )
-    public DashboardRestaurantResponseDTO getDashboardRestaurantByUserModel(UserModel userModel, LocalDate dateOfDashboard){
+    public DashboardRestaurantResponseDTO getDashboardRestaurantByUserModel(UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
 
@@ -49,7 +49,7 @@ public class DashboardService {
         Long totalReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelId(ownerModel.getId());
         Long scheduledReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.SCHEDULED);
         Long confirmedReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.CONFIRMED);
-        Long peoplesExpectedInDay = this.reserveRepository.sumNumberOfPeopleByDateAndStatusIn(dateOfDashboard, List.of(ReserveStatus.SCHEDULED, ReserveStatus.CONFIRMED), ownerModel.getRestaurantModel().getId());
+        Long peoplesExpectedInDay = this.reserveRepository.sumNumberOfPeopleByDateAndStatusIn(dateTime.toLocalDate(),List.of(ReserveStatus.SCHEDULED, ReserveStatus.CONFIRMED), ownerModel.getRestaurantModel().getId());
         List<ReserveResponseDTO> nextReservations = this.reserveRepository.findByTableModelRestaurantIdAndDateAndTimeStartIsBiggerOfActualTimeAndStatusIn
             (
                 ownerModel.getRestaurantModel().getId(),
@@ -78,7 +78,7 @@ public class DashboardService {
                 tablesTotalCount,
                 tablesActiveCount,
                 realTimeTablesData,
-                dateOfDashboard
+                dateTime.toLocalDate()
         );
 
     }

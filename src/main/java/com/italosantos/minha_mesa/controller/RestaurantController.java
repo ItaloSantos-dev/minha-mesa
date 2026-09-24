@@ -194,9 +194,8 @@ public class RestaurantController {
     })
     @GetMapping("/dashboard")
     public ResponseEntity<DashboardRestaurantResponseDTO> getDasboardRestaurantByUserModel(
-            @AuthenticationPrincipal UserModel userModel,
-            @RequestParam LocalDate date
+            @AuthenticationPrincipal UserModel userModel
             ){
-        return ResponseEntity.ok(this.dashboardService.getDashboardRestaurantByUserModel(userModel, date));
+        return ResponseEntity.ok(this.dashboardService.getDashboardRestaurantByUserModel(userModel));
     }
 }
