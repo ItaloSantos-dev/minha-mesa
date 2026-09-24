@@ -30,8 +30,8 @@ public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> 
     Optional<ReserveModel> findByIdAndTableModelRestaurantModelId(Integer id, Integer restaurantId);
     Optional<ReserveModel> findByIdAndUserModelId(Integer id, Integer userId);
 
-    Long countByTableModelRestaurantModelOwnerModelId(Integer ownerId);
-    Long countByTableModelRestaurantModelOwnerModelIdAndStatus(Integer ownerId, ReserveStatus reserveStatus);
+    Long countByTableModelRestaurantModelOwnerModelIdAndDate(Integer ownerId, LocalDate date);
+    Long countByTableModelRestaurantModelOwnerModelIdAndStatus(Integer ownerId, ReserveStatus reserveStatus, LocalDate date);
 
     @Query("""
         SELECT COALESCE(SUM(r.numberOfPeople), 0)

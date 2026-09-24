@@ -46,9 +46,9 @@ public class DashboardService {
                 .orElseThrow(UserIsNotOwnerException::new);
 
         OffsetDateTime dateTime = OffsetDateTime.now(ZoneId.of("America/Sao_Paulo"));
-        Long totalReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelId(ownerModel.getId());
-        Long scheduledReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.SCHEDULED);
-        Long confirmedReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.CONFIRMED);
+        Long totalReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndDate(ownerModel.getId(), dateTime.toLocalDate());
+        Long scheduledReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.SCHEDULED, dateTime.toLocalDate());
+        Long confirmedReservations = this.reserveRepository.countByTableModelRestaurantModelOwnerModelIdAndStatus(ownerModel.getId(), ReserveStatus.CONFIRMED, dateTime.toLocalDate());
         Long peoplesExpectedInDay = this.reserveRepository.sumNumberOfPeopleByDateAndStatusIn(dateTime.toLocalDate(),List.of(ReserveStatus.SCHEDULED, ReserveStatus.CONFIRMED), ownerModel.getRestaurantModel().getId());
         List<ReserveResponseDTO> nextReservations = this.reserveRepository.findByTableModelRestaurantIdAndDateAndTimeStartIsBiggerOfActualTimeAndStatusIn
             (
