@@ -9,6 +9,7 @@ import java.time.LocalTime;
 public record ReserveResponseDTO(
         Integer id,
         String clientName,
+        Integer tableNumber,
         String restaurantName,
         LocalDate date,
         DayOfWeek dayOfWeek,

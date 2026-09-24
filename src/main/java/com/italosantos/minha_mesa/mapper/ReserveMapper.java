@@ -33,6 +33,7 @@ public class ReserveMapper {
         return new ReserveResponseDTO(
                 reserveModel.getId(),
                 reserveModel.getUserModel().getName(),
+                reserveModel.getTableModel().getNumber(),
                 reserveModel.getTableModel().getRestaurantModel().getName(),
                 reserveModel.getDate(),
                 DayOfWeek.valueOf(reserveModel.getDate().getDayOfWeek().toString()),
