@@ -8,7 +8,7 @@ import { Component, input } from '@angular/core';
 export class OwnerDashboardCard {
   icon = input.required<string>();
   title = input.required<string>();
-  value = input.required<string>();
+  value = input.required<number>();
   detail = input('');
   accent = input('primary');
 

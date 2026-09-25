@@ -70,6 +70,7 @@ public class DashboardService {
         );
 
         return  new DashboardRestaurantResponseDTO(
+                ownerModel.getRestaurantModel().getName(),
                 totalReservations,
                 scheduledReservations,
                 confirmedReservations,

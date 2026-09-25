@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record DashboardRestaurantResponseDTO(
+        String restaurantName,
         Long totalReservations,
         Long scheduledReservations,
         Long confirmedReservations,

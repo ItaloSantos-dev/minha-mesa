@@ -7,7 +7,8 @@ export const API_BACK_CONFIG = {
             LOGIN: '/auth/login'
         },
         RESTAURANT: {
-            CREATE : '/restaurants'
+            CREATE : '/restaurants',
+            DASHBOARD : '/restaurants/dashboard'
         },
 
     

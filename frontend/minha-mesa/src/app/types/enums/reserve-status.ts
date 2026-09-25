@@ -1,0 +1,7 @@
+export enum ReserveStatus {
+  SCHEDULED = 'SCHEDULED',
+  CONFIRMED = 'CONFIRMED',
+  CANCELED = 'CANCELED',
+  COMPLETED = 'COMPLETED',
+  NO_SHOW = 'NO_SHOW'
+}

@@ -1,9 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { UtilityService } from '../../../../service/utility-service/utility-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-owner-layout-menu',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './owner-layout-menu.html',
   styleUrl: './owner-layout-menu.css',
 })

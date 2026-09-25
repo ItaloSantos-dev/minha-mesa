@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class OwnerLogin {
   private authservice = inject(AuthService);
+  private router = inject(Router);
   formLoginOwner = new FormGroup({
     email:new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl ('', [Validators.required, Validators.minLength(8)])
@@ -32,7 +33,8 @@ export class OwnerLogin {
       return
     this.authservice.login(this.generateLoginRequest()).subscribe({
       next:(data) =>{
-        this.authservice.setToken(data)
+        this.authservice.setToken(data);
+        this.router.navigate(['owner', 'restaurant', 'dashboard'])
       },
       error:(erro)=>{
         console.log(erro);
