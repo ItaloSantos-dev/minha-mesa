@@ -33,6 +33,7 @@ export class OwnerLogin {
       return
     this.authservice.login(this.generateLoginRequest()).subscribe({
       next:(data) =>{
+        
         this.authservice.setToken(data);
         this.router.navigate(['owner', 'restaurant', 'dashboard'])
       },

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OwnerShowReserve } from './owner-show-reserve';
+import { OwnerShowReserve } from './owner-show-reserves';
 
 describe('OwnerShowReserve', () => {
   let component: OwnerShowReserve;

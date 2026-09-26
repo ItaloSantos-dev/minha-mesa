@@ -8,7 +8,8 @@ export const API_BACK_CONFIG = {
         },
         RESTAURANT: {
             CREATE : '/restaurants',
-            DASHBOARD : '/restaurants/dashboard'
+            DASHBOARD : '/restaurants/dashboard',
+            RESERVES : '/restaurants/reserves'
         },
 
     
