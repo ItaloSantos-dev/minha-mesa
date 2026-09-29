@@ -40,13 +40,13 @@
 			<div class="overflow-y-scroll h-[55vh]">
 				@for (reserve of paginatedReserves(); track reserve.id) {
 					<article class="grid grid-cols-[minmax(0,1.4fr)_7rem_7rem_7rem_8rem_minmax(10rem,1fr)] items-center gap-4 border-b border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] px-6 py-4 last:border-b-0 max-[1024px]:grid-cols-[minmax(12rem,1.3fr)_6.5rem_6.5rem_6rem_8rem] max-[1024px]:[&>p:last-child]:hidden max-[760px]:grid-cols-[minmax(0,1fr)_auto] max-[760px]:gap-x-3 max-[760px]:gap-y-2 max-[760px]:px-4">
-						<div class="flex min-w-0 items-center gap-3">
+						<a class="group flex min-w-0 items-center gap-3 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" [routerLink]="['/owner/restaurant/reservations', reserve.id]" [state]="{ reserve }" [attr.aria-label]="'Ver detalhes da reserva de ' + reserve.clientName">
 							<span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[color-mix(in_srgb,var(--color-secondary)_14%,white)] font-bold text-(--color-secondary)">{{ reserve.clientName.charAt(0) }}</span>
 							<div class="min-w-0">
-								<h2 class="mb-1 overflow-hidden text-ellipsis whitespace-nowrap [font-family:var(--font-heading)] text-[.9rem]">{{ reserve.clientName }}</h2>
+								<h2 class="mb-1 overflow-hidden text-ellipsis whitespace-nowrap [font-family:var(--font-heading)] text-[.9rem] group-hover:text-(--color-primary)">{{ reserve.clientName }}</h2>
 								<p class="mb-0 text-[.7rem] text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">{{ reserve.peoples }} {{ reserve.peoples === 1 ? 'pessoa' : 'pessoas' }}</p>
 							</div>
-						</div>
+						</a>
 						<p class="mb-0 text-[.78rem] font-semibold max-[760px]:text-right"><span class="mr-1 text-[.68rem] text-[color-mix(in_srgb,var(--color-coffee)_55%,transparent)] lg:hidden">Data</span>{{ reserve.date }}</p>
 						<p class="mb-0 text-[.78rem] font-semibold max-[760px]:text-right"><span class="mr-1 text-[.68rem] text-[color-mix(in_srgb,var(--color-coffee)_55%,transparent)] lg:hidden">Hora</span>{{ reserve.timeStart }} - {{ reserve.timeEnd }}</p>
 						<p class="mb-0 text-[.78rem] max-[760px]:hidden"><i class="bi bi-grid-3x3-gap mr-1 text-(--color-secondary)" aria-hidden="true"></i>Mesa {{ reserve.tableNumber }}</p>

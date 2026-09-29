@@ -35,12 +35,20 @@ export class RestaurantService {
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.DASHBOARD
     )
   }
+  
 
   getReservesOfRestaurant(page:number):Observable<ReserveResponseDTO[]>{
     console.log(this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.RESERVES + this.generatePageable(page));
     
     return this.httpClient.get<ReserveResponseDTO[]>(
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.RESERVES + this.generatePageable(page)
+    )
+  }
+
+  getReserveOfRestaurantById(id:number):Observable<ReserveResponseDTO>{
+   
+    return this.httpClient.get<ReserveResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.RESERVES + '/' + id
     )
   }
 }

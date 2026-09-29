@@ -6,6 +6,7 @@ import { UserAuth } from './componens/auth/user/user-auth/user-auth';
 import { OwnerLayout } from './componens/owner/layout/owner-layout/owner-layout';
 import { OwnerDashboard } from './componens/owner/restaurant/owner-dashboard/owner-dashboard';
 import { OwnerShowReserve } from './componens/owner/restaurant/reserve/owner-show-reserves/owner-show-reserves';
+import { OwnerShowReserve as OwnerReserveDetails } from './componens/owner/restaurant/reserve/owner-show-reserve/owner-show-reserve';
 
 export const routes: Routes = [
     {
@@ -33,6 +34,10 @@ export const routes: Routes = [
             {
                 path:'restaurant',
                 children:[
+                    {
+                        path:'reservations/:id',
+                        component:OwnerReserveDetails
+                    },
                     {
                         path:'dashboard',
                         component:OwnerDashboard

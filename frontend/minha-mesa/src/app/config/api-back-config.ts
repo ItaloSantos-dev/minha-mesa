@@ -11,6 +11,9 @@ export const API_BACK_CONFIG = {
             DASHBOARD : '/restaurants/dashboard',
             RESERVES : '/restaurants/reserves'
         },
+        RESERVE:{
+            UPDATE:'/reserves'
+        }
 
     
     }

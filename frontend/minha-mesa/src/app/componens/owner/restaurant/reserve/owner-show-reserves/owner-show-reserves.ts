@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ReserveStatus } from '../../../../../types/enums/reserve-status';
 import { ReserveResponseDTO } from '../../../../../types/reserve/reserve-response';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
@@ -6,7 +7,7 @@ import { RestaurantService } from '../../../../../service/restaurant-service/res
 
 @Component({
   selector: 'app-owner-show-reserve',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './owner-show-reserves.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

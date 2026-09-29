@@ -107,7 +107,7 @@ public class ReserveController {
                     )
             )
     })
-    @PatchMapping("/{id}/update-status")
+    @PatchMapping("/{id}")
     public ResponseEntity<ReserveUpdateResponseDTO> updateStatusOfReserveById(
             @AuthenticationPrincipal UserModel userModel,
             @PathVariable Integer id,
