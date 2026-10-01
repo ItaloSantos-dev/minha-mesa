@@ -4,6 +4,7 @@ import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
@@ -11,6 +12,7 @@ import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.infra.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
+import com.italosantos.minha_mesa.mapper.TableMapper;
 import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
@@ -19,8 +21,11 @@ import com.italosantos.minha_mesa.repository.*;
 import org.jspecify.annotations.Nullable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,8 +43,9 @@ public class RestaurantService {
     private final WorkingScheduleMapper workingScheduleMapper;
     private final AuthService authService;
     private final UserRepository userRepository;
+    private final TableMapper tableMapper;
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository) {
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
@@ -50,6 +56,7 @@ public class RestaurantService {
         this.workingScheduleMapper = workingScheduleMapper;
         this.authService = authService;
         this.userRepository = userRepository;
+        this.tableMapper = tableMapper;
     }
 
 
@@ -128,5 +135,17 @@ public class RestaurantService {
             throw new RestaurantAlreadyHasDesactiveException();
         restaurantModel.setActive(false);
         this.restaurantRepository.save(restaurantModel);
+    }
+
+    @Cacheable(
+            key = "#userModel.id",
+            value = RedisCacheConfig.TABLESOFRESTAURANTCACHENAME
+    )
+    public List<TableResponseDTO> getTablesOfRestaurantById(@AuthenticationPrincipal UserModel userModel){
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+        return ownerModel.getRestaurantModel().getTableModels().stream()
+                .map(this.tableMapper::modelToResponse)
+                .toList();
     }
 }

@@ -5,6 +5,7 @@ import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
@@ -197,5 +198,19 @@ public class RestaurantController {
             @AuthenticationPrincipal UserModel userModel
             ){
         return ResponseEntity.ok(this.dashboardService.getDashboardRestaurantByUserModel(userModel));
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Busca o as mesas do restaurante de quem fez a requisição",
+            description = "Retorna a lista de mesas"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Mesas encontradas com sucesso"),
+            @ApiResponse(responseCode = "403", description = "Usuário não possui um restaurante cadastrado")
+    })
+    @GetMapping("/tables")
+    public ResponseEntity<List<TableResponseDTO>> getTablesOfRestaurantById(@AuthenticationPrincipal UserModel userModel){
+        return ResponseEntity.ok(this.restaurantService.getTablesOfRestaurantById(userModel));
     }
 }

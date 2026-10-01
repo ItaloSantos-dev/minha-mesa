@@ -29,6 +29,7 @@ public class RedisCacheConfig {
     public final static String REQUESTSOTHERSMETHODSCACHENAME = "requests-";
     public final static String TABLEAVALIABLECACHENAME = "table-avaliables";
     public final static String DASHBOARDRESTAURANTCACHENAME = "dashboard-restaurant";
+    public final static String TABLESOFRESTAURANTCACHENAME = "tables-restaurant";
 
 
     @Bean
@@ -70,6 +71,10 @@ public class RedisCacheConfig {
                 .withCacheConfiguration(
                         DASHBOARDRESTAURANTCACHENAME,
                         this.dashboardRestaurantCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        TABLESOFRESTAURANTCACHENAME,
+                        this.tableListCacheConfig(defaultConfig)
                 )
                 .build();
     }
