@@ -49,6 +49,7 @@ public class TableService {
             throw new AlreadyExistTableWithNumberException();
         TableModel tableModel = this.tableMapper.createToModel(createTableRequestDTO, ownerModel.getRestaurantModel());
         this.cacheService.deleteCache(RedisCacheConfig.TABLEAVALIABLECACHENAME);
+        this.cacheService.deleteCache(RedisCacheConfig.TABLESOFRESTAURANTCACHENAME);
         return this.tableMapper.modelToResponse(this.tableRepository.save(tableModel));
     }
 

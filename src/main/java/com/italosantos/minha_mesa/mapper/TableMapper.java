@@ -21,7 +21,8 @@ public class TableMapper {
         return new TableResponseDTO(
                 tableModel.getId(),
                 tableModel.getNumber(),
-                tableModel.getCapacity()
+                tableModel.getCapacity(),
+                tableModel.getActive()
         );
     }
 }

@@ -23,6 +23,7 @@ export class AuthService {
   }
 
   login(data:LoginRequestDTO):Observable<string>{
+    localStorage.clear()
     return this.httpClient.post(API_BACK_CONFIG.URL + API_BACK_CONFIG.ENDPOINTS.AUTH.LOGIN, data, {responseType:'text'});
   }
 

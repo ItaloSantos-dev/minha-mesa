@@ -6,6 +6,7 @@ import { RestaurantResponseDTO } from '../../types/restaurant/restaurant-respons
 import { HttpClient } from '@angular/common/http';
 import { DashboardResponseDTO } from '../../types/restaurant/dashboard/dashboard-response';
 import { ReserveResponseDTO } from '../../types/reserve/reserve-response';
+import { TableResponseDTO } from '../../types/table/table-response';
 
 @Injectable({
   providedIn: 'root',
@@ -51,4 +52,13 @@ export class RestaurantService {
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.RESERVES + '/' + id
     )
   }
+
+  getTablesOfRestaurant():Observable<TableResponseDTO[]>{
+    console.log(this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.TABLES);
+    
+    return this.httpClient.get<TableResponseDTO[]>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.TABLES
+    )
+  }
+
 }
