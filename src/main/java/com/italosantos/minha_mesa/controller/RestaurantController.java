@@ -167,6 +167,24 @@ public class RestaurantController {
         return ResponseEntity.ok(this.restaurantService.getDaysWorkingOfRestaurantById(id, pageable));
     }
 
+    @Operation(
+            summary = "Busca os dias de funcionamento de restaurante do dono da requisição",
+            description = "Retorna os dias de funcionamento de um restaurante"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Dias de funcionamento encontrados com sucesso"),
+            @ApiResponse(
+                    responseCode = "403", description = "Usuário não possui um restaurante cadastrado",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            )
+    })
+    @GetMapping("/working-scheduleds")
+    public ResponseEntity<List<WorkingScheduleResponseDTO>> getDaysWorkingOfRestaurantById(@AuthenticationPrincipal UserModel userModel, Pageable pageable){
+        return ResponseEntity.ok(this.restaurantService.getDaysWorkingOfRestaurantByUserModel(userModel, pageable));
+    }
+
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Desativa o restaurante do usuário que fez a requisição",

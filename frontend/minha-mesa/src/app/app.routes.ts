@@ -8,6 +8,7 @@ import { OwnerDashboard } from './componens/owner/restaurant/owner-dashboard/own
 import { OwnerShowReserve } from './componens/owner/restaurant/reserve/owner-show-reserves/owner-show-reserves';
 import { OwnerShowReserve as OwnerReserveDetails } from './componens/owner/restaurant/reserve/owner-show-reserve/owner-show-reserve';
 import { OwnerShowTables } from './componens/owner/restaurant/table/owner-show-tables/owner-show-tables';
+import { OwnerShowWorkingSchedules } from './componens/owner/restaurant/working-schedule/owner-show-working-schedules/owner-show-working-schedules';
 
 export const routes: Routes = [
     {
@@ -46,6 +47,10 @@ export const routes: Routes = [
                     {
                         path:'tables',
                         component:OwnerShowTables
+                    },
+                    {
+                        path:'working-schedules',
+                        component:OwnerShowWorkingSchedules
                     },
                     {
                         path:'reservations',

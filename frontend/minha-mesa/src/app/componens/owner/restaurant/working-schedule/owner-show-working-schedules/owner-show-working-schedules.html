@@ -1,0 +1,65 @@
+<main class="min-h-full bg-[radial-gradient(circle_at_100%_0%,color-mix(in_srgb,var(--color-highlight)_12%,transparent),transparent_28rem)] px-5 py-10 pb-12 [font-family:var(--font-body)] text-(--color-coffee) sm:px-[4vw] max-[760px]:px-4 max-[760px]:py-6 max-[760px]:pb-8">
+	<header class="mb-8 flex items-end justify-between gap-6 max-[760px]:items-start max-[760px]:flex-col">
+		<div>
+			<p class="mb-[.35rem] text-[.7rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Operação do restaurante</p>
+			<h1 class="mb-2 [font-family:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] text-(--color-primary)">Horários de funcionamento</h1>
+			<p class="mb-0 text-[.85rem] text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">Dias e períodos em que as mesas estão disponíveis para reservas.</p>
+		</div>
+		<button type="button" class="inline-flex cursor-pointer items-center gap-2 rounded-[.7rem] border-0 bg-(--color-primary) px-4 py-3 font-bold text-white shadow-[0_.6rem_1.5rem_color-mix(in_srgb,var(--color-primary)_25%,transparent)] transition hover:-translate-y-0.5 hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)">
+			<i class="bi bi-plus-lg" aria-hidden="true"></i>
+			Novo horário
+		</button>
+	</header>
+
+	<section class="mb-5 flex items-center justify-between gap-4" aria-label="Resumo dos horários">
+		<p class="mb-0 text-sm font-semibold">{{ schedules().length }} períodos cadastrados</p>
+		<span class="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_srgb,var(--color-secondary)_12%,white)] px-3 py-1.5 text-xs font-semibold text-(--color-secondary)">
+			<i class="bi bi-calendar-week" aria-hidden="true"></i>
+			Agenda semanal
+		</span>
+	</section>
+
+	@if (schedules().length) {
+		<section class="overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/75 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)]" aria-label="Horários de funcionamento">
+			<div class="max-h-[55vh] overflow-y-auto overscroll-contain divide-y divide-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)]" tabindex="0">
+				@for (schedule of schedules(); track schedule.id) {
+					<article class="flex min-h-22 items-center gap-4 px-5 py-4 transition-colors hover:bg-[color-mix(in_srgb,var(--color-highlight)_9%,white)] max-[600px]:flex-wrap max-[600px]:gap-3 max-[600px]:px-4">
+						<span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-[color-mix(in_srgb,var(--color-secondary)_12%,white)] text-lg text-(--color-secondary)" aria-hidden="true">
+							<i class="bi bi-clock-history"></i>
+						</span>
+						<div class="min-w-0 flex-1">
+							<h2 class="mb-1 [font-family:var(--font-heading)] text-base font-semibold">{{ dayLabels[schedule.dayOfWeek] }}</h2>
+							<p class="mb-0 text-xs text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Horário #{{ schedule.id }}</p>
+						</div>
+						<div class="flex items-center gap-3 rounded-lg bg-[color-mix(in_srgb,var(--color-background)_55%,white)] px-4 py-2.5 max-[600px]:ml-14 max-[600px]:px-3">
+							<i class="bi bi-clock text-(--color-secondary)" aria-hidden="true"></i>
+							<time class="font-semibold tabular-nums">{{ schedule.timeStart }} <span class="px-1 text-[color-mix(in_srgb,var(--color-coffee)_45%,transparent)]">até</span> {{ schedule.timeEnd }}</time>
+						</div>
+						<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#28734a] max-[600px]:ml-auto">
+							<span class="h-2 w-2 rounded-full bg-[#3b9b62]"></span>
+							Disponível
+						</span>
+						<button type="button" class="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] bg-white px-3 py-2 text-xs font-bold text-(--color-coffee) transition hover:border-[#a23b31] hover:text-[#a23b31] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) max-[600px]:ml-auto" [attr.aria-label]="'Desativar horário de ' + dayLabels[schedule.dayOfWeek]">
+							<i class="bi bi-pause-circle" aria-hidden="true"></i>
+							Desativar
+						</button>
+					</article>
+				}
+			</div>
+			<footer class="flex items-center justify-between gap-4 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] px-6 py-4 max-[600px]:items-start max-[600px]:flex-col max-[600px]:px-4">
+				<p class="mb-0 text-[.75rem] text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Página {{ currentPage()+1 }} <span class="mx-1">·</span> {{ schedules().length }} horários</p>
+				<nav class="flex items-center gap-1" aria-label="Navegação de páginas">
+					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Página anterior" [disabled]="currentPage() === 0" (click)="loadWorkingSchedules(currentPage() - 1)"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+
+					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Próxima página" [disabled]="currentPage() === totalPages()" (click)="loadWorkingSchedules(currentPage() + 1)"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+				</nav>
+			</footer>
+		</section>
+	} @else {
+		<section class="flex flex-col items-center justify-center rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 px-6 py-16 text-center shadow-[0_.8rem_2rem_rgba(90,69,60,.06)]">
+			<i class="bi bi-calendar-x mb-3 text-4xl text-(--color-secondary)" aria-hidden="true"></i>
+			<h2 class="mb-1 [font-family:var(--font-heading)] text-xl">Nenhum horário cadastrado</h2>
+			<p class="mb-0 text-sm text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Os horários disponíveis para reserva aparecerão aqui.</p>
+		</section>
+	}
+</main>

@@ -128,6 +128,17 @@ public class RestaurantService {
                 .toList();
     }
 
+    public List<WorkingScheduleResponseDTO> getDaysWorkingOfRestaurantByUserModel(UserModel userModel, Pageable pageable){
+        RestaurantModel restaurantModel = this.restaurantRepository.findByOwnerModelUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+        List<WorkingScheduleModel> workingScheduleModels = this.workingScheduleRepository.findByRestaurantModelId(restaurantModel.getId(), pageable).getContent();
+
+        return workingScheduleModels.stream()
+                .map(this.workingScheduleMapper::modelToResponse)
+                .toList();
+    }
+
     public void deleteRestaurantByUser(UserModel userModel){
         RestaurantModel restaurantModel = this.restaurantRepository.findByOwnerModelUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);

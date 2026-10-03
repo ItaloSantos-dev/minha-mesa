@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { DashboardResponseDTO } from '../../types/restaurant/dashboard/dashboard-response';
 import { ReserveResponseDTO } from '../../types/reserve/reserve-response';
 import { TableResponseDTO } from '../../types/table/table-response';
+import { WorkingScheduleResponseDTO } from '../../types/working_schedule/working-schedule-response';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,6 @@ export class RestaurantService {
   
 
   getReservesOfRestaurant(page:number):Observable<ReserveResponseDTO[]>{
-    console.log(this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.RESERVES + this.generatePageable(page));
     
     return this.httpClient.get<ReserveResponseDTO[]>(
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.RESERVES + this.generatePageable(page)
@@ -54,10 +54,18 @@ export class RestaurantService {
   }
 
   getTablesOfRestaurant():Observable<TableResponseDTO[]>{
-    console.log(this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.TABLES);
+    
     
     return this.httpClient.get<TableResponseDTO[]>(
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.TABLES
+    )
+  }
+
+  getWorkingSchedulesOfRestaurant(page:number):Observable<WorkingScheduleResponseDTO[]>{
+    console.log(this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.WORKING_SCHEDULES + this.generatePageable(page));
+    
+    return this.httpClient.get<WorkingScheduleResponseDTO[]>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.WORKING_SCHEDULES + this.generatePageable(page)
     )
   }
 
