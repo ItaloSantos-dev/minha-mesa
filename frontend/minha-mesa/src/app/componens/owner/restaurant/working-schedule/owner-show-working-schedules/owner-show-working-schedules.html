@@ -5,14 +5,13 @@
 			<h1 class="mb-2 [font-family:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] text-(--color-primary)">Horários de funcionamento</h1>
 			<p class="mb-0 text-[.85rem] text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">Dias e períodos em que as mesas estão disponíveis para reservas.</p>
 		</div>
-		<button type="button" class="inline-flex cursor-pointer items-center gap-2 rounded-[.7rem] border-0 bg-(--color-primary) px-4 py-3 font-bold text-white shadow-[0_.6rem_1.5rem_color-mix(in_srgb,var(--color-primary)_25%,transparent)] transition hover:-translate-y-0.5 hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)">
+		<button type="button" class="inline-flex cursor-pointer items-center gap-2 rounded-[.7rem] border-0 bg-(--color-primary) px-4 py-3 font-bold text-white shadow-[0_.6rem_1.5rem_color-mix(in_srgb,var(--color-primary)_25%,transparent)] transition hover:-translate-y-0.5 hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" (click)="handlerShowCreateForm(false)">
 			<i class="bi bi-plus-lg" aria-hidden="true"></i>
 			Novo horário
 		</button>
 	</header>
 
 	<section class="mb-5 flex items-center justify-between gap-4" aria-label="Resumo dos horários">
-		<p class="mb-0 text-sm font-semibold">{{ schedules().length }} períodos cadastrados</p>
 		<span class="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_srgb,var(--color-secondary)_12%,white)] px-3 py-1.5 text-xs font-semibold text-(--color-secondary)">
 			<i class="bi bi-calendar-week" aria-hidden="true"></i>
 			Agenda semanal
@@ -47,11 +46,10 @@
 				}
 			</div>
 			<footer class="flex items-center justify-between gap-4 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] px-6 py-4 max-[600px]:items-start max-[600px]:flex-col max-[600px]:px-4">
-				<p class="mb-0 text-[.75rem] text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Página {{ currentPage()+1 }} <span class="mx-1">·</span> {{ schedules().length }} horários</p>
 				<nav class="flex items-center gap-1" aria-label="Navegação de páginas">
-					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Página anterior" [disabled]="currentPage() === 0" (click)="loadWorkingSchedules(currentPage() - 1)"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Página anterior" [disabled]="currentPage()-1 === 0" (click)="loadWorkingSchedules(currentPage()-1, false)"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
 
-					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Próxima página" [disabled]="currentPage() === totalPages()" (click)="loadWorkingSchedules(currentPage() + 1)"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Próxima página" [disabled]="currentPage() === totalPages()" (click)="loadWorkingSchedules(currentPage()+1, true)"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 				</nav>
 			</footer>
 		</section>
@@ -63,3 +61,10 @@
 		</section>
 	}
 </main>
+
+
+<app-owner-create-working-schedules
+	#createWorkingSchedule
+	(closed)="handlerShowCreateForm($event)"
+	class="flex hidden opacity-0"/>
+

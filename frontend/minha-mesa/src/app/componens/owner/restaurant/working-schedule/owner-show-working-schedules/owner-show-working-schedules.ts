@@ -1,12 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { OwnerCreateWorkingSchedules } from '../owner-create-working-schedules/owner-create-working-schedules';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { DayOfWeek } from '../../../../../types/enums/day-of-week';
+import { CreateWorkingScheduleRequestDTO } from '../../../../../types/working_schedule/create-working-schedule-request';
 import { WorkingScheduleResponseDTO } from '../../../../../types/working_schedule/working-schedule-response';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { gsap } from 'gsap/gsap-core';
 
 @Component({
   selector: 'app-owner-show-working-schedules',
-  imports: [],
+  imports: [OwnerCreateWorkingSchedules],
   templateUrl: './owner-show-working-schedules.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,6 +32,7 @@ export class OwnerShowWorkingSchedules {
   ];
 
   readonly schedules = signal(<WorkingScheduleResponseDTO[]>[]);
+  readonly isCreateFormOpen = signal(false);
   readonly currentPage = signal(0);
   pageSize = 0;
 
@@ -37,6 +41,56 @@ export class OwnerShowWorkingSchedules {
   
 
   readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, index) => index + 1));
+
+  @ViewChild('createWorkingSchedule', { read: ElementRef })
+  createWorkingSchedule!: ElementRef<HTMLElement>;
+
+  
+
+  handlerShowCreateForm(haveNewWorkingSchedule:boolean) {
+    const mainCreateWorkingSchedule = this.createWorkingSchedule.nativeElement;
+    this.isCreateFormOpen.set(!this.isCreateFormOpen())
+
+    if (this.isCreateFormOpen()) {
+      gsap.set(
+        mainCreateWorkingSchedule,
+        {
+          display:'flex'
+        }
+      )
+      gsap.to(
+        mainCreateWorkingSchedule, 
+        {
+          opacity: 1,
+          duration: 0.3
+        }
+      );
+    }
+    else{
+      gsap.to(
+        mainCreateWorkingSchedule, 
+        {
+          opacity: 0,
+          duration: 0.3,
+          onComplete: (() =>{
+            gsap.set(
+              mainCreateWorkingSchedule,
+              {
+                display:'none'
+              }
+            )
+          })
+        }
+      );
+      if (haveNewWorkingSchedule) {
+        this.loadWorkingSchedules(1,true);
+      }
+    }
+  }
+
+ 
+
+  
 
   readonly dayLabels: Record<DayOfWeek, string> = {
     [DayOfWeek.MONDAY]: 'Segunda-feira',
@@ -48,19 +102,23 @@ export class OwnerShowWorkingSchedules {
     [DayOfWeek.SUNDAY]: 'Domingo',
   };
 
-  updatePageValues(){
+  updatePageValues(next:boolean){
     const schedulesCount = this.schedules().length;
     this.pageSize=schedulesCount;
     const haveMoreSchedules = this.schedules().length===10;
+    this.currentPage.set(next? this.currentPage()+1 : this.currentPage()-1);
     this.totalPages.set(haveMoreSchedules? this.currentPage()+1 : this.currentPage());
+    
   }
 
 
-  loadWorkingSchedules(page:number){
-    this.restaurantService.getWorkingSchedulesOfRestaurant(page).subscribe({
+  loadWorkingSchedules(page:number, next:boolean){
+    console.log(page);
+    const realPage = page>0 ? page-1 :page;
+    this.restaurantService.getWorkingSchedulesOfRestaurant(realPage).subscribe({
       next:(data) =>{
         this.schedules.set(data);
-        this.updatePageValues();
+        this.updatePageValues(next);
       },error: (err) =>{
         console.log(err);
       }
@@ -68,7 +126,7 @@ export class OwnerShowWorkingSchedules {
   }
 
   ngOnInit() {
-    this.loadWorkingSchedules(0);
+    this.loadWorkingSchedules(1, true);
     this.utilityService.updateCurrentPageOfOwnerMenu(3);
   }
 

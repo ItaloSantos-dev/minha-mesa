@@ -19,6 +19,9 @@ export const API_BACK_CONFIG = {
         TABLE:{
             DELETE:'/tables',
             CREATE:'/tables'
+        },
+        WORKING_SCHEDULEDS:{
+            CREATE:'/working-schedules'
         }
 
     
