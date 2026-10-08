@@ -5,6 +5,7 @@ import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
@@ -166,7 +167,7 @@ public class RestaurantController {
     public ResponseEntity<List<WorkingScheduleResponseDTO>> getDaysWorkingOfRestaurantById(@PathVariable Integer id, Pageable pageable){
         return ResponseEntity.ok(this.restaurantService.getDaysWorkingOfRestaurantById(id, pageable));
     }
-
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Busca os dias de funcionamento de restaurante do dono da requisição",
             description = "Retorna os dias de funcionamento de um restaurante"
@@ -183,6 +184,26 @@ public class RestaurantController {
     @GetMapping("/working-scheduleds")
     public ResponseEntity<List<WorkingScheduleResponseDTO>> getDaysWorkingOfRestaurantById(@AuthenticationPrincipal UserModel userModel, Pageable pageable){
         return ResponseEntity.ok(this.restaurantService.getDaysWorkingOfRestaurantByUserModel(userModel, pageable));
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Busca os dias de exceção de restaurante do dono da requisição",
+            description = "Retorna os dias de exceção de um restaurante"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Dias de exceção encontrados com sucesso"),
+            @ApiResponse(
+                    responseCode = "403", description = "Usuário não possui um restaurante cadastrado",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            )
+    })
+
+    @GetMapping("/schdule-exceptions")
+    public ResponseEntity<List<ScheduleExceptionResponseDTO>> getScheduleExceptionsOfRestaurantByUserModel(@AuthenticationPrincipal UserModel userModel, Pageable pageable){
+        return ResponseEntity.ok(this.restaurantService.getScheduleExceptionsOfRestaurantByUserModel(userModel, pageable));
     }
 
     @SecurityRequirement(name = "Bearer Authentication")

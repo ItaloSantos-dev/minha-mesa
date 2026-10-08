@@ -4,16 +4,14 @@ import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.infra.RedisCacheConfig;
-import com.italosantos.minha_mesa.mapper.ReserveMapper;
-import com.italosantos.minha_mesa.mapper.RestaurantMapper;
-import com.italosantos.minha_mesa.mapper.TableMapper;
-import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
+import com.italosantos.minha_mesa.mapper.*;
 import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.model.enums.UserRole;
@@ -44,8 +42,11 @@ public class RestaurantService {
     private final AuthService authService;
     private final UserRepository userRepository;
     private final TableMapper tableMapper;
+    private final ScheduleExceptionRepository scheduleExceptionRepository;
+    private final ScheduleExceptionMapper scheduleExceptionMapper;
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper) {
+
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
@@ -57,6 +58,8 @@ public class RestaurantService {
         this.authService = authService;
         this.userRepository = userRepository;
         this.tableMapper = tableMapper;
+        this.scheduleExceptionRepository = scheduleExceptionRepository;
+        this.scheduleExceptionMapper = scheduleExceptionMapper;
     }
 
 
@@ -136,6 +139,17 @@ public class RestaurantService {
 
         return workingScheduleModels.stream()
                 .map(this.workingScheduleMapper::modelToResponse)
+                .toList();
+    }
+
+    public List<ScheduleExceptionResponseDTO> getScheduleExceptionsOfRestaurantByUserModel(UserModel userModel, Pageable pageable){
+        RestaurantModel restaurantModel = this.restaurantRepository.findByOwnerModelUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+        List<ScheduleExceptionModel> exceptions = this.scheduleExceptionRepository.findByRestaurantModelId((restaurantModel.getId()), pageable).getContent();
+
+        return exceptions.stream()
+                .map(this.scheduleExceptionMapper::modelToResponse)
                 .toList();
     }
 

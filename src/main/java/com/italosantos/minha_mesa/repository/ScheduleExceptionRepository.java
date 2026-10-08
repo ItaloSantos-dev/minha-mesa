@@ -1,6 +1,8 @@
 package com.italosantos.minha_mesa.repository;
 
 import com.italosantos.minha_mesa.model.ScheduleExceptionModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,4 +14,6 @@ public interface ScheduleExceptionRepository  extends JpaRepository<ScheduleExce
     boolean existsByDateAndRestaurantModelId (LocalDate date, Integer restaurantId);
 
     Optional<ScheduleExceptionModel> findByDateAndRestaurantModelId (LocalDate date, Integer restaurantId);
+
+    Page<ScheduleExceptionModel> findByRestaurantModelId(Integer id, Pageable pageable);
 }
