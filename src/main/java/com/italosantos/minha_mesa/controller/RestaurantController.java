@@ -201,7 +201,7 @@ public class RestaurantController {
             )
     })
 
-    @GetMapping("/schdule-exceptions")
+    @GetMapping("/schedule-exceptions")
     public ResponseEntity<List<ScheduleExceptionResponseDTO>> getScheduleExceptionsOfRestaurantByUserModel(@AuthenticationPrincipal UserModel userModel, Pageable pageable){
         return ResponseEntity.ok(this.restaurantService.getScheduleExceptionsOfRestaurantByUserModel(userModel, pageable));
     }

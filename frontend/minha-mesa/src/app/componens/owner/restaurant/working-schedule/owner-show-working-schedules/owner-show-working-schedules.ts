@@ -108,7 +108,6 @@ export class OwnerShowWorkingSchedules {
     const haveMoreSchedules = this.schedules().length===10;
     this.currentPage.set(next? this.currentPage()+1 : this.currentPage()-1);
     this.totalPages.set(haveMoreSchedules? this.currentPage()+1 : this.currentPage());
-    
   }
 
 

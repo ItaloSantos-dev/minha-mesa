@@ -9,6 +9,7 @@ import { OwnerShowReserve } from './componens/owner/restaurant/reserve/owner-sho
 import { OwnerShowReserve as OwnerReserveDetails } from './componens/owner/restaurant/reserve/owner-show-reserve/owner-show-reserve';
 import { OwnerShowTables } from './componens/owner/restaurant/table/owner-show-tables/owner-show-tables';
 import { OwnerShowWorkingSchedules } from './componens/owner/restaurant/working-schedule/owner-show-working-schedules/owner-show-working-schedules';
+import { OwnerShowSchedulesException } from './componens/owner/restaurant/schedule-exception/owner-show-schedules-exception/owner-show-schedules-exception';
 
 export const routes: Routes = [
     {
@@ -51,6 +52,10 @@ export const routes: Routes = [
                     {
                         path:'working-schedules',
                         component:OwnerShowWorkingSchedules
+                    },
+                    {
+                        path:'schedule-exceptions',
+                        component:OwnerShowSchedulesException
                     },
                     {
                         path:'reservations',

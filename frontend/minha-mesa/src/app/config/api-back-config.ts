@@ -11,7 +11,8 @@ export const API_BACK_CONFIG = {
             DASHBOARD : '/restaurants/dashboard',
             RESERVES : '/restaurants/reserves',
             TABLES : '/restaurants/tables',
-            WORKING_SCHEDULES:'/restaurants/working-scheduleds'
+            WORKING_SCHEDULES:'/restaurants/working-scheduleds',
+            SCHEDULE_EXCEPTIONS:'/restaurants/schedule-exceptions'
         },
         RESERVE:{
             UPDATE:'/reserves'
@@ -22,7 +23,8 @@ export const API_BACK_CONFIG = {
         },
         WORKING_SCHEDULEDS:{
             CREATE:'/working-schedules'
-        }
+        },
+        
 
     
     }

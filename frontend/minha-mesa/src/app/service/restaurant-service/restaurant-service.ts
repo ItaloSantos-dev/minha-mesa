@@ -8,6 +8,7 @@ import { DashboardResponseDTO } from '../../types/restaurant/dashboard/dashboard
 import { ReserveResponseDTO } from '../../types/reserve/reserve-response';
 import { TableResponseDTO } from '../../types/table/table-response';
 import { WorkingScheduleResponseDTO } from '../../types/working_schedule/working-schedule-response';
+import { ScheduleExceptionResponseDTO } from '../../types/schedule_exception/schedule-exception-response';
 
 @Injectable({
   providedIn: 'root',
@@ -62,11 +63,16 @@ export class RestaurantService {
   }
 
   getWorkingSchedulesOfRestaurant(page:number):Observable<WorkingScheduleResponseDTO[]>{
-    console.log(this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.WORKING_SCHEDULES + this.generatePageable(page));
     
     return this.httpClient.get<WorkingScheduleResponseDTO[]>(
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.WORKING_SCHEDULES + this.generatePageable(page)
     )
+  }
+
+  getScheduleExceptionsOfRestaurant(page:number):Observable<ScheduleExceptionResponseDTO[]>{
+    return this.httpClient.get<ScheduleExceptionResponseDTO[]>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.SCHEDULE_EXCEPTIONS + this.generatePageable(page)
+    )  
   }
 
 }
