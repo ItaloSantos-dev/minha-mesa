@@ -1,0 +1,37 @@
+<div #main class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm" (click)="$event.target === $event.currentTarget && close(false)">
+	<section role="dialog" aria-modal="true" aria-labelledby="create-exception-title" class="w-full max-w-lg overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white shadow-2xl" (click)="$event.stopPropagation()">
+		<header class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_52%,white)] px-6 py-5">
+			<div>
+				<p class="mb-1 text-[.68rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Fechamento especial</p>
+				<h2 id="create-exception-title" class="mb-0 [font-family:var(--font-heading)] text-xl">Nova exceção</h2>
+			</div>
+			<button type="button" class="grid h-9 w-9 cursor-pointer place-items-center rounded-lg text-(--color-coffee) transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" aria-label="Fechar formulário" (click)="close(false)">
+				<i class="bi bi-x-lg" aria-hidden="true"></i>
+			</button>
+		</header>
+
+		<form class="grid gap-5 p-6" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+			<label class="grid gap-2 text-sm font-semibold" for="exception-date">Data do fechamento
+				<input id="exception-date" type="date" formControlName="date" class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 [font-family:var(--font-body)] text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)" />
+				@if (form.controls.date.touched && form.controls.date.hasError('required')) {
+					<span class="text-xs font-medium text-[#a23b31]" role="alert">Informe a data da exceção.</span>
+				}
+				@if (form.controls.date.touched && form.controls.date.hasError('pastDate')) {
+					<span class="text-xs font-medium text-[#a23b31]" role="alert">A data da exceção não pode ser anterior a hoje.</span>
+				}
+			</label>
+
+			<label class="grid gap-2 text-sm font-semibold" for="exception-reason">Motivo
+				<textarea id="exception-reason" rows="3" formControlName="reason" class="w-full resize-y rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 [font-family:var(--font-body)] text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)" placeholder="Ex.: manutenção, feriado ou evento privado"></textarea>
+				@if (form.controls.reason.touched && form.controls.reason.hasError('required')) {
+					<span class="text-xs font-medium text-[#a23b31]" role="alert">Informe o motivo da exceção.</span>
+				}
+			</label>
+
+			<footer class="mt-1 flex justify-end gap-3 max-[400px]:flex-col-reverse">
+				<button type="button" class="cursor-pointer rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] px-4 py-2.5 text-sm font-semibold transition hover:bg-[color-mix(in_srgb,var(--color-coffee)_6%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" (click)="close(false)">Cancelar</button>
+				<button type="submit" class="cursor-pointer rounded-lg bg-(--color-primary) px-4 py-2.5 text-sm font-bold text-white transition hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)">Salvar exceção</button>
+			</footer>
+		</form>
+	</section>
+</div>

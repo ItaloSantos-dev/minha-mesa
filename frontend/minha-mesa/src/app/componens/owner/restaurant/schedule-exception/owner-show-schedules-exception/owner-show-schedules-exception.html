@@ -5,7 +5,7 @@
 			<h1 class="mb-2 [font-family:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] text-(--color-primary)">Exceções de funcionamento</h1>
 			<p class="mb-0 text-[.85rem] text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">Datas em que o restaurante não estará aberto para reservas.</p>
 		</div>
-		<button type="button" class="inline-flex cursor-pointer items-center gap-2 rounded-[.7rem] border-0 bg-(--color-primary) px-4 py-3 font-bold text-white shadow-[0_.6rem_1.5rem_color-mix(in_srgb,var(--color-primary)_25%,transparent)] transition hover:-translate-y-0.5 hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)">
+		<button type="button" class="inline-flex cursor-pointer items-center gap-2 rounded-[.7rem] border-0 bg-(--color-primary) px-4 py-3 font-bold text-white shadow-[0_.6rem_1.5rem_color-mix(in_srgb,var(--color-primary)_25%,transparent)] transition hover:-translate-y-0.5 hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" (click)="handlerShowCreateForm(false)">
 			<i class="bi bi-plus-lg" aria-hidden="true"></i>
 			Nova exceção
 		</button>
@@ -53,3 +53,8 @@
 		</section>
 	}
 </main>
+
+<app-owner-create-schedule-exception
+	#createScheduleException
+	(closed)="handlerShowCreateForm($event)"
+	class="hidden opacity-0" />

@@ -1,18 +1,25 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, output, signal, ViewChild } from '@angular/core';
+import { OwnerCreateScheduleException } from '../owner-create-schedule-exception/owner-create-schedule-exception';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { ScheduleExceptionResponseDTO } from '../../../../../types/schedule_exception/schedule-exception-response';
+import { CreateScheduleExceptionRequestDTO } from '../../../../../types/schedule_exception/create-schedule-exception-request';
+import { gsap } from 'gsap/gsap-core';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
 
 type ExceptionDateStatus = 'past' | 'today' | 'upcoming' | 'invalid';
 
 @Component({
   selector: 'app-owner-show-schedules-exception',
-  imports: [],
+  imports: [OwnerCreateScheduleException],
   templateUrl: './owner-show-schedules-exception.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OwnerShowSchedulesException {
   private readonly utilityService = inject(UtilityService);
+  readonly isCreateFormOpen = signal(false);
+
+  @ViewChild('createScheduleException', { read: ElementRef })
+  createScheduleException!: ElementRef<HTMLElement>;
   private readonly restaurantService = inject(RestaurantService);
 
   readonly scheduleExceptionsMock: ScheduleExceptionResponseDTO[] = [
@@ -26,6 +33,28 @@ export class OwnerShowSchedulesException {
   readonly scheduleExceptions = signal(<ScheduleExceptionResponseDTO[]>[]);
   readonly currentPage = signal(0);
   readonly totalPages = signal(0);
+
+  handlerShowCreateForm(created: boolean) {
+    const overlay = this.createScheduleException.nativeElement;
+    this.isCreateFormOpen.set(!this.isCreateFormOpen());
+
+    if (this.isCreateFormOpen()) {
+      gsap.set(overlay, { display: 'flex' });
+      gsap.to(overlay, { opacity: 1, duration: 0.3 });
+    }
+    else{
+      gsap.to(overlay, {
+        opacity: 0,
+        duration: 0.3,
+        onComplete: () => gsap.set(overlay, { display: 'none' }),
+      });
+      if (created) {
+        this.loadScheduleExceptions(1, false);
+      }
+    }
+
+    
+  }
 
   updatePageValues(next:boolean){
     const schedulesCount = this.scheduleExceptions().length;

@@ -24,6 +24,9 @@ export const API_BACK_CONFIG = {
         WORKING_SCHEDULEDS:{
             CREATE:'/working-schedules'
         },
+        SCHEDULE_EXCEPTION:{
+            CREATE:'/schedule-exceptions'
+        }
         
 
     
