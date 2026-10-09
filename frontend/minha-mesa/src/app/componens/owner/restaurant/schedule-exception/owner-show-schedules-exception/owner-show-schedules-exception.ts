@@ -23,11 +23,11 @@ export class OwnerShowSchedulesException {
   private readonly restaurantService = inject(RestaurantService);
 
   readonly scheduleExceptionsMock: ScheduleExceptionResponseDTO[] = [
-    { id: 1, date: '2026-10-02', reason: 'Manutenção da cozinha' },
-    { id: 2, date: '2026-10-07', reason: 'Evento privado no restaurante' },
-    { id: 3, date: '2026-10-12', reason: 'Feriado nacional' },
-    { id: 4, date: '2026-11-02', reason: 'Reforma do salão' },
-    { id: 5, date: '2026-12-25', reason: 'Recesso de Natal' },
+    { id: 1, date: '2026-10-02', reason: 'Manutenção da cozinha', active: true },
+    { id: 2, date: '2026-10-07', reason: 'Evento privado no restaurante', active: true },
+    { id: 3, date: '2026-10-12', reason: 'Feriado nacional', active: true },
+    { id: 4, date: '2026-11-02', reason: 'Reforma do salão', active: true },
+    { id: 5, date: '2026-12-25', reason: 'Recesso de Natal', active: false },
   ];
 
   readonly scheduleExceptions = signal(<ScheduleExceptionResponseDTO[]>[]);
@@ -136,6 +136,20 @@ export class OwnerShowSchedulesException {
     };
 
     return classes[this.getDateStatus(dateValue)];
+  }
+
+  canChangeExceptionStatus(dateValue: string): boolean {
+    const dateStatus = this.getDateStatus(dateValue);
+    return dateStatus === 'today' || dateStatus === 'upcoming';
+  }
+
+  toggleExceptionStatus(exceptionId: number) {
+    const exception = this.scheduleExceptions().find((item) => item.id === exceptionId);
+    if (!exception || !this.canChangeExceptionStatus(exception.date)) return;
+
+    this.scheduleExceptions.update((exceptions) => exceptions.map((item) =>
+      item.id === exceptionId ? { ...item, active: !item.active } : item,
+    ));
   }
 
   ngOnInit() {

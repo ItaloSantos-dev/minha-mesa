@@ -20,7 +20,8 @@ public class ScheduleExceptionMapper {
         return new ScheduleExceptionResponseDTO(
                 scheduleExceptionModel.getId(),
                 scheduleExceptionModel.getDate(),
-                scheduleExceptionModel.getReason()
+                scheduleExceptionModel.getReason(),
+                scheduleExceptionModel.isActive()
         );
     }
 }

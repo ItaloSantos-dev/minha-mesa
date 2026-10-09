@@ -1,0 +1,3 @@
+ALTER TABLE tb_schedule_exception
+ADD COLUMN
+active BOOLEAN NOT NULL DEFAULT TRUE;

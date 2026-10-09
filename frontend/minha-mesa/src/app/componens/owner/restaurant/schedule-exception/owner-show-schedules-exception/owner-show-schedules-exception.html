@@ -35,6 +35,18 @@
 							<i class="bi bi-info-circle mr-2 text-(--color-secondary)" aria-hidden="true"></i>{{ exception.reason }}
 						</p>
 						<span class="inline-flex shrink-0 items-center rounded-full px-3 py-1.5 text-xs font-bold" [class]="getDateStatusClass(exception.date)">{{ getDateStatusLabel(exception.date) }}</span>
+						<span class="inline-flex shrink-0 items-center rounded-full px-3 py-1.5 text-xs font-bold" [class]="exception.active ? 'bg-[color-mix(in_srgb,#28734a_12%,white)] text-[#28734a]' : 'bg-[color-mix(in_srgb,var(--color-coffee)_10%,white)] text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]'">{{ exception.active ? 'Ativa' : 'Desativada' }}</span>
+						@if (canChangeExceptionStatus(exception.date)) {
+							<button type="button" class="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] bg-white px-3 py-2 text-xs font-bold text-(--color-coffee) transition hover:border-[#a23b31] hover:text-[#a23b31] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" [attr.aria-label]="(exception.active ? 'Desativar' : 'Ativar') + ' exceção de ' + formatExceptionDate(exception.date)" (click)="toggleExceptionStatus(exception.id)">
+								<i class="bi" [class.bi-pause-circle]="exception.active" [class.bi-play-circle]="!exception.active" aria-hidden="true"></i>
+								{{ exception.active ? 'Desativar' : 'Ativar' }}
+							</button>
+						} @else {
+							<span class="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[color-mix(in_srgb,var(--color-coffee)_8%,white)] px-3 py-2 text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_55%,transparent)]" title="Não é possível alterar o status de uma exceção passada">
+								<i class="bi bi-lock" aria-hidden="true"></i>
+								Status bloqueado
+							</span>
+						}
 					</article>
 				}
 			</div>

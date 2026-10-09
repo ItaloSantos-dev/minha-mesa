@@ -27,4 +27,7 @@ public class ScheduleExceptionModel {
 
     @Column(name = "reason", nullable = false)
     private String reason;
+
+    @Column(name="active", nullable = false)
+    private boolean active;
 }

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public record ScheduleExceptionResponseDTO(
         Integer id,
         LocalDate date,
-        String reason
+        String reason,
+        boolean active
 ) {
 }
