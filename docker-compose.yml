@@ -25,6 +25,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "4200:4200"
+    volumes:
+      - ./frontend/minha-mesa:/app
+      - /app/node_modules
     networks:
       - public_network
     depends_on:
