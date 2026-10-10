@@ -9,6 +9,7 @@ import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.model.WorkingScheduleModel;
 import com.italosantos.minha_mesa.model.enums.DayOfWeek;
+import com.italosantos.minha_mesa.repository.OwnerRepository;
 import com.italosantos.minha_mesa.repository.RestaurantRepository;
 import com.italosantos.minha_mesa.repository.WorkingScheduleRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,9 @@ class WorkingScheduleServiceTest {
     @Mock
     RestaurantRepository restaurantRepository;
 
+    @Mock
+    OwnerRepository ownerRepository;
+
     @Test
     @DisplayName("Dono tenta criar uma horário com hora de fim antes da hora de ínicio")
     void createWorkingScheduleCase1() {
@@ -47,8 +51,8 @@ class WorkingScheduleServiceTest {
                 LocalTime.now().minusHours(4)
         );
 
-        Mockito.when(this.restaurantRepository.findByOwnerModelUserModelId(Mockito.any()))
-                .thenReturn(Optional.of(new RestaurantModel()));
+        Mockito.when(this.ownerRepository.findByUserModelId(Mockito.any()))
+                .thenReturn(Optional.of(new OwnerModel()));
 
         assertThrows(TimeIsInvalidException.class, () -> this.workingScheduleService.createWorkingSchedule(userModel, createWorkingScheduleResquestDTO));
 
@@ -63,14 +67,18 @@ class WorkingScheduleServiceTest {
         RestaurantModel restaurantModel = new RestaurantModel();
         restaurantModel.setId(2);
 
+        OwnerModel ownerModel = new OwnerModel();
+
+        ownerModel.setRestaurantModel(restaurantModel);
+
         CreateWorkingScheduleResquestDTO createWorkingScheduleResquestDTO = new CreateWorkingScheduleResquestDTO(
                 DayOfWeek.FRIDAY,
                 LocalTime.now().minusHours(4),
                 LocalTime.now()
         );
 
-        Mockito.when(this.restaurantRepository.findByOwnerModelUserModelId(Mockito.any()))
-                .thenReturn(Optional.of(restaurantModel));
+        Mockito.when(this.ownerRepository.findByUserModelId(Mockito.any()))
+                .thenReturn(Optional.of(ownerModel));
 
         Mockito.when(this.workingScheduleRepository.existsByRestaurantModelIdAndDayOfWeekAndTimeStartAndTimeEnd(
                 Mockito.any(),
