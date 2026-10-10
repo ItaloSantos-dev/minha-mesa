@@ -5,6 +5,7 @@ import { ScheduleExceptionResponseDTO } from '../../../../../types/schedule_exce
 import { CreateScheduleExceptionRequestDTO } from '../../../../../types/schedule_exception/create-schedule-exception-request';
 import { gsap } from 'gsap/gsap-core';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { ScheduleExceptionService } from '../../../../../service/schedule-exception-service/schedule-exception-service';
 
 type ExceptionDateStatus = 'past' | 'today' | 'upcoming' | 'invalid';
 
@@ -17,9 +18,13 @@ type ExceptionDateStatus = 'past' | 'today' | 'upcoming' | 'invalid';
 export class OwnerShowSchedulesException {
   private readonly utilityService = inject(UtilityService);
   readonly isCreateFormOpen = signal(false);
+  private readonly scheduleExceptionService = inject(ScheduleExceptionService);
+
 
   @ViewChild('createScheduleException', { read: ElementRef })
   createScheduleException!: ElementRef<HTMLElement>;
+  @ViewChild('statusConfirmationOverlay', { read: ElementRef })
+  statusConfirmationOverlay!: ElementRef<HTMLElement>;
   private readonly restaurantService = inject(RestaurantService);
 
   readonly scheduleExceptionsMock: ScheduleExceptionResponseDTO[] = [
@@ -31,6 +36,7 @@ export class OwnerShowSchedulesException {
   ];
 
   readonly scheduleExceptions = signal(<ScheduleExceptionResponseDTO[]>[]);
+  readonly selectedExceptionForStatusChange = signal<ScheduleExceptionResponseDTO | null>(null);
   readonly currentPage = signal(0);
   readonly totalPages = signal(0);
 
@@ -74,6 +80,44 @@ export class OwnerShowSchedulesException {
       }
     })
     
+  }
+
+  handlerShowStatusConfirmation(exceptionId: number) {
+    const exception = this.scheduleExceptions().find((item) => item.id === exceptionId);
+    if (!exception || !this.canChangeExceptionStatus(exception.date)) return;
+
+    this.selectedExceptionForStatusChange.set(exception);
+    const overlay = this.statusConfirmationOverlay.nativeElement;
+    gsap.set(overlay, { display: 'flex' });
+    gsap.to(overlay, { opacity: 1, duration: 0.3 });
+  }
+
+  handlerCloseStatusConfirmation() {
+    const overlay = this.statusConfirmationOverlay.nativeElement;
+    gsap.to(overlay, {
+      opacity: 0,
+      duration: 0.3,
+      onComplete: () => {
+        gsap.set(overlay, { display: 'none' });
+        this.selectedExceptionForStatusChange.set(null);
+      },
+    });
+  }
+
+  confirmExceptionStatusChange() {
+    const id = this.selectedExceptionForStatusChange()?.id;
+
+    if (id === undefined) {
+      return;
+    }
+    this.scheduleExceptionService.updateStatusScheduleExceptionById(id).subscribe({
+      next:() =>{
+        this.loadScheduleExceptions(1, false);
+        this.handlerCloseStatusConfirmation();
+      },error: (err) =>{
+        console.log(err);
+      }
+    })
   }
 
   getDayOfWeek(dateValue: string): string {
@@ -143,14 +187,7 @@ export class OwnerShowSchedulesException {
     return dateStatus === 'today' || dateStatus === 'upcoming';
   }
 
-  toggleExceptionStatus(exceptionId: number) {
-    const exception = this.scheduleExceptions().find((item) => item.id === exceptionId);
-    if (!exception || !this.canChangeExceptionStatus(exception.date)) return;
-
-    this.scheduleExceptions.update((exceptions) => exceptions.map((item) =>
-      item.id === exceptionId ? { ...item, active: !item.active } : item,
-    ));
-  }
+  
 
   ngOnInit() {
     this.utilityService.updateCurrentPageOfOwnerMenu(4);

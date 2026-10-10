@@ -12,14 +12,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 @Tag(
@@ -68,5 +66,35 @@ public class ScheduleExceptionController {
             ){
         ScheduleExceptionResponseDTO scheduleExceptionResponseDTO = this.scheduleExceptionService.createscheduleExceptionModel(createScheduleExceptionDTO, userModel);
         return ResponseEntity.created(URI.create("/schedule-exceptions" + scheduleExceptionResponseDTO.id())).body(scheduleExceptionResponseDTO);
+    }
+
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Inverte o status atual da exceção",
+            description = "Retorna sucesso sem corpo"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Status da exceção alterada com sucesso"),
+            @ApiResponse(
+                    responseCode = "403", description = "Usuário não possui um restaurante cadastrado",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400", description = "A data da exceção já passou",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            )
+    })
+    @PatchMapping("/{id}/update-status")
+    public ResponseEntity<ScheduleExceptionResponseDTO> updateStatusScheduleExceptionById(
+            @AuthenticationPrincipal UserModel userModel,
+            @PathVariable Integer id
+    ){
+        this.scheduleExceptionService.updateStatusScheduleExceptionById(id, userModel);
+        return ResponseEntity.noContent().build();
     }
 }

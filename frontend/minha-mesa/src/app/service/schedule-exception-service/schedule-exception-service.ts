@@ -17,4 +17,10 @@ export class ScheduleExceptionService {
     return this.httClient.post<ScheduleExceptionResponseDTO>(this.url + API_BACK_CONFIG.ENDPOINTS.SCHEDULE_EXCEPTION.CREATE, data);
   }
 
+  updateStatusScheduleExceptionById(id:number):Observable<void>{
+    console.log(this.url + API_BACK_CONFIG.ENDPOINTS.SCHEDULE_EXCEPTION.UPDATE_STATUS(id));
+    
+    return this.httClient.patch<void>(this.url + API_BACK_CONFIG.ENDPOINTS.SCHEDULE_EXCEPTION.UPDATE_STATUS(id), null);
+  }
+
 }

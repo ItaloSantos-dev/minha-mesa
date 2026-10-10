@@ -25,10 +25,15 @@ export const API_BACK_CONFIG = {
             CREATE:'/working-schedules'
         },
         SCHEDULE_EXCEPTION:{
-            CREATE:'/schedule-exceptions'
+            CREATE:'/schedule-exceptions',
+            UPDATE_STATUS: (id:number):string=>{
+                return `/schedule-exceptions/${id}/update-status`
+            }
         }
         
 
     
-    }
+    },
+
+    
 };

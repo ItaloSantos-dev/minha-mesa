@@ -15,6 +15,7 @@ import com.italosantos.minha_mesa.repository.ScheduleExceptionRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Service
 public class ScheduleExceptionService {
@@ -43,5 +44,27 @@ public class ScheduleExceptionService {
         ScheduleExceptionModel scheduleExceptionModel = this.scheduleExceptionMapper.createToModel(createScheduleExceptionDTO, ownerModel.getRestaurantModel());
         return this.scheduleExceptionMapper.modelToResponse(this.scheduleExceptionRepository.save(scheduleExceptionModel));
 
+    }
+
+    public void updateStatusScheduleExceptionById(Integer id, UserModel userModel){
+        LocalDate currentDate = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+        ScheduleExceptionModel scheduleException = this.scheduleExceptionRepository.findByIdAndRestaurantModelId(id, ownerModel.getRestaurantModel().getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+        if (currentDate.isAfter(scheduleException.getDate()))
+            throw new IllegalParameterException("Não foi possível alterar o status pois a data desta exceção já passou.");
+
+        scheduleException.setActive(!scheduleException.isActive());
+
+        this.scheduleExceptionRepository.save(scheduleException);
+
+
+
+
+        return;
     }
 }

@@ -37,7 +37,7 @@
 						<span class="inline-flex shrink-0 items-center rounded-full px-3 py-1.5 text-xs font-bold" [class]="getDateStatusClass(exception.date)">{{ getDateStatusLabel(exception.date) }}</span>
 						<span class="inline-flex shrink-0 items-center rounded-full px-3 py-1.5 text-xs font-bold" [class]="exception.active ? 'bg-[color-mix(in_srgb,#28734a_12%,white)] text-[#28734a]' : 'bg-[color-mix(in_srgb,var(--color-coffee)_10%,white)] text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]'">{{ exception.active ? 'Ativa' : 'Desativada' }}</span>
 						@if (canChangeExceptionStatus(exception.date)) {
-							<button type="button" class="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] bg-white px-3 py-2 text-xs font-bold text-(--color-coffee) transition hover:border-[#a23b31] hover:text-[#a23b31] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" [attr.aria-label]="(exception.active ? 'Desativar' : 'Ativar') + ' exceção de ' + formatExceptionDate(exception.date)" (click)="toggleExceptionStatus(exception.id)">
+							<button type="button" class="inline-flex shrink-0 cursor-pointer items-center gap-2 rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] bg-white px-3 py-2 text-xs font-bold text-(--color-coffee) transition hover:border-[#a23b31] hover:text-[#a23b31] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" [attr.aria-label]="(exception.active ? 'Desativar' : 'Ativar') + ' exceção de ' + formatExceptionDate(exception.date)" (click)="handlerShowStatusConfirmation(exception.id)">
 								<i class="bi" [class.bi-pause-circle]="exception.active" [class.bi-play-circle]="!exception.active" aria-hidden="true"></i>
 								{{ exception.active ? 'Desativar' : 'Ativar' }}
 							</button>
@@ -70,3 +70,43 @@
 	#createScheduleException
 	(closed)="handlerShowCreateForm($event)"
 	class="hidden opacity-0" />
+
+<div
+	#statusConfirmationOverlay
+	class="fixed left-0 top-0 z-50 hidden h-screen w-full items-center justify-center bg-black/30 p-4 opacity-0 backdrop-blur-sm"
+	(click)="handlerCloseStatusConfirmation()">
+	@if (selectedExceptionForStatusChange(); as exception) {
+		<section
+			role="alertdialog"
+			aria-modal="true"
+			aria-labelledby="status-confirmation-title"
+			aria-describedby="status-confirmation-description"
+			class="w-full max-w-sm overflow-hidden rounded-2xl bg-white shadow-2xl"
+			(click)="$event.stopPropagation()">
+			<div class="p-6 text-center">
+				<h2 id="status-confirmation-title" class="mb-2 [font-family:var(--font-heading)] text-xl font-semibold text-(--color-primary)">Confirmar alteração</h2>
+				<p id="status-confirmation-description" class="mb-5 text-sm leading-relaxed text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">
+					Você tem certeza que deseja alterar o status desta exceção?
+				</p>
+				<dl class="mb-6 rounded-xl bg-[color-mix(in_srgb,var(--color-coffee)_5%,white)] p-4 text-left">
+					<div class="mb-3">
+						<dt class="text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Data</dt>
+						<dd class="mb-0 font-semibold">{{ formatExceptionDate(exception.date) }}</dd>
+					</div>
+					<div>
+						<dt class="text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Motivo</dt>
+						<dd class="mb-0 text-sm">{{ exception.reason }}</dd>
+					</div>
+				</dl>
+				<div class="flex gap-3">
+					<button type="button" class="w-full cursor-pointer rounded-xl bg-(--color-primary) px-4 py-3 text-sm font-bold text-white transition hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) focus-visible:ring-offset-2" (click)="confirmExceptionStatusChange()">
+						Confirmar
+					</button>
+					<button type="button" class="w-full cursor-pointer rounded-xl border border-[color-mix(in_srgb,var(--color-coffee)_20%,transparent)] bg-white px-4 py-3 text-sm font-bold text-(--color-coffee) transition hover:bg-[color-mix(in_srgb,var(--color-coffee)_5%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) focus-visible:ring-offset-2" (click)="handlerCloseStatusConfirmation()">
+						Cancelar
+					</button>
+				</div>
+			</div>
+		</section>
+	}
+</div>

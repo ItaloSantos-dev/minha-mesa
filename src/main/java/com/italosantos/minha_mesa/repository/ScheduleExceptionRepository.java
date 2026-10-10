@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -16,4 +17,6 @@ public interface ScheduleExceptionRepository  extends JpaRepository<ScheduleExce
     Optional<ScheduleExceptionModel> findByDateAndRestaurantModelId (LocalDate date, Integer restaurantId);
 
     Page<ScheduleExceptionModel> findByRestaurantModelId(Integer id, Pageable pageable);
+
+    Optional<ScheduleExceptionModel> findByIdAndRestaurantModelId(Integer id, Integer restaurantId);
 }
