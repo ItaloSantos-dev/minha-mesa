@@ -1,4 +1,5 @@
-<div #main class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm" (click)="$event.target === $event.currentTarget && close(false)">
+<app-message-error />
+<div #main class="fixed inset-0 z-20 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm" (click)="$event.target === $event.currentTarget && close(false)">
 	<section role="dialog" aria-modal="true" aria-labelledby="create-exception-title" class="w-full max-w-lg overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white shadow-2xl" (click)="$event.stopPropagation()">
 		<header class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_52%,white)] px-6 py-5">
 			<div>

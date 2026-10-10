@@ -3,6 +3,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../service/auth-service/auth-service';
 import { LoginRequestDTO } from '../../../../types/auth/login-request';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UtilityService } from '../../../../service/utility-service/utility-service';
+import { ExceptionService } from '../../../../service/exception-service/exception-service';
+import { ExceptionResponse } from '../../../../types/exception/excpetion-response';
 
 @Component({
   selector: 'app-user-login',
@@ -14,6 +18,9 @@ export class UserLogin {
   loginActive = output<void>();
 
   authService = inject(AuthService);
+
+  private utilityService = inject(UtilityService);
+  private exceptionService = inject(ExceptionService);
 
   inputClassList = 'bg-white/60 backdrop-blur-2xl rounded-xl p-1 focus:border-(--color-primary) focus:outline-none h-[5vh]';
 
@@ -40,6 +47,10 @@ export class UserLogin {
     }
   }
 
+  handlerShowError(erro:HttpErrorResponse){
+    this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro));
+  }
+
   ngOnSubmit(){
     if (this.formLoginUser.invalid) {
       return;
@@ -50,9 +61,11 @@ export class UserLogin {
         
         this.authService.setToken(token);
       },
-      error:(erro) =>{
-        console.log(erro);
-        
+      error:(erro: HttpErrorResponse)=>{
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro);
+        if (showError) {
+          this.handlerShowError(erro);
+        }
       }
     })
   }

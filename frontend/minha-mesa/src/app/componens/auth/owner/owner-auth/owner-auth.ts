@@ -6,12 +6,13 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import gsap from 'gsap';
 import { MorphSVGPlugin } from 'gsap/MorphSVGPlugin';
 import { NgClass } from "@angular/common";
+import { MessageError } from '../../../message-error/message-error';
 
 gsap.registerPlugin(MorphSVGPlugin);
 
 @Component({
   selector: 'app-owner-auth',
-  imports: [Boxes, OwnerRegister, OwnerLogin, NgClass, RouterLink],
+  imports: [Boxes, OwnerRegister, OwnerLogin, NgClass, RouterLink, MessageError],
   templateUrl: './owner-auth.html',
   styleUrl: './owner-auth.css',
 })

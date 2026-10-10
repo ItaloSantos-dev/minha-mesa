@@ -2,6 +2,12 @@ import { ChangeDetectionStrategy, Component, ElementRef, inject, output, ViewChi
 import { FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { CreateScheduleExceptionRequestDTO } from '../../../../../types/schedule_exception/create-schedule-exception-request';
 import { ScheduleExceptionService } from '../../../../../service/schedule-exception-service/schedule-exception-service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { UtilityService } from '../../../../../service/utility-service/utility-service';
+import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
+import { OwnerLayoutMenu } from '../../../layout/owner-layout-menu/owner-layout-menu';
+import { MessageError } from '../../../../message-error/message-error';
 
 const notPastDate: ValidatorFn = (control) => {
   const value = control.value;
@@ -19,7 +25,7 @@ const notPastDate: ValidatorFn = (control) => {
 
 @Component({
   selector: 'app-owner-create-schedule-exception',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, OwnerLayoutMenu, MessageError],
   templateUrl: './owner-create-schedule-exception.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,6 +33,8 @@ export class OwnerCreateScheduleException {
   readonly closed = output<boolean>();
 
   private scheduleExceptionService = inject(ScheduleExceptionService);
+  private exceptionService = inject(ExceptionService);
+  private utilityService = inject(UtilityService);
 
   @ViewChild('main')
   main!: ElementRef<HTMLElement>;
@@ -53,6 +61,10 @@ export class OwnerCreateScheduleException {
     }
   }
 
+  handlerShowError(erro:HttpErrorResponse){
+    this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro))
+  }
+
   submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -62,8 +74,12 @@ export class OwnerCreateScheduleException {
     this.scheduleExceptionService.createWorkingScheduleException(this.createScheduleExceptionRequest()).subscribe({
       next:(dado) =>{
         this.close(true);
-      },error: (err) =>{
-        console.log(err);
+      },
+      error: (erro:HttpErrorResponse) =>{
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro);
+        if (showError) {
+          this.handlerShowError(erro);
+        }
       }
     })
     

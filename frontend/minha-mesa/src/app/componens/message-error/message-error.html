@@ -1,0 +1,62 @@
+<div
+  (click)="$event.target === $event.currentTarget && handlerShowError(exception())"
+  #main
+  class="fixed left-0 top-0 z-50 hidden h-screen w-full items-center justify-center bg-[#24140f]/75 p-4 opacity-0 backdrop-blur-md"
+>
+  <section
+    #divMenssage
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="error-title"
+    aria-describedby="error-description"
+    class="absolute max-h-[90vh] w-full max-w-xl translate-y-[-100vh] overflow-y-auto rounded-3xl border-2 border-[#d94711]/25 bg-white shadow-[0_2rem_6rem_rgba(0,0,0,.45)] ring-4 ring-[#f26716]/20"
+  >
+    <div class="h-2 w-full bg-gradient-to-r from-[#a92b1d] via-[#e34b24] to-[#f2b705]"></div>
+
+    <div class="p-6 sm:p-9">
+      <div class="mb-7 flex items-start justify-between gap-4">
+        <div class="flex h-20 w-20 shrink-0 items-center justify-center rounded-full bg-[#c43d2d] text-white shadow-[0_0_0_10px_#fff0eb]">
+          <i class="bi bi-exclamation-triangle-fill text-4xl" aria-hidden="true"></i>
+        </div>
+        <button
+          type="button"
+          aria-label="Fechar mensagem de erro"
+          class="grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full text-lg text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)] transition hover:bg-[#fff0eb] hover:text-[#a92b1d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+          (click)="handlerShowError(exception())"
+        >
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <p class="mb-2 text-sm font-extrabold uppercase tracking-[.18em] text-[#a92b1d]">Atenção — erro</p>
+      <h2 id="error-title" class="mb-4 [font-family:var(--font-heading)] text-3xl font-bold leading-tight text-[#8f281c] sm:text-4xl">
+        Não foi possível concluir
+      </h2>
+      <div class="mb-6 rounded-2xl border-2 border-[#e8b1a5] bg-[#fff1ed] p-5 sm:p-6">
+        <p class="mb-2 text-xs font-bold uppercase tracking-wider text-[#a92b1d]">Detalhes do problema</p>
+        <p id="error-description" class="mb-0 break-words text-base font-semibold leading-7 text-[#57251f] sm:text-lg">
+          {{ exception().menssage }}
+        </p>
+      </div>
+
+      <div class="mb-7 flex flex-wrap items-center gap-2 rounded-xl bg-[color-mix(in_srgb,var(--color-coffee)_7%,white)] px-4 py-3.5">
+        <i class="bi bi-info-circle text-[#c43d2d]" aria-hidden="true"></i>
+        <span class="text-sm font-medium text-(--color-coffee)">
+          @if (exception().status) {
+            Código do erro: <span class="font-extrabold">{{ exception().status }}</span>
+          } @else {
+            Verifique sua conexão e tente novamente.
+          }
+        </span>
+      </div>
+
+      <button
+        type="button"
+        class="w-full cursor-pointer rounded-xl bg-[#a92b1d] px-5 py-4 text-base font-extrabold text-white shadow-[0_.8rem_1.8rem_rgba(169,43,29,.3)] transition hover:-translate-y-0.5 hover:bg-[#842217] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a92b1d] focus-visible:ring-offset-2"
+        (click)="handlerShowError(exception())"
+      >
+        Fechar mensagem
+      </button>
+    </div>
+  </section>
+</div>

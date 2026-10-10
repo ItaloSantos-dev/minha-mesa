@@ -5,10 +5,11 @@ import { NgClass } from '@angular/common';
 import { UserLogin } from '../user-login/user-login';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { MessageError } from '../../../message-error/message-error';
 
 @Component({
   selector: 'app-user-auth',
-  imports: [RouterLink, UserRegister, NgClass, UserLogin],
+  imports: [RouterLink, UserRegister, NgClass, UserLogin, MessageError],
   templateUrl: './user-auth.html',
   styleUrl: './user-auth.css',
 })

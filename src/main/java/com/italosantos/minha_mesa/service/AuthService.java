@@ -41,7 +41,7 @@ public class AuthService {
         if (this.userRepository.existsByEmail(registerRequestDTO.email()))
             throw new UserAlreadyRegisterException();
         if (this.userRepository.existsByPhone(registerRequestDTO.phone()))
-            throw new UserAlreadyRegisterException();
+            throw new UserAlreadyRegisterException("Este telefone ja esta cadastrado");
         UserModel userModel = this.userMapper.registerToModel(registerRequestDTO, this.passwordEncoder);
         return this.userMapper.modelToResponse(this.userRepository.save(userModel));
     }

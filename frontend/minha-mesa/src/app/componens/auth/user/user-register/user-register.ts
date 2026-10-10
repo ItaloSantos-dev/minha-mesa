@@ -4,6 +4,10 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { map } from 'rxjs';
 import { AuthService } from '../../../../service/auth-service/auth-service';
 import { RegisterRequestDTO } from '../../../../types/auth/register-request';
+import { HttpErrorResponse } from '@angular/common/http';
+import { UtilityService } from '../../../../service/utility-service/utility-service';
+import { ExceptionService } from '../../../../service/exception-service/exception-service';
+import { ExceptionResponse } from '../../../../types/exception/excpetion-response';
 
 @Component({
   selector: 'app-user-register',
@@ -15,6 +19,8 @@ export class UserRegister {
   userAcceptedTerms = signal(false);
   authService = inject(AuthService);
   router = inject(Router);
+  private utilityService = inject(UtilityService);
+  private exceptionService = inject(ExceptionService);
 
   registerActive = output<void>();
 
@@ -74,6 +80,10 @@ export class UserRegister {
   }
   private mensageSuccessRegister = "Registro realizado com sucesso, agora faça seu login";
 
+  handlerShowError(erro:HttpErrorResponse){
+    this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro));
+  }
+
   ngOnSubmit(){
     if (this.formRegisterUser.invalid) {
       return
@@ -85,8 +95,13 @@ export class UserRegister {
         this.updateForm();
         this.sendMenssageForFather(this.mensageSuccessRegister, true);
       },
-      error:(err)=>{
-        console.log(err);
+      error:(erro: HttpErrorResponse)=>{
+        console.log(erro);
+        
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro);
+        if (showError) {
+          this.handlerShowError(erro);
+        }
       }
     })
   }

@@ -212,6 +212,7 @@ export class OwnerShowReserve {
   overlayConfirmationDiv!: ElementRef<HTMLElement>
 
   showConfirmedUpdatedStatus = signal(false)
+  
   handlerShowConfirmedUpdatedStatus(){
     const shouldShow = !this.showConfirmedUpdatedStatus();
     this.showConfirmedUpdatedStatus.set(shouldShow);

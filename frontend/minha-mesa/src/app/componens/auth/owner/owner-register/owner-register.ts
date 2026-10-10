@@ -9,6 +9,10 @@ import { RegisterRequestDTO } from '../../../../types/auth/register-request';
 import { CreateOwnerRequestDTO } from '../../../../types/owner/create-owner-request';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from "@angular/router";
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../service/exception-service/exception-service';
+import { UtilityService } from '../../../../service/utility-service/utility-service';
+import { ExceptionResponse } from '../../../../types/exception/excpetion-response';
 
 @Component({
   selector: 'app-owner-register',
@@ -20,6 +24,8 @@ export class OwnerRegister {
 
   private restaurantService = inject(RestaurantService);
   private authService = inject(AuthService);
+  private exceptionService = inject(ExceptionService);
+  private utilityService = inject(UtilityService);
 
   formRegisterOwner = new FormGroup({
     userName: new FormControl('', [Validators.required, Validators.minLength(4)]),
@@ -101,7 +107,10 @@ ownerFormPartIsValid = computed(() => {
     }
   }
 
-  
+
+  handlerShowError(erro:HttpErrorResponse){
+    this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro));
+  }
 
   ngOnSubmit(){
     if (!this.formRegisterOwner.valid) 
@@ -112,8 +121,11 @@ ownerFormPartIsValid = computed(() => {
       next:(data) =>{
         console.log('Deu bom');
       },
-      error:(error)=>{
-        console.log(error);
+      error:(erro: HttpErrorResponse)=>{
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro);
+        if (showError) {
+          this.handlerShowError(erro);
+        }
       }
     })
   }
