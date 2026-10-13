@@ -75,7 +75,7 @@ export class OwnerCreateScheduleException {
         this.close(true);
       },
       error: (erro:HttpErrorResponse) =>{
-        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro, NotFound.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS);
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro, UtilityService.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS);
         if (showError) {
           this.handlerShowError(erro);
         }

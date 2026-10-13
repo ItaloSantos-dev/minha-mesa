@@ -82,7 +82,7 @@ export class OwnerShowSchedulesException {
         this.scheduleExceptions.set(data);
         this.updatePageValues(next);
       },error: (error: HttpErrorResponse) =>{
-        if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS)) {
+        if (this.exceptionService.handlerRedirectExceptionResponse(error, UtilityService.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS)) {
           this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
         }
       }
@@ -123,7 +123,7 @@ export class OwnerShowSchedulesException {
         this.loadScheduleExceptions(1, false);
         this.handlerCloseStatusConfirmation();
       },error: (error: HttpErrorResponse) =>{
-        if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS)) {
+        if (this.exceptionService.handlerRedirectExceptionResponse(error, UtilityService.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS)) {
           this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
         }
       }

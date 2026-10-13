@@ -6,6 +6,16 @@ import { ExceptionResponse } from '../../types/exception/excpetion-response';
   providedIn: 'root',
 })
 export class UtilityService {
+
+
+  static pathsOfApplication ={
+    OWNER_DASHBOARD: 'owner/restaurant/dashboard',
+    OWNER_SHOW_RESERVES: 'owner/restaurant/reservations',
+    OWNER_SHOW_TABLES: 'owner/restaurant/tables',
+    OWNER_SHOW_WORKING_SCHEDULES: 'owner/restaurant/working-schedules',
+    OWNER_SHOW_SCHEDULE_EXCEPTIONS: 'owner/restaurant/schedule-exceptions'
+  }
+
   private updateCurrentPageSubject = new Subject<number>();
   updateCurrentPage$ = this.updateCurrentPageSubject.asObservable();
 

@@ -142,7 +142,7 @@ export class OwnerShowTables {
   }
 
   private handlerShowError(error: HttpErrorResponse) {
-    if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_TABLES)) {
+    if (this.exceptionService.handlerRedirectExceptionResponse(error, UtilityService.pathsOfApplication.OWNER_SHOW_TABLES)) {
       this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
     }
   }

@@ -274,7 +274,7 @@ export class OwnerShowReserve {
           this.statusForUpdated.set(this.reserve()?.status as ReserveStatus);
         },
         error: (erro:HttpErrorResponse) =>{
-          const showForm = this.exceptioNService.handlerRedirectExceptionResponse(erro, NotFound.pathsOfApplication.OWNER_SHOW_RESERVES);
+          const showForm = this.exceptioNService.handlerRedirectExceptionResponse(erro, UtilityService.pathsOfApplication.OWNER_SHOW_RESERVES);
           if (showForm) {
             this.handlerShowError(erro)
           }
@@ -292,7 +292,7 @@ export class OwnerShowReserve {
           await this.router.navigate(['/']);
           await this.router.navigate(['/owner', 'restaurant', 'reservations', id])
         },error: (erro:HttpErrorResponse) =>{
-          const showForm = this.exceptioNService.handlerRedirectExceptionResponse(erro, NotFound.pathsOfApplication.OWNER_SHOW_RESERVES);
+          const showForm = this.exceptioNService.handlerRedirectExceptionResponse(erro, UtilityService.pathsOfApplication.OWNER_SHOW_RESERVES);
           if (showForm) {
             this.handlerShowError(erro)
           }

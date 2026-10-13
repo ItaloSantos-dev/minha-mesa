@@ -82,7 +82,7 @@ export class OwnerCreateWorkingSchedules {
         this.close(true);
       },
       error: (error: HttpErrorResponse) => {
-        if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_WORKING_SCHEDULES)) {
+        if (this.exceptionService.handlerRedirectExceptionResponse(error, UtilityService.pathsOfApplication.OWNER_SHOW_WORKING_SCHEDULES)) {
           this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
         }
       }

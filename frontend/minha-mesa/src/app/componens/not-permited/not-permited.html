@@ -1,0 +1,49 @@
+<main class="relative grid min-h-screen place-items-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_srgb,var(--color-secondary)_18%,transparent),transparent_25rem),linear-gradient(135deg,#f1fbfc,#e7f3f1_60%,#f4faf7)] p-4 text-(--color-coffee) sm:p-8">
+  <div class="pointer-events-none absolute -left-24 top-12 h-64 w-64 rounded-full bg-(--color-secondary)/15 blur-3xl" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute -bottom-24 right-0 h-80 w-80 rounded-full bg-[#2e9b78]/15 blur-3xl" aria-hidden="true"></div>
+
+  <section class="relative flex min-h-[min(760px,calc(100vh-2rem))] w-full max-w-6xl flex-col justify-between overflow-hidden rounded-[2rem] border border-white/80 bg-white/75 p-6 shadow-[0_2rem_6rem_rgba(3,87,105,.16)] backdrop-blur-xl sm:min-h-[min(780px,calc(100vh-4rem))] sm:p-9 lg:p-12" aria-labelledby="not-permitted-title">
+    <header class="flex items-center justify-between gap-4">
+      <a routerLink="/" aria-label="Minha Mesa - página inicial" class="inline-flex items-center gap-3 rounded-full text-(--color-secondary) outline-none transition hover:text-[#025c7e] focus-visible:ring-2 focus-visible:ring-[#2e9b78] focus-visible:ring-offset-4">
+        <span class="grid h-11 w-11 place-items-center rounded-full bg-[#2e9b78] text-white shadow-md">
+          <i class="bi bi-house-heart-fill text-lg" aria-hidden="true"></i>
+        </span>
+        <span class="[font-family:var(--font-heading)] text-lg font-bold tracking-tight">minha mesa</span>
+      </a>
+      <span class="hidden items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-secondary)_16%,transparent)] bg-white/75 px-4 py-2 text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)] sm:inline-flex">
+        <i class="bi bi-shield-lock text-[#16836d]" aria-hidden="true"></i>
+        Acesso restrito
+      </span>
+    </header>
+
+    <div class="relative mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center py-14 text-center">
+      <div class="pointer-events-none absolute left-1/2 top-1/2 -z-0 aspect-square w-[min(78vw,34rem)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/90 bg-[radial-gradient(circle,color-mix(in_srgb,var(--color-secondary)_17%,white),color-mix(in_srgb,#2e9b78_12%,transparent)_56%,transparent_72%)]" aria-hidden="true"></div>
+      <div class="relative z-10 mb-5 grid h-16 w-16 place-items-center rounded-2xl border border-[#0378a6]/15 bg-white/85 text-[#0378a6] shadow-[0_.8rem_2rem_rgba(3,120,166,.12)] sm:h-20 sm:w-20">
+        <i class="bi bi-shield-lock-fill text-3xl sm:text-4xl" aria-hidden="true"></i>
+      </div>
+      <p class="relative z-10 mb-0 select-none [font-family:var(--font-heading)] text-[clamp(8rem,27vw,18rem)] font-extrabold leading-[.78] tracking-[-.09em] text-[#075b70]">
+        403
+      </p>
+      <div class="relative z-10 mt-8 max-w-lg">
+        <p class="mb-3 text-xs font-extrabold uppercase tracking-[.22em] text-[#16836d]">Área protegida</p>
+        <h1 id="not-permitted-title" class="mb-3 [font-family:var(--font-heading)] text-2xl font-bold leading-tight text-[#075b70] sm:text-3xl">
+          Você não tem permissão para acessar esta página
+        </h1>
+        <p class="mb-0 text-sm leading-6 text-[color-mix(in_srgb,var(--color-coffee)_75%,transparent)] sm:text-base">
+          Sua conta não possui acesso a este conteúdo. Se acredita que isso é um engano, entre em contato com o responsável pelo restaurante.
+        </p>
+      </div>
+    </div>
+
+    <footer class="flex flex-col items-center justify-between gap-4 border-t border-[color-mix(in_srgb,var(--color-secondary)_12%,transparent)] pt-5 sm:flex-row">
+      <p class="mb-0 text-xs font-medium text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">
+        <i class="bi bi-shield-check mr-1 text-[#16836d]" aria-hidden="true"></i>
+        Acesso protegido para manter sua conta segura.
+      </p>
+      <button type="button" (click)="goBack()" class="inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0378a6] px-5 py-3 text-sm font-bold text-white shadow-[0_.6rem_1.5rem_rgba(3,120,166,.24)] transition hover:-translate-y-0.5 hover:bg-[#025c7e] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16836d] focus-visible:ring-offset-2 sm:w-auto">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        Voltar
+      </button>
+    </footer>
+  </section>
+</main>

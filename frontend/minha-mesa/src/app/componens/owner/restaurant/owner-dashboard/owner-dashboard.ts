@@ -145,7 +145,7 @@ export class OwnerDashboard {
   private LASTFETCHEDGETDASHBOARDTOKEN = 'lastFetchedGetDashboard';
 
   private handlerShowError(error: HttpErrorResponse) {
-    if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_DASHBOARD)) {
+    if (this.exceptionService.handlerRedirectExceptionResponse(error, UtilityService.pathsOfApplication.OWNER_DASHBOARD)) {
       this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
     }
   }

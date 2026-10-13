@@ -239,7 +239,7 @@ export class OwnerShowReserve {
         this.reserves.set(date);
         this.updatePageValues()
       },error: (error: HttpErrorResponse) =>{
-        const showError = this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_RESERVES);
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(error, UtilityService.pathsOfApplication.OWNER_SHOW_RESERVES);
         if (showError) {
           this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
         }
