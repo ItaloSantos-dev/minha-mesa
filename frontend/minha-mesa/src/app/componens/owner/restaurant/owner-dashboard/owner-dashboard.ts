@@ -4,6 +4,11 @@ import { DashboardResponseDTO } from '../../../../types/restaurant/dashboard/das
 import { ReserveStatus } from '../../../../types/enums/reserve-status';
 import { RestaurantService } from '../../../../service/restaurant-service/restaurant-service';
 import { UtilityService } from '../../../../service/utility-service/utility-service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../service/exception-service/exception-service';
+import { ExceptionResponse } from '../../../../types/exception/excpetion-response';
+import { MessageError } from '../../../message-error/message-error';
+import { NotFound } from '../../../not-found/not-found';
 
 interface Card{
   icon:string;
@@ -13,7 +18,7 @@ interface Card{
 }
 @Component({
   selector: 'app-owner-dashboard',
-  imports: [OwnerDashboardCard],
+  imports: [OwnerDashboardCard, MessageError],
   templateUrl: './owner-dashboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -64,9 +69,25 @@ export class OwnerDashboard {
     },
     dateOfDashboard:'2026-09-24'
   };
-  dashboardRestaurant = signal(<DashboardResponseDTO>{});
+  dashboardRestaurant = signal<DashboardResponseDTO>({
+    restaurantName: '',
+    totalReservations: 0,
+    scheduledReservations: 0,
+    confirmedReservations: 0,
+    peoplesExpectedInDay: 0,
+    nextReservations: [],
+    tablesTotalCount: 0,
+    tablesActiveCount: 0,
+    realTimeTablesData: {
+      tablesOccupied: 0,
+      tablesFree: 0,
+      dataAndTimeFetchedAt: '',
+    },
+    dateOfDashboard: '',
+  });
   private utilityService = inject(UtilityService);
   private restaurantService = inject(RestaurantService);
+  private exceptionService = inject(ExceptionService);
 
   metrics:Card[] = [
     { icon: 'bi bi-calendar3', title: 'Reservas totais', value: 0, accent: 'primary' },
@@ -96,10 +117,16 @@ export class OwnerDashboard {
   }
 
   getPercentageOfTablesOccupied(){
-    return ((this.dashboardRestaurant().realTimeTablesData.tablesOccupied / this.dashboardRestaurant().tablesActiveCount) * 100).toFixed(0)
+    const activeTables = this.dashboardRestaurant().tablesActiveCount;
+    if (activeTables === 0) return '0';
+
+    return ((this.dashboardRestaurant().realTimeTablesData.tablesOccupied / activeTables) * 100).toFixed(0)
   }
 
-  timeOfFetchedDashboardRequest = computed( () => this.dashboardRestaurant().realTimeTablesData.dataAndTimeFetchedAt.split('T')[1].slice(0,5))
+  timeOfFetchedDashboardRequest = computed(() => {
+    const fetchedAt = this.dashboardRestaurant().realTimeTablesData.dataAndTimeFetchedAt;
+    return fetchedAt ? fetchedAt.split('T')[1]?.slice(0, 5) ?? '--:--' : '--:--';
+  });
 
   
 
@@ -116,6 +143,13 @@ export class OwnerDashboard {
   }).format(new Date());
 
   private LASTFETCHEDGETDASHBOARDTOKEN = 'lastFetchedGetDashboard';
+
+  private handlerShowError(error: HttpErrorResponse) {
+    if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_DASHBOARD)) {
+      this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
+    }
+  }
+
   fetchDashboard(){
     this.restaurantService.getDashboard().subscribe({
       next:(dado) =>{
@@ -125,9 +159,8 @@ export class OwnerDashboard {
         localStorage.setItem('this.LASTFETCHEDGETDASHBOARDTOKEN', this.dashboardRestaurant().realTimeTablesData.dataAndTimeFetchedAt)
         this.completedCards();
       },
-      error: (err) =>{
-        console.log(err);
-        
+      error: (error: HttpErrorResponse) =>{
+        this.handlerShowError(error);
       }
     })
         

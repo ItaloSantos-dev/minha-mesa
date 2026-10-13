@@ -1,0 +1,46 @@
+<main class="relative grid min-h-screen place-items-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_srgb,var(--color-primary)_20%,transparent),transparent_25rem),linear-gradient(135deg,#fffaf0,var(--color-background)_60%,#eef7fa)] p-4 text-(--color-coffee) sm:p-8">
+  <div class="pointer-events-none absolute -left-24 top-12 h-64 w-64 rounded-full bg-(--color-highlight)/15 blur-3xl" aria-hidden="true"></div>
+  <div class="pointer-events-none absolute -bottom-24 right-0 h-80 w-80 rounded-full bg-(--color-secondary)/10 blur-3xl" aria-hidden="true"></div>
+
+  <section class="relative flex min-h-[min(760px,calc(100vh-2rem))] w-full max-w-6xl flex-col justify-between overflow-hidden rounded-[2rem] border border-white/80 bg-white/75 p-6 shadow-[0_2rem_6rem_rgba(90,69,60,.16)] backdrop-blur-xl sm:min-h-[min(780px,calc(100vh-4rem))] sm:p-9 lg:p-12" aria-labelledby="not-found-title">
+    <header class="flex items-center justify-between gap-4">
+      <a routerLink="/" aria-label="Minha Mesa - página inicial" class="inline-flex items-center gap-3 rounded-full text-(--color-primary) outline-none transition hover:text-(--color-primary-hover) focus-visible:ring-2 focus-visible:ring-(--color-secondary) focus-visible:ring-offset-4">
+        <span class="grid h-11 w-11 place-items-center rounded-full bg-(--color-highlight) text-white shadow-md">
+          <i class="bi bi-house-heart-fill text-lg" aria-hidden="true"></i>
+        </span>
+        <span class="[font-family:var(--font-heading)] text-lg font-bold tracking-tight">minha mesa</span>
+      </a>
+      <span class="hidden items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--color-coffee)_12%,transparent)] bg-white/75 px-4 py-2 text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)] sm:inline-flex">
+        <i class="bi bi-compass text-(--color-secondary)" aria-hidden="true"></i>
+        Página não encontrada
+      </span>
+    </header>
+
+    <div class="relative mx-auto flex w-full max-w-3xl flex-1 flex-col items-center justify-center py-14 text-center">
+      <div class="pointer-events-none absolute left-1/2 top-1/2 -z-0 aspect-square w-[min(78vw,34rem)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/90 bg-[radial-gradient(circle,color-mix(in_srgb,var(--color-highlight)_20%,white),color-mix(in_srgb,var(--color-primary)_10%,transparent)_56%,transparent_72%)]" aria-hidden="true"></div>
+      <p class="relative z-10 mb-0 select-none [font-family:var(--font-heading)] text-[clamp(9rem,30vw,20rem)] font-extrabold leading-[.78] tracking-[-.09em] text-(--color-coffee)">
+        404
+      </p>
+      <div class="relative z-10 mt-8 max-w-lg">
+        <p class="mb-3 text-xs font-extrabold uppercase tracking-[.22em] text-(--color-secondary)">Ops, caminho errado</p>
+        <h1 id="not-found-title" class="mb-3 [font-family:var(--font-heading)] text-2xl font-bold leading-tight text-(--color-primary) sm:text-3xl">
+          O item ou página que você procura não foi encontrado
+        </h1>
+        <p class="mb-0 text-sm leading-6 text-[color-mix(in_srgb,var(--color-coffee)_75%,transparent)] sm:text-base">
+          O endereço pode estar incorreto ou a página não está mais disponível. Que tal voltar para o início?
+        </p>
+      </div>
+    </div>
+
+    <footer class="flex flex-col items-center justify-between gap-4 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] pt-5 sm:flex-row">
+      <p class="mb-0 text-xs font-medium text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">
+        <i class="bi bi-geo-alt mr-1 text-(--color-primary)" aria-hidden="true"></i>
+        Sempre tem um bom caminho de volta.
+      </p>
+      <button (click)="goBack()" class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-(--color-primary) px-5 py-3 text-sm font-bold text-white shadow-[0_.6rem_1.5rem_color-mix(in_srgb,var(--color-primary)_24%,transparent)] transition hover:-translate-y-0.5 hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) focus-visible:ring-offset-2 sm:w-auto">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        Voltar 
+      </button>
+    </footer>
+  </section>
+</main>

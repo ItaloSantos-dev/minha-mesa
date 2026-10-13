@@ -6,12 +6,17 @@ import { CreateScheduleExceptionRequestDTO } from '../../../../../types/schedule
 import { gsap } from 'gsap/gsap-core';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
 import { ScheduleExceptionService } from '../../../../../service/schedule-exception-service/schedule-exception-service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
+import { MessageError } from '../../../../message-error/message-error';
+import { NotFound } from '../../../../not-found/not-found';
 
 type ExceptionDateStatus = 'past' | 'today' | 'upcoming' | 'invalid';
 
 @Component({
   selector: 'app-owner-show-schedules-exception',
-  imports: [OwnerCreateScheduleException],
+  imports: [OwnerCreateScheduleException, MessageError],
   templateUrl: './owner-show-schedules-exception.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -19,6 +24,7 @@ export class OwnerShowSchedulesException {
   private readonly utilityService = inject(UtilityService);
   readonly isCreateFormOpen = signal(false);
   private readonly scheduleExceptionService = inject(ScheduleExceptionService);
+  private readonly exceptionService = inject(ExceptionService);
 
 
   @ViewChild('createScheduleException', { read: ElementRef })
@@ -75,8 +81,10 @@ export class OwnerShowSchedulesException {
       next:(data) =>{
         this.scheduleExceptions.set(data);
         this.updatePageValues(next);
-      },error: (err) =>{
-        console.log(err);
+      },error: (error: HttpErrorResponse) =>{
+        if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS)) {
+          this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
+        }
       }
     })
     
@@ -114,8 +122,10 @@ export class OwnerShowSchedulesException {
       next:() =>{
         this.loadScheduleExceptions(1, false);
         this.handlerCloseStatusConfirmation();
-      },error: (err) =>{
-        console.log(err);
+      },error: (error: HttpErrorResponse) =>{
+        if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS)) {
+          this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
+        }
       }
     })
   }

@@ -7,19 +7,26 @@ import { DayOfWeek } from '../../../../../types/enums/day-of-week';
 import { gsap } from 'gsap/gsap-core';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { ReserveService } from '../../../../../service/reserve-service/reserve-service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
+import { MessageError } from '../../../../message-error/message-error';
+import { NotFound } from '../../../../not-found/not-found';
 interface StringAndStatus{
   value:string,
   status:ReserveStatus
 }
 @Component({
   selector: 'app-owner-show-reserve',
-  imports: [RouterLink],
+  imports: [RouterLink, MessageError],
   templateUrl: './owner-show-reserve.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OwnerShowReserve {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private utilityService = inject(UtilityService);
+  private exceptioNService = inject(ExceptionService);
 
   private reserveMock:ReserveResponseDTO = {
         id: 1,
@@ -37,7 +44,6 @@ export class OwnerShowReserve {
   readonly reserve = signal<ReserveResponseDTO | null>(null);
   statusForUpdated = signal(<ReserveStatus>{});
 
-  private utilityService = inject(UtilityService);
   private reserveService = inject(ReserveService);
 
   private restaurantService = inject(RestaurantService);
@@ -254,6 +260,10 @@ export class OwnerShowReserve {
     this.statusForUpdated.set(status);
   }
 
+  handlerShowError(erro:HttpErrorResponse){
+    this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro));
+  }
+
   ngOnInit() {
     this.utilityService.updateCurrentPageOfOwnerMenu(1);
     const id = this.route.snapshot.paramMap.get('id');
@@ -262,8 +272,12 @@ export class OwnerShowReserve {
         next: (data) =>{
           this.reserve.set(data);
           this.statusForUpdated.set(this.reserve()?.status as ReserveStatus);
-        },error: (err) =>{
-          console.log(err);
+        },
+        error: (erro:HttpErrorResponse) =>{
+          const showForm = this.exceptioNService.handlerRedirectExceptionResponse(erro, NotFound.pathsOfApplication.OWNER_SHOW_RESERVES);
+          if (showForm) {
+            this.handlerShowError(erro)
+          }
         }
       })
     }    
@@ -277,8 +291,11 @@ export class OwnerShowReserve {
          next:async (data) =>{
           await this.router.navigate(['/']);
           await this.router.navigate(['/owner', 'restaurant', 'reservations', id])
-        },error: (err) =>{
-          console.log(err);
+        },error: (erro:HttpErrorResponse) =>{
+          const showForm = this.exceptioNService.handlerRedirectExceptionResponse(erro, NotFound.pathsOfApplication.OWNER_SHOW_RESERVES);
+          if (showForm) {
+            this.handlerShowError(erro)
+          }
         }
       })
     }

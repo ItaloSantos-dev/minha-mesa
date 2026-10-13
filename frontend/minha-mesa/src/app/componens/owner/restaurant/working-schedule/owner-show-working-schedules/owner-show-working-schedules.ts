@@ -6,16 +6,22 @@ import { CreateWorkingScheduleRequestDTO } from '../../../../../types/working_sc
 import { WorkingScheduleResponseDTO } from '../../../../../types/working_schedule/working-schedule-response';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
 import { gsap } from 'gsap/gsap-core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
+import { MessageError } from '../../../../message-error/message-error';
+import { NotFound } from '../../../../not-found/not-found';
 
 @Component({
   selector: 'app-owner-show-working-schedules',
-  imports: [OwnerCreateWorkingSchedules],
+  imports: [OwnerCreateWorkingSchedules, MessageError],
   templateUrl: './owner-show-working-schedules.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OwnerShowWorkingSchedules {
   private readonly utilityService = inject(UtilityService);
   private restaurantService = inject(RestaurantService);
+  private exceptionService = inject(ExceptionService);
 
   readonly schedulesMock: WorkingScheduleResponseDTO[] = [
     { id: 1, dayOfWeek: DayOfWeek.MONDAY, timeStart: '11:00', timeEnd: '22:00' },
@@ -118,8 +124,10 @@ export class OwnerShowWorkingSchedules {
       next:(data) =>{
         this.schedules.set(data);
         this.updatePageValues(next);
-      },error: (err) =>{
-        console.log(err);
+      },error: (error: HttpErrorResponse) =>{
+        if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_WORKING_SCHEDULES)) {
+          this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
+        }
       }
     })
   }

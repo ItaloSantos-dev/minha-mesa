@@ -22,56 +22,57 @@ export class MessageError {
   divMenssage!:ElementRef<HTMLElement>;
 
   handlerShowError(exception: ExceptionResponse){
-    console.log("Veio");
     this.exception.set(exception);
-    this.showError.set(!this.showError());
+    if (this.showError()) return;
 
-    if (this.showError()) {
-      gsap.set(
-        this.mainDiv.nativeElement,
-        {display:'flex'}
-      )
+    this.showError.set(true);
 
-      gsap.to(
-        this.mainDiv.nativeElement,
-        {
-          opacity:1,
-          duration:0.3
-        }
-      )
-      gsap.to(
-        this.divMenssage.nativeElement,
-        {
-          y:'0vh',
-          duration: 0.6
-        }
-      )
-      
-    }
+    gsap.set(
+      this.mainDiv.nativeElement,
+      {display:'flex'}
+    )
 
-    else{
-      gsap.to(
-        this.divMenssage.nativeElement,
-        {
-          y:'-100vh',
-          duration: 0.3
+    gsap.to(
+      this.mainDiv.nativeElement,
+      {
+        opacity:1,
+        duration:0.3
+      }
+    )
+    gsap.to(
+      this.divMenssage.nativeElement,
+      {
+        y:'0vh',
+        duration: 0.6
+      }
+    )
+  }
+
+  handlerCloseError() {
+    if (!this.showError()) return;
+
+    this.showError.set(false);
+
+    gsap.to(
+      this.divMenssage.nativeElement,
+      {
+        y:'-100vh',
+        duration: 0.3
+      }
+    )
+    gsap.to(
+      this.mainDiv.nativeElement,
+      {
+        opacity:0,
+        duration:0.6,
+        onComplete:() =>{
+           gsap.set(
+            this.mainDiv.nativeElement,
+            {display:'none'}
+          )
         }
-      )
-      gsap.to(
-        this.mainDiv.nativeElement,
-        {
-          opacity:0,
-          duration:0.6,
-          onComplete:() =>{
-             gsap.set(
-              this.mainDiv.nativeElement,
-              {display:'none'}
-            )
-          }
-        }
-      )
-      
-    }
+      }
+    )
   }
 
   ngOnInit(){

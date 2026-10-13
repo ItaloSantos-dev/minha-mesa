@@ -5,10 +5,15 @@ import { RestaurantService } from '../../../../../service/restaurant-service/res
 import { TableService } from '../../../../../service/table-service/table-service';
 import { FormControl, FormGroup, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateTableRequestDTO } from '../../../../../types/table/create-table-request';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
+import { MessageError } from '../../../../message-error/message-error';
+import { NotFound } from '../../../../not-found/not-found';
 
 @Component({
   selector: 'app-owner-show-tables',
-  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule],
+  imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, MessageError],
   templateUrl: './owner-show-tables.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -16,6 +21,7 @@ export class OwnerShowTables {
   private readonly utilityService = inject(UtilityService);
   private restaurantService = inject(RestaurantService);
   private tableService = inject(TableService);
+  private exceptionService = inject(ExceptionService);
 
   readonly tablesMock: TableResponseDTO[] = [
     { id: 1, number: 1, capacity: 2, active: true },
@@ -88,8 +94,8 @@ export class OwnerShowTables {
       next: (value) => {
         this.loadTables()
       },
-      error:(err) => {
-        console.log(err);
+      error:(error: HttpErrorResponse) => {
+        this.handlerShowError(error);
       }
     });
     this.isDeactivateConfirmationOpen.set(false);
@@ -129,10 +135,16 @@ export class OwnerShowTables {
       next:(dado) =>{
         this.tables.set(dado);
       },
-      error:(err) => {
-        console.log(err);
+      error:(error: HttpErrorResponse) => {
+        this.handlerShowError(error);
       }
     })
+  }
+
+  private handlerShowError(error: HttpErrorResponse) {
+    if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_TABLES)) {
+      this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
+    }
   }
 
   ngOnInit() {
@@ -156,8 +168,8 @@ export class OwnerShowTables {
         this.closeCreateForm()
         this.loadTables();
       },
-      error:(err) => {
-        console.log(err);
+      error:(error: HttpErrorResponse) => {
+        this.handlerShowError(error);
       }
     })
   }

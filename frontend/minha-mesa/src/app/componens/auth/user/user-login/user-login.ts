@@ -62,7 +62,7 @@ export class UserLogin {
         this.authService.setToken(token);
       },
       error:(erro: HttpErrorResponse)=>{
-        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro);
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro, '');
         if (showError) {
           this.handlerShowError(erro);
         }

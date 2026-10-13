@@ -6,8 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
-import { OwnerLayoutMenu } from '../../../layout/owner-layout-menu/owner-layout-menu';
-import { MessageError } from '../../../../message-error/message-error';
+import { NotFound } from '../../../../not-found/not-found';
 
 const notPastDate: ValidatorFn = (control) => {
   const value = control.value;
@@ -25,7 +24,7 @@ const notPastDate: ValidatorFn = (control) => {
 
 @Component({
   selector: 'app-owner-create-schedule-exception',
-  imports: [ReactiveFormsModule, OwnerLayoutMenu, MessageError],
+  imports: [ReactiveFormsModule],
   templateUrl: './owner-create-schedule-exception.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -76,7 +75,7 @@ export class OwnerCreateScheduleException {
         this.close(true);
       },
       error: (erro:HttpErrorResponse) =>{
-        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro);
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro, NotFound.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS);
         if (showError) {
           this.handlerShowError(erro);
         }

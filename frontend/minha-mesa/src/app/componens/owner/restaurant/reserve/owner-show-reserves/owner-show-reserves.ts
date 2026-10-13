@@ -4,19 +4,25 @@ import { ReserveStatus } from '../../../../../types/enums/reserve-status';
 import { ReserveResponseDTO } from '../../../../../types/reserve/reserve-response';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
+import { MessageError } from '../../../../message-error/message-error';
+import { NotFound } from '../../../../not-found/not-found';
 
 @Component({
   selector: 'app-owner-show-reserve',
-  imports: [RouterLink],
+  imports: [RouterLink, MessageError],
   templateUrl: './owner-show-reserves.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OwnerShowReserve {
   private utilityService = inject(UtilityService);
+  private exceptionService = inject(ExceptionService);
 
   private restaurantService = inject(RestaurantService);
 
-  reserves = signal(<ReserveResponseDTO[]>{});
+  reserves = signal<ReserveResponseDTO[]>([]);
 
   readonly reservesMock:ReserveResponseDTO[] = [
     {
@@ -173,7 +179,7 @@ export class OwnerShowReserve {
 
   readonly paginatedReserves = computed(() => {
     const start = (this.currentPage() - 1) * this.pageSize();
-    console.log(start);
+
     
     return this.filteredReserves().slice(start, start + this.pageSize());
   });
@@ -232,8 +238,11 @@ export class OwnerShowReserve {
       next: (date) =>{
         this.reserves.set(date);
         this.updatePageValues()
-      },error: (err) =>{
-        console.log(err);
+      },error: (error: HttpErrorResponse) =>{
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_RESERVES);
+        if (showError) {
+          this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
+        }
       }
     })
   }

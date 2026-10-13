@@ -98,7 +98,7 @@ export class UserRegister {
       error:(erro: HttpErrorResponse)=>{
         console.log(erro);
         
-        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro);
+        const showError = this.exceptionService.handlerRedirectExceptionResponse(erro, '');
         if (showError) {
           this.handlerShowError(erro);
         }

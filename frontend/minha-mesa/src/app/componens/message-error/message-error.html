@@ -1,5 +1,5 @@
 <div
-  (click)="$event.target === $event.currentTarget && handlerShowError(exception())"
+  (click)="$event.target === $event.currentTarget && handlerCloseError()"
   #main
   class="fixed left-0 top-0 z-50 hidden h-screen w-full items-center justify-center bg-[#24140f]/75 p-4 opacity-0 backdrop-blur-md"
 >
@@ -22,7 +22,7 @@
           type="button"
           aria-label="Fechar mensagem de erro"
           class="grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-full text-lg text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)] transition hover:bg-[#fff0eb] hover:text-[#a92b1d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
-          (click)="handlerShowError(exception())"
+          (click)="handlerCloseError()"
         >
           <i class="bi bi-x-lg" aria-hidden="true"></i>
         </button>
@@ -53,7 +53,7 @@
       <button
         type="button"
         class="w-full cursor-pointer rounded-xl bg-[#a92b1d] px-5 py-4 text-base font-extrabold text-white shadow-[0_.8rem_1.8rem_rgba(169,43,29,.3)] transition hover:-translate-y-0.5 hover:bg-[#842217] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a92b1d] focus-visible:ring-offset-2"
-        (click)="handlerShowError(exception())"
+        (click)="handlerCloseError()"
       >
         Fechar mensagem
       </button>

@@ -3,6 +3,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators } 
 import { DayOfWeek } from '../../../../../types/enums/day-of-week';
 import { CreateWorkingScheduleRequestDTO } from '../../../../../types/working_schedule/create-working-schedule-request';
 import { WorkingScheduleService } from '../../../../../service/working-schedule/working-schedule-service';
+import { HttpErrorResponse } from '@angular/common/http';
+import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { UtilityService } from '../../../../../service/utility-service/utility-service';
+import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
+import { NotFound } from '../../../../not-found/not-found';
 
 const validTimeRange: ValidatorFn = (control) => {
   const timeStart = control.get('timeStart')?.value as string | null;
@@ -21,6 +26,8 @@ const validTimeRange: ValidatorFn = (control) => {
 export class OwnerCreateWorkingSchedules {
   readonly closed = output<boolean>();
   private workingScheduleService = inject(WorkingScheduleService);
+  private exceptionService = inject(ExceptionService);
+  private utilityService = inject(UtilityService);
   
 
   @ViewChild('main')
@@ -73,6 +80,11 @@ export class OwnerCreateWorkingSchedules {
     this.workingScheduleService.createWorkingSchedule(this.generateCreateWorkingScheduleRequest()).subscribe({
       next:(dado) =>{
         this.close(true);
+      },
+      error: (error: HttpErrorResponse) => {
+        if (this.exceptionService.handlerRedirectExceptionResponse(error, NotFound.pathsOfApplication.OWNER_SHOW_WORKING_SCHEDULES)) {
+          this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
+        }
       }
     })
     
