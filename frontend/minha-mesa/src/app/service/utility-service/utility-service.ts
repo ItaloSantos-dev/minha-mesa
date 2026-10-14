@@ -13,7 +13,8 @@ export class UtilityService {
     OWNER_SHOW_RESERVES: 'owner/restaurant/reservations',
     OWNER_SHOW_TABLES: 'owner/restaurant/tables',
     OWNER_SHOW_WORKING_SCHEDULES: 'owner/restaurant/working-schedules',
-    OWNER_SHOW_SCHEDULE_EXCEPTIONS: 'owner/restaurant/schedule-exceptions'
+    OWNER_SHOW_SCHEDULE_EXCEPTIONS: 'owner/restaurant/schedule-exceptions',
+    CLIENT_HOME: 'client/home'
   }
 
   private updateCurrentPageSubject = new Subject<number>();

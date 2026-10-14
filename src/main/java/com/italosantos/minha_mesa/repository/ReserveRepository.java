@@ -57,5 +57,5 @@ public interface ReserveRepository extends JpaRepository<ReserveModel, Integer> 
     """)
     List<ReserveModel> findByTableModelRestaurantIdAndDateAndTimeStartIsBiggerOfActualTimeAndStatusIn(Integer restaurantId, LocalDate date, LocalTime actualTime, List<ReserveStatus> statuses);
 
-
+    List<ReserveModel> findByUserModelIdAndDate(Integer userId, LocalDate date);
 }

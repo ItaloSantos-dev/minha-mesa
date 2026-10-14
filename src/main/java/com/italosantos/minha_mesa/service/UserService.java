@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -51,5 +53,15 @@ public class UserService implements UserDetailsService {
                 this.reserveRepository.findByIdAndUserModelId(id, userModel.getId())
                         .orElseThrow(ResourceNotFoundException::new)
         );
+    }
+
+    public List<ReserveResponseDTO> getReservesTodayOfUser(UserModel userModel){
+        LocalDate currentDate = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
+
+        List<ReserveModel> reserves = this.reserveRepository.findByUserModelIdAndDate(userModel.getId(), currentDate);
+
+        return reserves.stream()
+                .map(this.reserveMapper::modelToResponse)
+                .toList();
     }
 }

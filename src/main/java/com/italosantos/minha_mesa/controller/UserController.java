@@ -49,6 +49,8 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getReservesOfUser(userModel, pageable));
     }
 
+
+
     @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Busca uma reserva de um usuário com base no id",
@@ -66,5 +68,19 @@ public class UserController {
     @GetMapping("/reserves/{id}")
     public ResponseEntity<ReserveResponseDTO> getReserveOfUserById(@AuthenticationPrincipal UserModel userModel, @PathVariable Integer id){
         return ResponseEntity.ok(this.userService.getReserveOfUserById(userModel, id));
+    }
+
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Busca as reservas do dia para o usuário",
+            description = "Retorna lista de todas reversas do usuário que fez a requisição"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Reservas buscadas com sucesso")
+    })
+    @GetMapping("/reserves/today")
+    public ResponseEntity<List<ReserveResponseDTO>> getReservesTodayOfUser(@AuthenticationPrincipal UserModel userModel){
+        return ResponseEntity.ok(this.userService.getReservesTodayOfUser(userModel));
     }
 }

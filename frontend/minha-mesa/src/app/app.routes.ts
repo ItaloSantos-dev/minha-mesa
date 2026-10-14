@@ -13,6 +13,7 @@ import { OwnerShowSchedulesException } from './componens/owner/restaurant/schedu
 import { NotFound } from './componens/not-found/not-found';
 import { NotPermited } from './componens/not-permited/not-permited';
 import { ClientLayout } from './componens/client/layout/client-layout/client-layout';
+import { ClientHome } from './componens/client/client-home/client-home';
 
 export const routes: Routes = [
     {
@@ -35,7 +36,13 @@ export const routes: Routes = [
     },
     {
         path:'client',
-        component:ClientLayout
+        component:ClientLayout,
+        children:[
+            {
+                path:'home',
+                component:ClientHome
+            }
+        ]
     },
     {
         path:'owner',

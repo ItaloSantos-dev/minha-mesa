@@ -1,6 +1,6 @@
 import { Component, inject, output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../service/auth-service/auth-service';
 import { LoginRequestDTO } from '../../../../types/auth/login-request';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -18,6 +18,8 @@ export class UserLogin {
   loginActive = output<void>();
 
   authService = inject(AuthService);
+
+  private readonly router = inject(Router);
 
   private utilityService = inject(UtilityService);
   private exceptionService = inject(ExceptionService);
@@ -60,6 +62,7 @@ export class UserLogin {
         console.log("Deu bom");
         
         this.authService.setToken(token);
+        this.router.navigate([UtilityService.pathsOfApplication.CLIENT_HOME])
       },
       error:(erro: HttpErrorResponse)=>{
         const showError = this.exceptionService.handlerRedirectExceptionResponse(erro, '');
