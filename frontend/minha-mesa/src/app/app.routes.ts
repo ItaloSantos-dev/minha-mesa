@@ -12,6 +12,7 @@ import { OwnerShowWorkingSchedules } from './componens/owner/restaurant/working-
 import { OwnerShowSchedulesException } from './componens/owner/restaurant/schedule-exception/owner-show-schedules-exception/owner-show-schedules-exception';
 import { NotFound } from './componens/not-found/not-found';
 import { NotPermited } from './componens/not-permited/not-permited';
+import { ClientLayout } from './componens/client/layout/client-layout/client-layout';
 
 export const routes: Routes = [
     {
@@ -31,6 +32,10 @@ export const routes: Routes = [
     {
         path:'auth/user',
         component: UserAuth
+    },
+    {
+        path:'client',
+        component:ClientLayout
     },
     {
         path:'owner',
