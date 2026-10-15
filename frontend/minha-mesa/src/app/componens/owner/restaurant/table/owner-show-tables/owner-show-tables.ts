@@ -24,7 +24,7 @@ export class OwnerShowTables {
   private exceptionService = inject(ExceptionService);
 
   readonly tablesMock: TableResponseDTO[] = [
-    { id: 1, number: 1, capacity: 2, active: true },
+    { id: 1, number: 1, capacity: 2, active: false },
     { id: 2, number: 2, capacity: 4, active: true },
     { id: 3, number: 3, capacity: 6, active: true },
     { id: 4, number: 4, capacity: 4, active: true },
@@ -36,7 +36,7 @@ export class OwnerShowTables {
   readonly searchTerm = signal('');
   readonly inactiveTableIds = signal<number[]>([]);
   readonly selectedTable = signal<TableResponseDTO | null>(null);
-  readonly isDeactivateConfirmationOpen = signal(false);
+  readonly isUpdateStatusTableConfirmationOpen = signal(false);
   readonly isCreateFormOpen = signal(false);
   readonly newTableNumber = signal('');
   readonly newTableCapacity = signal('');
@@ -64,49 +64,56 @@ export class OwnerShowTables {
 
   openTableDetails(table: TableResponseDTO) {
     this.selectedTable.set(table);
-    this.isDeactivateConfirmationOpen.set(false);
+    this.isUpdateStatusTableConfirmationOpen.set(false);
   }
 
   closeTableDetails() {
     this.selectedTable.set(null);
-    this.isDeactivateConfirmationOpen.set(false);
+    this.isUpdateStatusTableConfirmationOpen.set(false);
   }
 
-  isTableActive(tableId: number): boolean {
-    return !this.inactiveTableIds().includes(tableId);
+  menssageOfUpdateStatusForm = '';
+  titleOfUpdateStatus = '';
+  classListOfButtonConfirmUpdateStatus = '';
+
+  cancelTableUpdateStatus() {
+    this.isUpdateStatusTableConfirmationOpen.set(false);
   }
 
-  requestTableDeactivation() {
-    if (this.selectedTable() && this.isTableActive(this.selectedTable()!.id)) {
-      this.isDeactivateConfirmationOpen.set(true);
+  openTableUpdateStatus(table:TableResponseDTO){
+    if (table.active) {
+      this.menssageOfUpdateStatusForm = `Tem certeza que deseja desativar a Mesa ${ table.number }? Ela deixará de ficar disponível para reservas`;
+      this.titleOfUpdateStatus = 'Desativar'
+      this.classListOfButtonConfirmUpdateStatus = 'w-full cursor-pointer rounded-xl bg-[#a23b31] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#852d25] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a23b31] focus-visible:ring-offset-2'
+    }else{
+      this.menssageOfUpdateStatusForm = `Tem certeza que deseja ativar a Mesa ${ table.number }? Ela voltará a ficar disponível para reservas`
+      this.titleOfUpdateStatus = 'Ativar'
+      this.classListOfButtonConfirmUpdateStatus = 'w-full cursor-pointer rounded-xl bg-(--color-secondary) px-4 py-3 text-sm font-bold text-white transition hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) focus-visible:ring-offset-2'
+
     }
+
+    this.isUpdateStatusTableConfirmationOpen.set(true)
+    
+    
   }
 
-  cancelTableDeactivation() {
-    this.isDeactivateConfirmationOpen.set(false);
-  }
-
-  confirmTableDeactivation() {
+  confirmTableUpdateStatus() {
     const table = this.selectedTable();
     if (!table) return;
 
-    this.tableService.deleteTableById(table.id).subscribe({
+    this.tableService.updateStatusOfTableById(table.id).subscribe({
       next: (value) => {
+        this.closeTableDetails();
         this.loadTables()
       },
       error:(error: HttpErrorResponse) => {
         this.handlerShowError(error);
       }
     });
-    this.isDeactivateConfirmationOpen.set(false);
+    this.isUpdateStatusTableConfirmationOpen.set(false);
   }
 
-  activateSelectedTable() {
-    const table = this.selectedTable();
-    if (!table) return;
-
-    this.inactiveTableIds.update((inactiveIds) => inactiveIds.filter((id) => id !== table.id));
-  }
+  
 
   openCreateForm() {
     this.createTableError.set('');
@@ -131,6 +138,8 @@ export class OwnerShowTables {
   
 
   loadTables(){
+    console.log("Carregando mesas");
+    
     this.restaurantService.getTablesOfRestaurant().subscribe({
       next:(dado) =>{
         this.tables.set(dado);
@@ -143,6 +152,7 @@ export class OwnerShowTables {
 
   private handlerShowError(error: HttpErrorResponse) {
     if (this.exceptionService.handlerRedirectExceptionResponse(error, UtilityService.pathsOfApplication.OWNER_SHOW_TABLES)) {
+      this.closeTableDetails();
       this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
     }
   }

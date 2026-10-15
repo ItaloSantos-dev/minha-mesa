@@ -11,6 +11,7 @@ import { ExceptionService } from '../../../../../service/exception-service/excep
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { MessageError } from '../../../../message-error/message-error';
 import { NotFound } from '../../../../not-found/not-found';
+import { Router } from '@angular/router';
 
 type ExceptionDateStatus = 'past' | 'today' | 'upcoming' | 'invalid';
 
@@ -25,6 +26,7 @@ export class OwnerShowSchedulesException {
   readonly isCreateFormOpen = signal(false);
   private readonly scheduleExceptionService = inject(ScheduleExceptionService);
   private readonly exceptionService = inject(ExceptionService);
+  private readonly router = inject(Router);
 
 
   @ViewChild('createScheduleException', { read: ElementRef })
@@ -43,10 +45,10 @@ export class OwnerShowSchedulesException {
 
   readonly scheduleExceptions = signal(<ScheduleExceptionResponseDTO[]>[]);
   readonly selectedExceptionForStatusChange = signal<ScheduleExceptionResponseDTO | null>(null);
-  readonly currentPage = signal(0);
-  readonly totalPages = signal(0);
+  readonly actualPage = signal(-1);
+  readonly haveMoreScheduleExceptions = signal(false);
 
-  handlerShowCreateForm(created: boolean) {
+  async handlerShowCreateForm(created: boolean) {
     const overlay = this.createScheduleException.nativeElement;
     this.isCreateFormOpen.set(!this.isCreateFormOpen());
 
@@ -61,7 +63,8 @@ export class OwnerShowSchedulesException {
         onComplete: () => gsap.set(overlay, { display: 'none' }),
       });
       if (created) {
-        this.loadScheduleExceptions(1, false);
+        await this.router.navigate(['/']);
+        await this.router.navigate([UtilityService.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS])
       }
     }
 
@@ -69,15 +72,12 @@ export class OwnerShowSchedulesException {
   }
 
   updatePageValues(next:boolean){
-    const schedulesCount = this.scheduleExceptions().length;
-    const haveMoreSchedules = this.scheduleExceptions().length===10;
-    this.currentPage.set(next? this.currentPage()+1 : this.currentPage()-1);
-    this.totalPages.set(haveMoreSchedules? this.currentPage()+1 : this.currentPage());
+    this.haveMoreScheduleExceptions.set(this.scheduleExceptions().length===10);
+    this.actualPage.set(next? this.actualPage()+1 : this.actualPage()-1);
   }
 
-  loadScheduleExceptions(page: number, next:boolean) {
-    const realPage = page>0 ? page-1 : page; 
-    this.restaurantService.getScheduleExceptionsOfRestaurant(realPage).subscribe({
+  loadScheduleExceptions(next:boolean) { 
+    this.restaurantService.getScheduleExceptionsOfRestaurant(next?this.actualPage()+1 : this.actualPage()-1).subscribe({
       next:(data) =>{
         this.scheduleExceptions.set(data);
         this.updatePageValues(next);
@@ -119,9 +119,9 @@ export class OwnerShowSchedulesException {
       return;
     }
     this.scheduleExceptionService.updateStatusScheduleExceptionById(id).subscribe({
-      next:() =>{
-        this.loadScheduleExceptions(1, false);
-        this.handlerCloseStatusConfirmation();
+      next:async () =>{
+        await this.router.navigate(['/']);
+        await this.router.navigate([UtilityService.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS])
       },error: (error: HttpErrorResponse) =>{
         if (this.exceptionService.handlerRedirectExceptionResponse(error, UtilityService.pathsOfApplication.OWNER_SHOW_SCHEDULE_EXCEPTIONS)) {
           this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(error));
@@ -201,7 +201,7 @@ export class OwnerShowSchedulesException {
 
   ngOnInit() {
     this.utilityService.updateCurrentPageOfOwnerMenu(4);
-    this.loadScheduleExceptions(1, true);
+    this.loadScheduleExceptions(true);
   }
 
   private parseLocalDate(value: string): Date | null {

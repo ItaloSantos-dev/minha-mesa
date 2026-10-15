@@ -148,9 +148,9 @@ public class TableController {
                     )
             )
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTableById(@AuthenticationPrincipal UserModel userModel, @PathVariable  Integer id){
-        this.tableService.deleteTableById(userModel, id);
+    @PatchMapping("/{id}/update-status")
+    public ResponseEntity<Void> updateStatusOfTableById(@AuthenticationPrincipal UserModel userModel, @PathVariable  Integer id){
+        this.tableService.updateStatusOfTableById(userModel, id);
         return ResponseEntity.noContent().build();
     }
 }

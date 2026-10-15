@@ -48,9 +48,9 @@
 			</div>
 			<footer class="flex items-center justify-between gap-4 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] px-6 py-4 max-[600px]:items-start max-[600px]:flex-col max-[600px]:px-4">
 				<nav class="flex items-center gap-1" aria-label="Navegação de páginas">
-					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Página anterior" [disabled]="currentPage()-1 === 0" (click)="loadWorkingSchedules(currentPage()-1, false)"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
+					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Página anterior" [disabled]="actualPage() === 0" (click)="loadWorkingSchedules(false)"><i class="bi bi-chevron-left" aria-hidden="true"></i></button>
 
-					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Próxima página" [disabled]="currentPage() === totalPages()" (click)="loadWorkingSchedules(currentPage()+1, true)"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+					<button type="button" class="grid h-8 w-8 cursor-pointer place-items-center rounded-md border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white text-(--color-coffee) transition hover:border-(--color-primary) hover:text-(--color-primary) disabled:cursor-not-allowed disabled:opacity-40" aria-label="Próxima página" [disabled]="!haveMoreSchedules()" (click)="loadWorkingSchedules(true)"><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
 				</nav>
 			</footer>
 		</section>
