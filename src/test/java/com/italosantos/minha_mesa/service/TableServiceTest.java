@@ -82,8 +82,8 @@ class TableServiceTest {
 
 
     @Test
-    @DisplayName("Um dono tenta deletar uma mesa que nao pertence ao seu restaurante")
-    void deleteTableByIdCase1() {
+    @DisplayName("Um dono tenta alterar o satus de ativo de uma mesa que nao pertence ao seu restaurante")
+    void updateStatusOfTableByIdCase1() {
         //não dono
         UserModel userModel = new UserModel();
         userModel.setId(1);
@@ -113,7 +113,7 @@ class TableServiceTest {
         Mockito.when(this.tableRepository.findById(Mockito.any()))
                 .thenReturn(Optional.of(tableModel));
 
-        assertThrows(NotPermitedException.class, ()-> this.tableService.deleteTableById(userModel, Mockito.any()));
+        assertThrows(NotPermitedException.class, ()-> this.tableService.updateStatusOfTableById(userModel, Mockito.any()));
 
     }
 

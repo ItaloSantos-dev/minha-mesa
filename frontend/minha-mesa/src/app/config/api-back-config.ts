@@ -21,7 +21,9 @@ export const API_BACK_CONFIG = {
             UPDATE:'/reserves'
         },
         TABLE:{
-            DELETE:'/tables',
+            UPDATE_STATUS: (id:number):string=>{
+                return `/tables/${id}/update-status`
+            },
             CREATE:'/tables'
         },
         WORKING_SCHEDULEDS:{

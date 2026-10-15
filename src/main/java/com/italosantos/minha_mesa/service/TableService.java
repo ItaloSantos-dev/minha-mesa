@@ -53,7 +53,7 @@ public class TableService {
         return this.tableMapper.modelToResponse(this.tableRepository.save(tableModel));
     }
 
-    public void deleteTableById(UserModel userModel, Integer id){
+    public void updateStatusOfTableById(UserModel userModel, Integer id){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(NotPermitedException::new);
 
@@ -63,8 +63,9 @@ public class TableService {
         if (! tableModel.getRestaurantModel().getOwnerModel().getId().equals(ownerModel.getId()))
             throw new NotPermitedException();
 
-        tableModel.setActive(false);
+        tableModel.setActive(!tableModel.getActive());
         this.cacheService.deleteCache(RedisCacheConfig.TABLEAVALIABLECACHENAME);
+        this.cacheService.deleteCache(RedisCacheConfig.TABLESOFRESTAURANTCACHENAME);
         this.tableRepository.save(tableModel);
     }
 

@@ -12,17 +12,17 @@ export class TableService {
   private readonly url = API_BACK_CONFIG.URL;
   private httpClient = inject(HttpClient); 
 
-  deleteTableById(id:number):Observable<void>{
-    console.log(this.url + API_BACK_CONFIG.ENDPOINTS.TABLE + `/${id}`);
+  updateStatusOfTableById(id:number):Observable<void>{
+    console.log("FAZENDO UPDATE");
     
-    return this.httpClient.delete<void>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.TABLE.DELETE + `/${id}`
+    return this.httpClient.patch<void>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.TABLE.UPDATE_STATUS(id), null
     )
   }
 
   createTable(data:CreateTableRequestDTO):Observable<TableResponseDTO>{
     return this.httpClient.post<TableResponseDTO>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.TABLE.DELETE,
+      this.url + API_BACK_CONFIG.ENDPOINTS.TABLE.CREATE,
       data
     )
   }
