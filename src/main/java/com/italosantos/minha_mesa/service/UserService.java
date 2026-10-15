@@ -1,12 +1,17 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
 import com.italosantos.minha_mesa.infra.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
+import com.italosantos.minha_mesa.mapper.RestaurantMapper;
 import com.italosantos.minha_mesa.model.ReserveModel;
+import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.UserModel;
+import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.repository.ReserveRepository;
+import com.italosantos.minha_mesa.repository.RestaurantRepository;
 import com.italosantos.minha_mesa.repository.UserRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +29,15 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final ReserveRepository reserveRepository;
     private final ReserveMapper reserveMapper;
+    private final RestaurantRepository restaurantRepository;
+    private final RestaurantMapper restaurantMapper;
 
-    public UserService(UserRepository userRepository, ReserveRepository reserveRepository, ReserveMapper reserveMapper) {
+    public UserService(UserRepository userRepository, ReserveRepository reserveRepository, ReserveMapper reserveMapper, RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper) {
         this.userRepository = userRepository;
         this.reserveRepository = reserveRepository;
         this.reserveMapper = reserveMapper;
+        this.restaurantRepository = restaurantRepository;
+        this.restaurantMapper = restaurantMapper;
     }
 
     @Override
@@ -62,6 +71,15 @@ public class UserService implements UserDetailsService {
 
         return reserves.stream()
                 .map(this.reserveMapper::modelToResponse)
+                .toList();
+    }
+
+
+    public List<RestaurantResponseDTO> getRecentsRestaurantsOfUser(UserModel userModel){
+        List<RestaurantModel> recentsRestaurants = this.restaurantRepository.findRecentRestaurantsByUserId(userModel.getId(), ReserveStatus.COMPLETED);
+
+        return recentsRestaurants.stream()
+                .map(this.restaurantMapper::modelToResponse)
                 .toList();
     }
 }

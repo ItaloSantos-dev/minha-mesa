@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.controller;
 
 import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.model.ReserveModel;
 import com.italosantos.minha_mesa.model.UserModel;
@@ -82,5 +83,18 @@ public class UserController {
     @GetMapping("/reserves/today")
     public ResponseEntity<List<ReserveResponseDTO>> getReservesTodayOfUser(@AuthenticationPrincipal UserModel userModel){
         return ResponseEntity.ok(this.userService.getReservesTodayOfUser(userModel));
+    }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Busca os restaurantes das ultimas reservas do usuário",
+            description = "Retorna os restaurantes das ultimas reservas do usuário que fez a requisição"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Restaurantes buscados com sucesso")
+    })
+    @GetMapping("/reserves/recents")
+    public ResponseEntity<List<RestaurantResponseDTO>> getReservesRecentsOfUser(@AuthenticationPrincipal UserModel userModel){
+        return ResponseEntity.ok(this.userService.getRecentsRestaurantsOfUser(userModel));
     }
 }
