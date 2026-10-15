@@ -11,6 +11,7 @@ import { ExceptionService } from '../../../../../service/exception-service/excep
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { MessageError } from '../../../../message-error/message-error';
 import { NotFound } from '../../../../not-found/not-found';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-owner-show-working-schedules',
@@ -22,6 +23,7 @@ export class OwnerShowWorkingSchedules {
   private readonly utilityService = inject(UtilityService);
   private restaurantService = inject(RestaurantService);
   private exceptionService = inject(ExceptionService);
+  private readonly router = inject(Router);
 
   readonly schedulesMock: WorkingScheduleResponseDTO[] = [
     { id: 1, dayOfWeek: DayOfWeek.MONDAY, timeStart: '11:00', timeEnd: '22:00' },
@@ -39,21 +41,19 @@ export class OwnerShowWorkingSchedules {
 
   readonly schedules = signal(<WorkingScheduleResponseDTO[]>[]);
   readonly isCreateFormOpen = signal(false);
-  readonly currentPage = signal(0);
+  actualPage = signal(-1)
   pageSize = 0;
 
-  readonly totalPages = signal(0);
 
   
 
-  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, index) => index + 1));
 
   @ViewChild('createWorkingSchedule', { read: ElementRef })
   createWorkingSchedule!: ElementRef<HTMLElement>;
 
   
 
-  handlerShowCreateForm(haveNewWorkingSchedule:boolean) {
+  async handlerShowCreateForm(haveNewWorkingSchedule:boolean) {
     const mainCreateWorkingSchedule = this.createWorkingSchedule.nativeElement;
     this.isCreateFormOpen.set(!this.isCreateFormOpen())
 
@@ -89,7 +89,8 @@ export class OwnerShowWorkingSchedules {
         }
       );
       if (haveNewWorkingSchedule) {
-        this.loadWorkingSchedules(1,true);
+        await this.router.navigate(['/']);
+        await this.router.navigate([UtilityService.pathsOfApplication.OWNER_SHOW_WORKING_SCHEDULES])
       }
     }
   }
@@ -108,19 +109,16 @@ export class OwnerShowWorkingSchedules {
     [DayOfWeek.SUNDAY]: 'Domingo',
   };
 
+  haveMoreSchedules = signal(false);
+
   updatePageValues(next:boolean){
-    const schedulesCount = this.schedules().length;
-    this.pageSize=schedulesCount;
-    const haveMoreSchedules = this.schedules().length===10;
-    this.currentPage.set(next? this.currentPage()+1 : this.currentPage()-1);
-    this.totalPages.set(haveMoreSchedules? this.currentPage()+1 : this.currentPage());
+    this.haveMoreSchedules.set(this.schedules().length===10);
+    this.actualPage.set(next? this.actualPage()+1 : this.actualPage()-1);
   }
 
 
-  loadWorkingSchedules(page:number, next:boolean){
-    console.log(page);
-    const realPage = page>0 ? page-1 :page;
-    this.restaurantService.getWorkingSchedulesOfRestaurant(realPage).subscribe({
+  loadWorkingSchedules(next:boolean){
+    this.restaurantService.getWorkingSchedulesOfRestaurant(next?this.actualPage()+1 : this.actualPage()-1).subscribe({
       next:(data) =>{
         this.schedules.set(data);
         this.updatePageValues(next);
@@ -133,7 +131,7 @@ export class OwnerShowWorkingSchedules {
   }
 
   ngOnInit() {
-    this.loadWorkingSchedules(1, true);
+    this.loadWorkingSchedules(true);
     this.utilityService.updateCurrentPageOfOwnerMenu(3);
   }
 
