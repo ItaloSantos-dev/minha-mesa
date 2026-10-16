@@ -25,6 +25,12 @@ public class RestaurantModel {
     @JoinColumn(name = "owner_id")
     private OwnerModel ownerModel;
 
+    @Column(name = "image_perfil_path", nullable = false)
+    private String imagePerfilPath;
+
+    @Column(name = "image_banner_path", nullable = false)
+    private String imageBannerPath;
+
     @Column(name = "active", nullable = false)
     private Boolean active;
 
