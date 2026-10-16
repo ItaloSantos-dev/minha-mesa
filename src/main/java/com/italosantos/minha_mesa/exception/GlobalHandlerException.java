@@ -87,4 +87,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerLoginAttemptsExceededException(RequestRateLimitExceededException exception){
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(new ExceptionResponse(HttpStatus.TOO_MANY_REQUESTS, exception.getMessage()));
     }
+
+    @ExceptionHandler(UploadMediaException.class)
+    public ResponseEntity<ExceptionResponse> handlerUploadMediaException(UploadMediaException exception){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+    }
 }
