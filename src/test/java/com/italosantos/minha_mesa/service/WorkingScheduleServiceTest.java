@@ -4,6 +4,7 @@ import com.italosantos.minha_mesa.dto.working_schedule.CreateWorkingScheduleResq
 import com.italosantos.minha_mesa.exception.AlreadyExistsThisWorkingScheduleException;
 import com.italosantos.minha_mesa.exception.NotPermitedException;
 import com.italosantos.minha_mesa.exception.TimeIsInvalidException;
+import com.italosantos.minha_mesa.mapper.WorkingScheduleMapper;
 import com.italosantos.minha_mesa.model.OwnerModel;
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.UserModel;
@@ -39,6 +40,9 @@ class WorkingScheduleServiceTest {
     @Mock
     OwnerRepository ownerRepository;
 
+    @Mock
+    WorkingScheduleMapper workingScheduleMapper;
+
     @Test
     @DisplayName("Dono tenta criar uma horário com hora de fim antes da hora de ínicio")
     void createWorkingScheduleCase1() {
@@ -47,8 +51,8 @@ class WorkingScheduleServiceTest {
 
         CreateWorkingScheduleResquestDTO createWorkingScheduleResquestDTO = new CreateWorkingScheduleResquestDTO(
                 DayOfWeek.FRIDAY,
-                LocalTime.now(),
-                LocalTime.now().minusHours(4)
+                LocalTime.parse("15:00"),
+                LocalTime.parse("14:00")
         );
 
         Mockito.when(this.ownerRepository.findByUserModelId(Mockito.any()))
@@ -73,8 +77,8 @@ class WorkingScheduleServiceTest {
 
         CreateWorkingScheduleResquestDTO createWorkingScheduleResquestDTO = new CreateWorkingScheduleResquestDTO(
                 DayOfWeek.FRIDAY,
-                LocalTime.now().minusHours(4),
-                LocalTime.now()
+                LocalTime.parse("14:00"),
+                LocalTime.parse("15:00")
         );
 
         Mockito.when(this.ownerRepository.findByUserModelId(Mockito.any()))
