@@ -6,6 +6,8 @@ export interface RestaurantResponseDTO{
     phone:string;
     address:string;
     active:boolean;
+    imagePerfilLink:string;
+    imageBannerLink:string;
     workingDays:WorkingScheduleResponseDTO[];
 
 }

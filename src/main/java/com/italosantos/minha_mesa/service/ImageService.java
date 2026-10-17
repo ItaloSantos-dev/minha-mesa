@@ -38,4 +38,8 @@ public class ImageService {
         this.mediaStorage.uploadMedia(image, path);
         return path;
     }
+
+    public String getAssignedUrl(String imagePath){
+        return this.mediaStorage.getAssignedUrl(imagePath);
+    }
 }

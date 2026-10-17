@@ -10,6 +10,8 @@ public record RestaurantResponseDTO(
         String phone,
         String address,
         Boolean active,
+        String imagePerfilLink,
+        String imageBannerLink,
         List<WorkingScheduleResponseDTO> workingDays
 ) {
 }

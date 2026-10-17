@@ -90,17 +90,26 @@ public class RestaurantService {
         String imageBannerPath = this.imageService.uploadImage(imageBanner, MediaPath.RESTAURANT_BANNER_PATH);
 
         RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel, imagePerfilPath, imageBannerPath);
-        return this.restaurantMapper.modelToResponse(this.restaurantRepository.save(restaurantModel));
+
+        String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
+        String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
+        this.restaurantRepository.save(restaurantModel);
+
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl);
     }
     @Cacheable(
             value = RedisCacheConfig.RESTAURANTCACHENAME,
             key = "#id"
     )
     public RestaurantResponseDTO getRestaurantById(Integer id){
-        return this.restaurantMapper.modelToResponse(
+        RestaurantModel restaurantModel =
                 this.restaurantRepository.findById(id)
-                        .orElseThrow(() -> new RestaurantNotFoundException(id))
-        );
+                        .orElseThrow(() -> new RestaurantNotFoundException(id));
+
+        String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
+        String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
+
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl);
     }
 
 
