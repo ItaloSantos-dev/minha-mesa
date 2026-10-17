@@ -31,6 +31,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.time.LocalDate;
@@ -77,9 +78,12 @@ public class RestaurantController {
     @PostMapping
     public ResponseEntity<RestaurantResponseDTO> createRestaurant(
             @Nullable @AuthenticationPrincipal UserModel userModel,
-            @RequestBody CreateRestaurantRequestDTO createRestaurantRequestDTO
-    ){
-        RestaurantResponseDTO restaurantResponseDTO = this.restaurantService.createRestaurant(createRestaurantRequestDTO, userModel);
+            @RequestPart("data") CreateRestaurantRequestDTO createRestaurantRequestDTO,
+            @RequestPart("imagePerfil") MultipartFile imagePerfil,
+            @RequestPart("imageBanner") MultipartFile imageBanner
+            ){
+        RestaurantResponseDTO restaurantResponseDTO = this.restaurantService.createRestaurant(createRestaurantRequestDTO, userModel, imagePerfil, imageBanner);
+
         return ResponseEntity.created(URI.create("/restaurants" + restaurantResponseDTO.id())).body(restaurantResponseDTO);
     }
 

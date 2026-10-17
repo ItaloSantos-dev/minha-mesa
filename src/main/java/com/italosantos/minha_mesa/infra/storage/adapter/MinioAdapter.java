@@ -5,28 +5,31 @@ import com.italosantos.minha_mesa.infra.storage.port.MediaStorage;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+@Component
 public class MinioAdapter implements MediaStorage {
-    @Value("${minio.url}")
-    private String minioUrl;
+    private final MinioClient minioClient;
+    private final String bucketName;
 
-    @Value("${minio.bucket.name}")
-    private String bucketName;
+    public MinioAdapter(
+            @Value("${minio.url}") String minioUrl,
+            @Value("${minio.bucket.name}") String bucketName,
+            @Value("${minio.access.name}") String accessKey,
+            @Value("${minio.access.secret}") String accessSecret) {
 
-    @Value( "${minio.access.name}" )
-    private String accessKey;
+        this.bucketName = bucketName;
 
-    @Value( "${minio.access.secret}" )
-    private String accessSecret;
-
-    private final MinioClient minioClient = MinioClient.builder()
-                .endpoint(this.minioUrl)
+        this.minioClient = MinioClient.builder()
+                .endpoint(minioUrl)
                 .credentials(accessKey, accessSecret)
                 .build();
+    }
 
     @Override
     public void uploadMedia(MultipartFile file, String path) {
