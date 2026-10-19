@@ -22,7 +22,7 @@ export class RestaurantService {
   }
   
 
-  createRestaurant(data:CreateRestaurantRequestDTO):Observable<RestaurantResponseDTO>{
+  createRestaurant(data:FormData):Observable<RestaurantResponseDTO>{
     return this.httpClient.post<RestaurantResponseDTO>(
       API_BACK_CONFIG.URL + 
       API_BACK_CONFIG.ENDPOINTS.RESTAURANT.CREATE,

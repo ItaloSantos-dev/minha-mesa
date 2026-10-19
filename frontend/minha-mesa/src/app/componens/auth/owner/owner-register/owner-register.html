@@ -1,4 +1,10 @@
 
+
+<div class="w-full overflow-hidden relative">
+    <p #menssageSuccessLogin class="text-3xl font-[poppins] text-emerald-600 -translate-x-full font-semibold text-center">Registro realizado com sucesso, agora realize seu login!</p>
+</div>
+
+
 <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-amber-600/10 rounded-full blur-2xl"></div>
 
 <div class="relative w-full bg-(--color-bege2) p-6 rounded-lg shadow-[0_0_15px_rgba(0,0,0,0.1)]">
@@ -19,10 +25,9 @@
 
     <form [formGroup]="formRegisterOwner" class="mt-4 w-full overflow-hidden " action="#">
         <div
-            class="flex w-[200%] transition-transform duration-500 ease-in-out"
-            [class.-translate-x-1/2]="formShow() === -1"
+            [className]="formMainDivClass()"
         >
-            <div class="w-1/2 shrink-0 flex flex-col px-1">
+            <div class="w-1/3 shrink-0 flex flex-col px-1">
                 <div class="w-full mt-2.5">
                     @if(formRegisterOwner.get('userName')?.invalid && formRegisterOwner.get('userName')?.touched) {
                         <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
@@ -142,15 +147,15 @@
                 </div>
 
                 <button
-                    (click)="formShow.set(formShow()*-1)"
-                    [disabled]="!ownerFormPartIsValid()"
+                    (click)="formShow.set(1)"
+                    [disabled]="formPartIsInvalid(0)"
                     class="gradient-button relative h-10 w-full text-base font-normal mt-4 border-none rounded-md flex items-center justify-center overflow-hidden cursor-pointer disabled:cursor-no-drop disabled:text-(--color-background)"
                     >
                     Próximo
                 </button>
             </div>
 
-            <div class="w-1/2 shrink-0 flex flex-col px-1 justify-center">
+            <div class="w-1/3 shrink-0 flex flex-col px-1 justify-center">
                 <div class="w-full mt-2.5">
                     @if(formRegisterOwner.get('restaurantName')?.invalid && formRegisterOwner.get('restaurantName')?.touched) {
                         <div class="flex items-center gap-2 bg-red-500/10 border border-red-500/30 rounded-xl p-2.5 animate-shake">
@@ -235,6 +240,88 @@
                     <button
 
                         type="button"
+                        (click)="formShow.set(0)"
+                        class="h-10 px-5 rounded-md border border-(--color-bege-yellow) bg-(--color-bege2) text-(--color-brown2) font-medium flex items-center justify-center gap-2 cursor-pointer transition-all duration-200 hover:bg-(--color-bege-yellow) hover:-translate-x-0.5"
+                    >
+                        <i class="bi bi-arrow-left"></i>
+                        Anterior
+                    </button>
+
+                    <button
+                        
+                        [disabled]="formPartIsInvalid(1)"
+                        (click)="formShow.set(2)"
+                        class="gradient-button relative h-10 flex-1 text-(--color-brown2) text-base font-normal border-none rounded-md flex items-center justify-center gap-2 overflow-hidden cursor-pointer transition-all duration-200 disabled:cursor-not-allowed disabled:text-(--color-bege2)"
+                    >
+                        Próximo
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="w-1/3 shrink-0 flex flex-col px-1 justify-center">
+                <div class="w-full h-full">
+                    <div class="w-full h-1/2">
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between">
+                                <label for="imagePerfil" class="text-xl font-semibold text-(--color-secondary)">Foto de perfil do restaurante *</label>
+                                @if (imagePerfilPath() !=='') {
+                                    <button (click)="emitExpandImage(imagePerfilPath())" type="button" class="text-black cursor-pointer hover:scale-110 transition-all">
+                                        <i class="bi bi-arrows-angle-expand text-2xl inline-block font-extrabold"></i>
+                                    </button>
+                                }
+                            </div>
+                            <div [className]="divInputImageClass">
+                                <input type="file" id="imagePerfil" name="imagePerfil" accept="image/*" (change)="onFileSelected($event, 0)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
+                                @if (imagePerfilPath() === '') {
+                                    <div class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-emerald-50 flex items-center justify-center text-slate-400 group-hover:text-(--color-primary) transition-colors mb-1">
+                                        <i class="bi bi-camera-fill text-sm"></i>
+                                    </div>
+                                    <p class="text-[10px] font-bold text-slate-600 group-hover:text-(--color-primary)">Adicionar foto</p>
+                                } @else {
+                                    <img [src]="imagePerfilPath()" alt="Preview 1" class="absolute inset-0 w-full h-full object-contain pointer-events-none group-hover:scale-[1.03] transition-transform duration-500" />
+                                    <div class="absolute inset-0 bg-slate-950/0 group-hover:bg-slate-950/40 transition-all duration-300 pointer-events-none flex items-center justify-center z-10 backdrop-blur-0 group-hover:backdrop-blur-[1px]">
+                                        <span class="text-white text-[9px] font-bold bg-slate-950/60 px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">Alterar</span>
+                                    </div>
+                                    
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full h-1/2">
+                        <div class="space-y-1.5">
+                            <div class="flex justify-between">
+                                <label for="imagePerfil" class="text-xl font-semibold text-(--color-secondary)">Foto capa do restaurante *</label>
+                                @if (imageBannerPath() !=='') {
+                                    <button (click)="emitExpandImage(imageBannerPath())" type="button" class="text-black cursor-pointer hover:scale-110 transition-all">
+                                        <i class="bi bi-arrows-angle-expand text-2xl inline-block font-extrabold"></i>
+                                    </button>
+                                }
+                            </div>
+                            <div [className]="divInputImageClass">
+                                <input type="file" id="imageBanner" name="imageBanner" accept="image/*" (change)="onFileSelected($event, 1)" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" />
+                                @if (imageBannerPath() === '') {
+                                    <div class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-emerald-50 flex items-center justify-center text-slate-400 group-hover:text-(--color-primary) transition-colors mb-1">
+                                        <i class="bi bi-camera-fill text-sm"></i>
+                                    </div>
+                                    <p class="text-[10px] font-bold text-slate-600 group-hover:text-(--color-primary)">Adicionar foto</p>
+                                } @else {
+                                    <img [src]="imageBannerPath()" alt="Preview 1" class="absolute inset-0 w-full h-full object-contain pointer-events-none group-hover:scale-[1.03] transition-transform duration-500" />
+                                        <div class="absolute inset-0 bg-slate-950/0 group-hover:bg-slate-950/40 transition-all duration-300 pointer-events-none flex items-center justify-center z-10 backdrop-blur-0 group-hover:backdrop-blur-[1px]">
+                                        <span class="text-white text-[9px] font-bold bg-slate-950/60 px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-1 group-hover:translate-y-0">Alterar</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 mt-auto pt-4">
+
+                    <button
+
+                        type="button"
                         (click)="formShow.set(1)"
                         class="h-10 px-5 rounded-md border border-(--color-bege-yellow) bg-(--color-bege2) text-(--color-brown2) font-medium flex items-center justify-center gap-2 cursor-pointer transition-all duration-200 hover:bg-(--color-bege-yellow) hover:-translate-x-0.5"
                     >
@@ -244,12 +331,12 @@
 
                     <button
                         
-                        [disabled]="!formRegisterOwner.valid"
+                        [disabled]="formInvalid()"
                         (click)="ngOnSubmit()"
                         class="gradient-button relative h-10 flex-1 text-(--color-brown2) text-base font-normal border-none rounded-md flex items-center justify-center gap-2 overflow-hidden cursor-pointer transition-all duration-200 disabled:cursor-not-allowed disabled:text-(--color-bege2)"
                     >
                         Registrar
-                        <i class="bi bi-check-lg"></i>
+                        <i class="bi bi-check"></i>
                     </button>
 
                 </div>
@@ -258,7 +345,8 @@
 
     </form>
     <div class="flex gap-5 justify-center items-center mt-3">
+        <i [class]="formShow() === 0 ? 'bi bi-circle-fill text-gray-600 shadow-2xl shadow-white transition-all' : 'bi bi-circle text-gray-600 transition-all'"></i>
         <i [class]="formShow() === 1 ? 'bi bi-circle-fill text-gray-600 shadow-2xl shadow-white transition-all' : 'bi bi-circle text-gray-600 transition-all'"></i>
-        <i [class]="formShow() === -1 ? 'bi bi-circle-fill text-gray-600 shadow-2xl shadow-white transition-all' : 'bi bi-circle text-gray-600 transition-all'"></i>
+        <i [class]="formShow() === 2 ? 'bi bi-circle-fill text-gray-600 shadow-2xl shadow-white transition-all' : 'bi bi-circle text-gray-600 transition-all'"></i>
     </div>
 </div>
