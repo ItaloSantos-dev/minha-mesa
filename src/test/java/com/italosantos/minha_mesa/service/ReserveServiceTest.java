@@ -206,7 +206,7 @@ class ReserveServiceTest {
     @Test
     @DisplayName("Usuário tenta criar reserva com uma hora de fim anterior a hora de inicio")
     void createReserveCase7(){
-        CreateReserveRequestDTO createReserveRequestDTO = new CreateReserveRequestDTO(1, LocalDate.now(), LocalTime.now(), LocalTime.now().minusHours(5), 5, "");
+        CreateReserveRequestDTO createReserveRequestDTO = new CreateReserveRequestDTO(1, LocalDate.now(), LocalTime.parse("15:00"), LocalTime.parse("14:00"), 5, "");
 
         TableModel tableModel = new TableModel();
         RestaurantModel restaurantModel = new RestaurantModel();

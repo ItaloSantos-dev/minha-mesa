@@ -31,13 +31,15 @@ public class UserService implements UserDetailsService {
     private final ReserveMapper reserveMapper;
     private final RestaurantRepository restaurantRepository;
     private final RestaurantMapper restaurantMapper;
+    private final ImageService imageService;
 
-    public UserService(UserRepository userRepository, ReserveRepository reserveRepository, ReserveMapper reserveMapper, RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper) {
+    public UserService(UserRepository userRepository, ReserveRepository reserveRepository, ReserveMapper reserveMapper, RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper, ImageService imageService) {
         this.userRepository = userRepository;
         this.reserveRepository = reserveRepository;
         this.reserveMapper = reserveMapper;
         this.restaurantRepository = restaurantRepository;
         this.restaurantMapper = restaurantMapper;
+        this.imageService = imageService;
     }
 
     @Override
@@ -79,7 +81,11 @@ public class UserService implements UserDetailsService {
         List<RestaurantModel> recentsRestaurants = this.restaurantRepository.findRecentRestaurantsByUserId(userModel.getId(), ReserveStatus.COMPLETED);
 
         return recentsRestaurants.stream()
-                .map(this.restaurantMapper::modelToResponse)
+                .map(r -> {
+                    String imagePerfilUrl = this.imageService.getAssignedUrl(r.getImagePerfilPath());
+                    String imageBannerUrl = this.imageService.getAssignedUrl(r.getImageBannerPath());
+                    return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl);
+                })
                 .toList();
     }
 }

@@ -21,6 +21,55 @@ export class OwnerAuth {
   formShow = signal(-1);
 
 
+  @ViewChild('showImageOfRegisterForm')
+  divShowImageOfRegisterForm!: ElementRef<HTMLElement>;
+
+  @ViewChild('imageOfRegisterForm')
+  imageOfRegisterForm!: ElementRef<HTMLElement>;
+
+
+
+  urlImageShow = signal('');
+
+  showDivOfImage(show:boolean){
+    if (show) {
+      gsap.set(this.divShowImageOfRegisterForm.nativeElement, {
+        display: 'flex'
+      });
+
+      gsap.to(this.divShowImageOfRegisterForm.nativeElement, {
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        duration: 0.5,
+      });
+
+      gsap.to(this.imageOfRegisterForm.nativeElement, {
+        opacity: 1,
+        duration: 0.5,
+      });
+
+    } else {
+      gsap.to(this.imageOfRegisterForm.nativeElement, {
+        opacity: 0,
+        duration: 0.3,
+      });
+      gsap.to(this.divShowImageOfRegisterForm.nativeElement, {
+        backgroundColor: "rgba(0, 0, 0, 0)",
+        duration: 0.3,
+        onComplete: () => {
+          gsap.set(this.divShowImageOfRegisterForm.nativeElement, {
+            display: 'none'
+          });
+        }
+      });
+    }
+  }
+
+  showImageOfRegisterForms(imageUrl:string){
+    this.urlImageShow.set(imageUrl);
+    this.showDivOfImage(true);
+  }
+
+
   constructor (route:ActivatedRoute){
     const typeForm = route.snapshot.queryParamMap.get('form');
     if (typeForm) {

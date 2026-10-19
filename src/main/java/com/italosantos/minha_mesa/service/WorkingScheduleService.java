@@ -11,8 +11,10 @@ import com.italosantos.minha_mesa.model.WorkingScheduleModel;
 import com.italosantos.minha_mesa.repository.OwnerRepository;
 import com.italosantos.minha_mesa.repository.RestaurantRepository;
 import com.italosantos.minha_mesa.repository.WorkingScheduleRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class WorkingScheduleService {
     private final WorkingScheduleRepository workingScheduleRepository;

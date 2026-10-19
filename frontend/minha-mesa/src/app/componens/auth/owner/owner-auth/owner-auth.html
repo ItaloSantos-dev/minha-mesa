@@ -1,4 +1,7 @@
 <app-message-error />
+<div (click)="$event.target === $event.currentTarget && showDivOfImage(false)" #showImageOfRegisterForm class="absolute z-20  flex items-center hidden justify-center bg-transparent h-screen w-full ">
+  <img #imageOfRegisterForm  class="object-contain h-full opacity-0" [src]="urlImageShow()" alt="">
+</div>
 <main class="relative w-full min-h-screen bg-(--color-background)">
   <div class="absolute inset-0 overflow-hidden">
     <app-boxes />
@@ -79,7 +82,7 @@
             [class.-translate-x-1/2]="formShow() === 1"
             >
                 <div class="w-1/2 shrink-0 flex flex-col px-1">
-                  <app-owner-register  />
+                  <app-owner-register (expandImage)="showImageOfRegisterForms($event)"  />
                 </div>
                 <div class="w-1/2 shrink-0  justify-center flex flex-col px-1">
                   <app-owner-login  />
