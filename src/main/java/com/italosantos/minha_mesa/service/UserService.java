@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.user.dashboard.DashboardUserResponseDTO;
 import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
 import com.italosantos.minha_mesa.infra.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
@@ -66,26 +67,27 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    public List<ReserveResponseDTO> getReservesTodayOfUser(UserModel userModel){
+
+    public DashboardUserResponseDTO getDashboardOfUser(UserModel userModel){
+        List<RestaurantModel> recentsRestaurants = this.restaurantRepository.findRecentRestaurantsByUserId(userModel.getId(), ReserveStatus.COMPLETED);
+
+        if (recentsRestaurants.size()>5)
+            recentsRestaurants = recentsRestaurants.subList(0, 5);
+
         LocalDate currentDate = LocalDate.now(ZoneId.of("America/Sao_Paulo"));
 
         List<ReserveModel> reserves = this.reserveRepository.findByUserModelIdAndDate(userModel.getId(), currentDate);
 
-        return reserves.stream()
+        List<ReserveResponseDTO> reservesToday =  reserves.stream()
                 .map(this.reserveMapper::modelToResponse)
                 .toList();
-    }
-
-
-    public List<RestaurantResponseDTO> getRecentsRestaurantsOfUser(UserModel userModel){
-        List<RestaurantModel> recentsRestaurants = this.restaurantRepository.findRecentRestaurantsByUserId(userModel.getId(), ReserveStatus.COMPLETED);
-
-        return recentsRestaurants.stream()
-                .map(r -> {
+        List<RestaurantResponseDTO> recentRestaurantsDTO = recentsRestaurants.stream()
+                .map(r ->{
                     String imagePerfilUrl = this.imageService.getAssignedUrl(r.getImagePerfilPath());
                     String imageBannerUrl = this.imageService.getAssignedUrl(r.getImageBannerPath());
                     return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl);
-                })
-                .toList();
+                }).toList();
+
+        return new DashboardUserResponseDTO(recentRestaurantsDTO, reservesToday);
     }
 }
