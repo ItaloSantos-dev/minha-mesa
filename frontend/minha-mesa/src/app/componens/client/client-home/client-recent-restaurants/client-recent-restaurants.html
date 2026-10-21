@@ -1,0 +1,22 @@
+<section class="overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/85 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)]" aria-labelledby="recent-restaurants-title">
+  <header class="border-b border-[color-mix(in_srgb,var(--color-coffee)_9%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_40%,white)] px-5 py-5">
+    <p class="mb-1 text-[.68rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Seu histórico</p>
+    <h2 id="recent-restaurants-title" class="mb-0 [font-family:var(--font-heading)] text-xl font-semibold text-(--color-primary)">Visitados recentemente</h2>
+  </header>
+
+  @if (recentrestaurants()?.length) {
+    <div class="grid gap-4 p-4 sm:grid-cols-2 xl:grid-cols-1">
+      @for (restaurant of recentrestaurants(); track restaurant.id) {
+        <app-card-recent-restaurant [restaurant]="restaurant" />
+      }
+    </div>
+  } @else {
+    <div class="flex flex-col items-center px-5 py-10 text-center">
+      <span class="mb-3 grid h-12 w-12 place-items-center rounded-xl bg-[color-mix(in_srgb,var(--color-highlight)_18%,white)] text-2xl text-[#8a6700]" aria-hidden="true">
+        <i class="bi bi-shop"></i>
+      </span>
+      <h3 class="mb-1 [font-family:var(--font-heading)] text-base font-semibold">Nenhum restaurante recente</h3>
+      <p class="mb-0 text-sm leading-6 text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Os restaurantes que você visitar aparecerão aqui.</p>
+    </div>
+  }
+</section>

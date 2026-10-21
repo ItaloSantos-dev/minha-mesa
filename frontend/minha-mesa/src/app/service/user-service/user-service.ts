@@ -4,6 +4,8 @@ import { API_BACK_CONFIG } from '../../config/api-back-config';
 import { Observable } from 'rxjs';
 import { ReserveResponseDTO } from '../../types/reserve/reserve-response';
 import { ReserveStatus } from '../../types/enums/reserve-status';
+import { DashboardResponseDTO } from '../../types/restaurant/dashboard/dashboard-response';
+import { DashboardUserResponseDTO } from '../../types/user/dashboard/dashboard-user-response';
 
 @Injectable({
   providedIn: 'root',
@@ -14,9 +16,7 @@ export class UserService {
 
   
 
-  public getReservesTodayOfUser():Observable<ReserveResponseDTO[]>{
-    console.log(this.url+ API_BACK_CONFIG.ENDPOINTS.USER.RESERVES_TODAY);
-    
-    return this.httpClient.get<ReserveResponseDTO[]>( this.url+ API_BACK_CONFIG.ENDPOINTS.USER.RESERVES_TODAY);
+  public getDashboardOfUser():Observable<DashboardUserResponseDTO>{
+    return this.httpClient.get<DashboardUserResponseDTO>( this.url+ API_BACK_CONFIG.ENDPOINTS.USER.DASHBOARD);
   }
 }

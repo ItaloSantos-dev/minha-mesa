@@ -1,102 +1,98 @@
 <app-message-error />
-<main class="min-h-full bg-[radial-gradient(circle_at_100%_0%,color-mix(in_srgb,var(--color-highlight)_12%,transparent),transparent_28rem)] px-5 py-8 sm:px-[4vw] md:py-10 md:pb-12 [font-family:var(--font-body)] text-(--color-coffee)">
-    
-    <!-- Cabeçalho -->
-    <header class="mb-8 flex flex-col items-start gap-5 md:flex-row md:items-end md:justify-between">
-        <div>
-            <p class="mb-1 text-[.7rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Minha agenda</p>
-            <h1 class="mb-2 [font-family:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] text-(--color-primary)">Reservas de hoje</h1>
-            <p class="mb-0 text-[.9rem] capitalize text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">{{ todayLabel }}</p>
-        </div>
-        
-        <div class="flex items-center gap-3 rounded-xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/75 px-4 py-3 shadow-[0_.6rem_1.5rem_rgba(90,69,60,.05)]">
-            <i class="bi bi-calendar-check text-xl text-(--color-secondary)" aria-hidden="true"></i>
-            <div>
-                <p class="mb-0 text-[.68rem] font-semibold text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Reservas hoje</p>
-                <p class="mb-0 [font-family:var(--font-heading)] text-xl font-semibold">
-                    {{ reserves().length }} <span class="text-xs font-normal">· {{ expectedPeople() }} pessoas</span>
-                </p>
-            </div>
-        </div>
+
+<main class="min-h-full bg-[radial-gradient(circle_at_100%_0%,color-mix(in_srgb,var(--color-highlight)_13%,transparent),transparent_28rem)] px-4 py-6 pb-10 font-(--font-body) text-(--color-coffee) sm:px-6 sm:py-8 lg:px-[4vw] lg:py-10">
+  <div class="mx-auto w-full max-w-7xl">
+    <header class="mb-7 flex flex-col justify-between gap-5 rounded-3xl border border-white/70 bg-[linear-gradient(115deg,color-mix(in_srgb,var(--color-secondary)_10%,white),color-mix(in_srgb,var(--color-highlight)_13%,white)_68%,white)] p-6 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)] sm:flex-row sm:items-center sm:p-8">
+      <div>
+        <h1 class="mb-2 [font-family:var(--font-heading)] text-[clamp(1.8rem,4vw,2.8rem)] font-bold leading-tight text-(--color-primary)">
+          Início
+        </h1>
+        <p class="mb-0 text-sm capitalize text-[color-mix(in_srgb,var(--color-coffee)_72%,transparent)]">{{ todayLabel }}</p>
+      </div>
+      
     </header>
 
-    <!-- Lista de Reservas -->
-    @if (reserves().length) {
-        <section class="max-h-[65vh] overflow-y-auto overscroll-contain rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/75 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)]" aria-label="Reservas de hoje" tabindex="0">
-            <div class="divide-y divide-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)]">
-                
-                @for (reserve of reserves(); track reserve.id) {
-					<article class="flex flex-col gap-3 px-4 py-4 transition-colors border border-gray-200 border-b-gray-400 hover:bg-[color-mix(in_srgb,var(--color-highlight)_9%,white)] sm:px-6">
+    
 
-						<div class="flex flex-wrap items-center justify-between gap-4">
+    <div class="grid items-start gap-6 xl:grid-cols-[minmax(0,1.55fr)_minmax(18rem,.85fr)]">
+      <section class="min-w-0 overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/85 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)]" aria-labelledby="today-reservations-title">
+        <header class="flex flex-wrap items-center justify-between gap-3 border-b border-[color-mix(in_srgb,var(--color-coffee)_9%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_40%,white)] px-5 py-5 sm:px-6">
+          <div>
+            <p class="mb-1 text-[.68rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Tudo organizado</p>
+            <h2 id="today-reservations-title" class="mb-0 [font-family:var(--font-heading)] text-xl font-semibold text-(--color-primary)">Reservas de hoje</h2>
+          </div>
+          <span class="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-(--color-coffee) shadow-sm">
+            <span class="h-2 w-2 rounded-full bg-(--color-secondary)" aria-hidden="true"></span>
+            {{ dashboardUser().reservesToday.length }} {{ dashboardUser().reservesToday.length === 1 ? 'compromisso' : 'compromissos' }}
+          </span>
+        </header>
 
-							<div class="flex min-w-0 flex-1 items-center gap-4">
+        @if (dashboardUser().reservesToday.length) {
+          <div class="max-h-[68vh] divide-y divide-[color-mix(in_srgb,var(--color-coffee)_9%,transparent)] overflow-y-auto overscroll-contain" tabindex="0" aria-label="Lista de reservas de hoje">
+            @for (reserve of dashboardUser().reservesToday; track reserve.id) {
+              <article class="p-4 transition-colors hover:bg-[color-mix(in_srgb,var(--color-highlight)_7%,white)] sm:p-5">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div class="flex min-w-0 items-center gap-3">
+                    <span class="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[color-mix(in_srgb,var(--color-primary)_11%,white)] [font-family:var(--font-heading)] text-sm font-bold text-(--color-primary)">
+                      {{ getInitialRestaurantName(reserve.restaurantName) }}
+                    </span>
+                    <div class="min-w-0">
+                      <h3 class="mb-1 truncate [font-family:var(--font-heading)] text-base font-semibold">{{ reserve.restaurantName }}</h3>
+                      <p class="mb-0 text-xs text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">
+                        <i class="bi bi-grid-3x3-gap mr-1 text-(--color-secondary)" aria-hidden="true"></i>
+                        Mesa {{ reserve.tableNumber }}
+                        <span class="mx-1">·</span>
+                        {{ reserve.peoples }} {{ reserve.peoples === 1 ? 'pessoa' : 'pessoas' }}
+                      </p>
+                    </div>
+                  </div>
 
-								<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-orange-500 text-lg font-semibold text-white">
-									{{ getInitialRestaurantName(reserve.restaurantName) }}
-								</div>
+                  <div class="flex flex-wrap items-center gap-x-5 gap-y-3 sm:justify-end">
+                    <div class="flex items-center gap-2">
+                      <i class="bi bi-clock text-(--color-secondary)" aria-hidden="true"></i>
+                      <div class="flex items-baseline gap-1.5">
+                        <span class="text-[.65rem] text-[color-mix(in_srgb,var(--color-coffee)_55%,transparent)]">Início</span>
+                        <time class="[font-family:var(--font-heading)] text-sm font-bold tabular-nums text-(--color-primary)">{{ reserve.timeStart.slice(0, 5) }}</time>
+                        <span class="text-[color-mix(in_srgb,var(--color-coffee)_45%,transparent)]">–</span>
+                        <time class="text-sm font-semibold tabular-nums">{{ reserve.timeEnd.slice(0, 5) }}</time>
+                      </div>
+                    </div>
 
-								<div class="min-w-0 flex-1">
-									<h2 class="mb-1 truncate [font-family:var(--font-heading)] text-base font-semibold">
-										{{ reserve.restaurantName }}
-									</h2>
+                    <span class="inline-flex w-fit shrink-0 items-center rounded-full px-3 py-1.5 text-[.7rem] font-bold" [class]="getStatusClass(reserve.status)">
+                      {{ getStatusLabel(reserve.status) }}
+                    </span>
 
-									<p class="mb-0 text-xs text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">
-										Mesa {{ reserve.tableNumber }} <span class="mx-1">·</span> {{ reserve.peoples }} {{ reserve.peoples === 1 ? 'pessoa' : 'pessoas' }}
-									</p>
-								</div>
-							</div>
+                    @if (showButonForCanceledReserve(reserve)) {
+                      <button type="button" class="cursor-pointer rounded-lg border border-[#a23b31]/20 bg-[#fde5e2]/70 px-3 py-2 text-xs font-bold text-[#a23b31] transition hover:bg-[#a23b31] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a23b31] focus-visible:ring-offset-2">
+                        Cancelar
+                      </button>
+                    }
+                  </div>
+                </div>
 
-							<div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+                @if (reserve.observation) {
+                  <div class="mt-4 sm:ml-[3.75rem]">
+                    <p class="mb-0 flex items-start gap-2 rounded-xl border border-[color-mix(in_srgb,var(--color-coffee)_8%,transparent)] bg-[color-mix(in_srgb,var(--color-coffee)_3%,white)] px-3 py-2.5 text-xs leading-relaxed text-[color-mix(in_srgb,var(--color-coffee)_75%,transparent)]">
+                      <i class="bi bi-chat-left-text mt-0.5 shrink-0 text-(--color-secondary)" aria-hidden="true"></i>
+                      <span>{{ reserve.observation }}</span>
+                    </p>
+                  </div>
+                }
+              </article>
+            }
+          </div>
+        } @else {
+          <div class="flex flex-col items-center px-6 py-14 text-center">
+            <span class="mb-4 grid h-16 w-16 place-items-center rounded-2xl bg-[color-mix(in_srgb,var(--color-secondary)_10%,white)] text-3xl text-(--color-secondary)" aria-hidden="true">
+              <i class="bi bi-calendar2-check"></i>
+            </span>
+            <h3 class="mb-2 [font-family:var(--font-heading)] text-lg font-semibold">Nenhuma reserva para hoje</h3>
+            <p class="mb-0 max-w-sm text-sm leading-6 text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Quando você tiver uma reserva marcada para hoje, ela aparecerá aqui.</p>
+          </div>
+        }
+      </section>
 
-								@if (showButonForCanceledReserve(reserve)) {
-									<button class="bg-red-500 text-white p-2 rounded-xl cursor-pointer hover:bg-red-800 transition-all duration-300">
-										CANCELAR 
-									</button>
-								}
-
-								<div class="flex flex-col gap-0.5">
-									<span class="text-xs text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Início</span>
-									<time class="[font-family:var(--font-heading)] text-base font-semibold tabular-nums text-(--color-primary)">
-										{{ reserve.timeStart.slice(0, 5) }}
-									</time>
-								</div>
-
-								<div class="flex flex-col gap-0.5">
-									<span class="text-xs text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Fim</span>
-									<time class="[font-family:var(--font-heading)] text-base font-semibold tabular-nums text-(--color-primary)">
-										{{ reserve.timeEnd.slice(0, 5) }}
-									</time>
-								</div>
-
-								<span class="inline-flex shrink-0 items-center rounded-full px-3 py-1.5 text-[0.7rem] font-bold sm:text-xs" [class]="getStatusClass(reserve.status)">
-									{{ getStatusLabel(reserve.status) }}
-								</span>
-
-							</div>
-
-						</div>
-
-						@if (reserve.observation) {
-							<div class="sm:pl-16">
-								<div class="flex items-start gap-2 rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_8%,transparent)] bg-[color-mix(in_srgb,var(--color-coffee)_4%,transparent)] px-3 py-2.5 text-xs leading-relaxed text-[color-mix(in_srgb,var(--color-coffee)_75%,transparent)]">
-									<i class="bi bi-chat-left-text mt-[0.1rem] text-(--color-secondary)" aria-hidden="true"></i>
-									<p class="mb-0 flex-1">{{ reserve.observation }}</p>
-								</div>
-							</div>
-						}
-
-					</article>
-				}
-                
-            </div>
-        </section>
-    } @else {
-        <!-- Estado Vazio -->
-        <section class="flex flex-col items-center justify-center rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 px-6 py-16 text-center shadow-[0_.8rem_2rem_rgba(90,69,60,.06)]">
-            <i class="bi bi-calendar2-check mb-4 text-4xl text-(--color-secondary)" aria-hidden="true"></i>
-            <h2 class="mb-2 [font-family:var(--font-heading)] text-xl font-semibold text-(--color-primary)">Nenhuma reserva para hoje</h2>
-            <p class="mb-0 text-sm text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Suas reservas do dia aparecerão aqui.</p>
-        </section>
-    }
+      <app-client-recent-restaurants [recentrestaurants]="dashboardUser().recentRestaurants" />
+    </div>
+  </div>
 </main>

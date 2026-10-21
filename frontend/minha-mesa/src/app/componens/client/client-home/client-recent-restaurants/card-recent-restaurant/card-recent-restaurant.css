@@ -1,0 +1,97 @@
+/* Sun glow */
+.sun {
+  filter: drop-shadow(0 0 10px white);
+}
+
+.sun::before,
+.sun::after {
+  position: absolute;
+  content: "";
+  border-radius: 50%;
+  background-color: white;
+}
+
+.sun::before {
+  width: 134%;
+  height: 134%;
+  opacity: 0.1;
+}
+
+.sun::after {
+  width: 118%;
+  height: 118%;
+  opacity: 0.5;
+}
+
+/* Ocean reflections */
+.reflection {
+  position: absolute;
+  z-index: 1;
+  background-color: white;
+  opacity: 0.5;
+}
+
+.reflection-1 {
+  top: 5%;
+  left: 32%;
+  width: 40px;
+  height: 10px;
+  clip-path: polygon(0% 0%, 100% 0%, 50% 20%);
+}
+
+.reflection-2 {
+  top: 15%;
+  left: 39%;
+  width: 80px;
+  height: 15px;
+  clip-path: polygon(0% 0%, 100% 0%, 60% 20%, 40% 20%);
+}
+
+.reflection-3,
+.reflection-4,
+.reflection-5 {
+  height: 2px;
+  clip-path: polygon(0% 50%, 40% 0%, 60% 0%, 100% 50%, 60% 100%, 40% 100%);
+}
+
+.reflection-3 {
+  top: 27%;
+  right: 15%;
+  width: 60px;
+}
+
+.reflection-4 {
+  top: 37%;
+  right: 28%;
+  width: 70px;
+}
+
+.reflection-5 {
+  top: 46%;
+  right: 8%;
+  width: 70px;
+  height: 3px;
+}
+
+/* Hills reflected in the ocean */
+.shadow-hill-1,
+.shadow-hill-2 {
+  position: absolute;
+  border-radius: 50%;
+  background-color: #f1c7a0;
+}
+
+.shadow-hill-1 {
+  top: -30%;
+  right: -25%;
+  width: 150px;
+  height: 40px;
+}
+
+.shadow-hill-2 {
+  top: -65%;
+  right: -36%;
+  width: 150px;
+  height: 80px;
+  background-color: #e5bb96;
+}

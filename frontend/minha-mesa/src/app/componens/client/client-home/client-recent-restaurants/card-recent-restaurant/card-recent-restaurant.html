@@ -1,0 +1,30 @@
+<article class="group overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+  <div class="relative h-36 overflow-hidden bg-[color-mix(in_srgb,var(--color-background)_65%,white)]">
+    <img
+      class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+      [src]="restaurant().imagePerfilLink"
+      [alt]="'Imagem do restaurante ' + restaurant().name"
+    >
+    @if (restaurantIsOpen(restaurant().workingDays)) {
+      <span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-[#28734a] shadow-sm backdrop-blur">
+        <span class="h-2 w-2 rounded-full bg-[#3b9b62]" aria-hidden="true"></span>
+        Aberto agora
+      </span>
+    } @else {
+      <span class="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-[color-mix(in_srgb,var(--color-coffee)_72%,transparent)] shadow-sm backdrop-blur">
+        <span class="h-2 w-2 rounded-full bg-[color-mix(in_srgb,var(--color-coffee)_45%,transparent)]" aria-hidden="true"></span>
+        Fechado
+      </span>
+    }
+  </div>
+
+  <div class="p-4">
+    <h3 class="mb-2 line-clamp-1 [font-family:var(--font-heading)] text-base font-semibold text-(--color-coffee)">{{ restaurant().name }}</h3>
+    @if (restaurant().address) {
+      <p class="mb-0 flex items-start gap-2 text-xs leading-relaxed text-[color-mix(in_srgb,var(--color-coffee)_68%,transparent)]">
+        <i class="bi bi-geo-alt mt-0.5 shrink-0 text-(--color-secondary)" aria-hidden="true"></i>
+        <span class="line-clamp-2">{{ restaurant().address }}</span>
+      </p>
+    }
+  </div>
+</article>
