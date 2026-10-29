@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.repository;
 
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -29,4 +30,6 @@ public interface RestaurantRepository extends JpaRepository<RestaurantModel, Int
             @Param("userId") Integer userId,
             @Param("status") ReserveStatus status
     );
+
+    List<RestaurantModel> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }

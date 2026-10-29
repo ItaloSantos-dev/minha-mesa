@@ -30,6 +30,7 @@ public class RedisCacheConfig {
     public final static String TABLEAVALIABLECACHENAME = "table-avaliables";
     public final static String DASHBOARDRESTAURANTCACHENAME = "dashboard-restaurant";
     public final static String TABLESOFRESTAURANTCACHENAME = "tables-restaurant";
+    public final static String RESTAURANTSEARCHEDCACHENAME = "restaurant-search";
 
 
     @Bean
@@ -76,6 +77,10 @@ public class RedisCacheConfig {
                         TABLESOFRESTAURANTCACHENAME,
                         this.tableListCacheConfig(defaultConfig)
                 )
+                .withCacheConfiguration(
+                        RESTAURANTSEARCHEDCACHENAME,
+                        this.restaurantListCacheConfig(defaultConfig)
+                )
                 .build();
     }
 
@@ -96,6 +101,28 @@ public class RedisCacheConfig {
                 defaultConfig.serializeValuesWith(
                         RedisSerializationContext.SerializationPair
                                 .fromSerializer(reservasUsuarioSerializer)
+                );
+    }
+
+    private RedisCacheConfiguration restaurantListCacheConfig(RedisCacheConfiguration defaultConfig){
+        JavaType restauranType =
+                this.objectMapper.getTypeFactory()
+                        .constructCollectionType(
+                                List.class,
+                                RestaurantResponseDTO.class
+                        );
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> restaurantsSerializer =
+                new JacksonJsonRedisSerializer<>(
+                        this.objectMapper,
+                        restauranType
+                );
+
+        return
+                defaultConfig.serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(restaurantsSerializer)
+                ).entryTtl(
+                        Duration.ofMinutes(5)
                 );
     }
 

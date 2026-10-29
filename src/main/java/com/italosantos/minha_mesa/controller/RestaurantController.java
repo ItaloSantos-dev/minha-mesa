@@ -256,4 +256,19 @@ public class RestaurantController {
     public ResponseEntity<List<TableResponseDTO>> getTablesOfRestaurantById(@AuthenticationPrincipal UserModel userModel){
         return ResponseEntity.ok(this.restaurantService.getTablesOfRestaurantById(userModel));
     }
+
+    @Operation(
+            summary = "Busca restaurantes com nomes parecidos ao do pesquisado",
+            description = "Retorna a lista de restaurantes"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Mesas encontradas com sucesso")
+    })
+    @GetMapping()
+    public ResponseEntity<List<RestaurantResponseDTO>> getRestaurantsLikeName(
+            @RequestParam String search,
+            Pageable pageable
+    ){
+        return ResponseEntity.ok(this.restaurantService.getRestaurantsLikeName(search, pageable));
+    }
 }

@@ -190,4 +190,19 @@ public class RestaurantService {
                 .map(this.tableMapper::modelToResponse)
                 .toList();
     }
+
+    @Cacheable(
+            key = "#search + '-' + #pageable.pageNumber",
+            value = RedisCacheConfig.RESTAURANTSEARCHEDCACHENAME
+    )
+    public List<RestaurantResponseDTO> getRestaurantsLikeName(String search, Pageable pageable){
+        List<RestaurantModel> restaurants = this.restaurantRepository.findByNameContainingIgnoreCase(search, pageable);
+
+        return restaurants.stream()
+                .map(r ->{
+                    String imagePerfilUrl = this.imageService.getAssignedUrl(r.getImagePerfilPath());
+                    String imageBannerUrl = this.imageService.getAssignedUrl(r.getImageBannerPath());
+                    return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl);
+                }).toList();
+    }
 }
