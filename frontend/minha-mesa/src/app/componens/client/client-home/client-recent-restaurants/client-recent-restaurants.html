@@ -7,7 +7,7 @@
   @if (recentrestaurants()?.length) {
     <div class="grid gap-4 p-4 sm:grid-cols-2 xl:grid-cols-1">
       @for (restaurant of recentrestaurants(); track restaurant.id) {
-        <app-card-recent-restaurant [restaurant]="restaurant" />
+        <app-client-card-restaurant [restaurant]="restaurant" />
       }
     </div>
   } @else {

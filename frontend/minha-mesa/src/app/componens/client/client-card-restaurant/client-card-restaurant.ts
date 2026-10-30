@@ -1,15 +1,15 @@
 import { Component, input } from '@angular/core';
-import { RestaurantResponseDTO } from '../../../../../types/restaurant/restaurant-response';
-import { WorkingScheduleResponseDTO } from '../../../../../types/working_schedule/working-schedule-response';
-import { DayOfWeek, mapDayNumber } from '../../../../../types/enums/day-of-week';
+import { RestaurantResponseDTO } from '../../../types/restaurant/restaurant-response';
+import { WorkingScheduleResponseDTO } from '../../../types/working_schedule/working-schedule-response';
+import { mapDayNumber } from '../../../types/enums/day-of-week';
 
 @Component({
-  selector: 'app-card-recent-restaurant',
+  selector: 'app-client-card-restaurant',
   imports: [],
-  templateUrl: './card-recent-restaurant.html',
-  styleUrl: './card-recent-restaurant.css',
+  templateUrl: './client-card-restaurant.html',
+  styleUrl: './client-card-restaurant.css',
 })
-export class CardRecentRestaurant {
+export class ClientCardRestaurant {
   restaurant = input.required<RestaurantResponseDTO>();
   restaurantIsOpen(workingDays:WorkingScheduleResponseDTO[]):boolean{
     const currentDay:number = new Date().getDay();

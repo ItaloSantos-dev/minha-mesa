@@ -15,7 +15,10 @@ export const API_BACK_CONFIG = {
             RESERVES : '/restaurants/reserves',
             TABLES : '/restaurants/tables',
             WORKING_SCHEDULES:'/restaurants/working-scheduleds',
-            SCHEDULE_EXCEPTIONS:'/restaurants/schedule-exceptions'
+            SCHEDULE_EXCEPTIONS:'/restaurants/schedule-exceptions',
+            SEARCH:(search:string, page:number):string =>{
+                return `/restaurants?search=${search}&page=${page}`
+            }
         },
         RESERVE:{
             UPDATE:'/reserves'

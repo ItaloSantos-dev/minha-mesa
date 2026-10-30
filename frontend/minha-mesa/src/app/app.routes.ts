@@ -14,6 +14,7 @@ import { NotFound } from './componens/not-found/not-found';
 import { NotPermited } from './componens/not-permited/not-permited';
 import { ClientLayout } from './componens/client/layout/client-layout/client-layout';
 import { ClientHome } from './componens/client/client-home/client-home';
+import { ClientSearchRestaurants } from './componens/client/client-search-restaurants/client-search-restaurants';
 
 export const routes: Routes = [
     {
@@ -41,6 +42,10 @@ export const routes: Routes = [
             {
                 path:'home',
                 component:ClientHome
+            },
+            {
+                path:'restaurants',
+                component:ClientSearchRestaurants
             }
         ]
     },

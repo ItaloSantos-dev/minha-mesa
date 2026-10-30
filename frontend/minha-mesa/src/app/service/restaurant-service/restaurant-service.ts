@@ -75,4 +75,10 @@ export class RestaurantService {
     )  
   }
 
+  getRestaurantsLikeName(search:string, page:number):Observable<RestaurantResponseDTO[]>{
+    return this.httpClient.get<RestaurantResponseDTO[]>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.SEARCH(search, page)
+    )
+  }
+
 }

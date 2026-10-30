@@ -326,6 +326,7 @@ export class ClientHome {
   };
 
   ngOnInit(){
+    this.utilityService.updateCurrentPageOfOwnerMenu(0)
     this.userService.getDashboardOfUser().subscribe({
       next:(data) =>{
         this.dashboardUser.set(data)

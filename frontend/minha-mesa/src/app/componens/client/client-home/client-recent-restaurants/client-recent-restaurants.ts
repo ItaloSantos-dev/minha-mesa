@@ -1,10 +1,10 @@
 import { Component, input } from '@angular/core';
 import { RestaurantResponseDTO } from '../../../../types/restaurant/restaurant-response';
-import { CardRecentRestaurant } from './card-recent-restaurant/card-recent-restaurant';
+import { ClientCardRestaurant } from '../../client-card-restaurant/client-card-restaurant';
 
 @Component({
   selector: 'app-client-recent-restaurants',
-  imports: [CardRecentRestaurant],
+  imports: [ClientCardRestaurant],
   templateUrl: './client-recent-restaurants.html',
   styleUrl: './client-recent-restaurants.css',
 })

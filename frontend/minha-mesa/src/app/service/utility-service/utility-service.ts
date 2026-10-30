@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ExceptionResponse } from '../../types/exception/excpetion-response';
+import { RestaurantResponseDTO } from '../../types/restaurant/restaurant-response';
 
 @Injectable({
   providedIn: 'root',

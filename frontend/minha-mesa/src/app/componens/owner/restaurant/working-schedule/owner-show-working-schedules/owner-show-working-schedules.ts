@@ -44,10 +44,6 @@ export class OwnerShowWorkingSchedules {
   actualPage = signal(-1)
   pageSize = 0;
 
-
-  
-
-
   @ViewChild('createWorkingSchedule', { read: ElementRef })
   createWorkingSchedule!: ElementRef<HTMLElement>;
 
