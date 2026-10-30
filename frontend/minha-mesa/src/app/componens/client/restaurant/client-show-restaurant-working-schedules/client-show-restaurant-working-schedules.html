@@ -1,0 +1,64 @@
+
+<app-message-error />
+<div #main class="schedule-card w-full max-w-4xl opacity-0 mx-auto bg-white rounded-2xl border border-gray-200 shadow-lg overflow-hidden">
+  
+  <!-- Estrutura Flex adaptativa: empilha no mobile (dias no topo), lado a lado no desktop -->
+  <div class="flex flex-col md:flex-row">
+    
+    <!-- Sidebar: Seleção de Dias -->
+    <div class="w-full md:w-64 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-200 p-5 md:p-6">
+      <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 hidden md:block">Selecione o Dia</h3>
+      
+      <!-- No mobile rola horizontalmente, no desktop empilha em coluna -->
+      <div class="flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-2 md:pb-0 hide-scrollbar">
+        @for (day of daySlots; track $index) {
+          <button
+            #divDay
+            (click)="handlerSelectDay(day.day)"
+            [class.bg-[var(--color-primary)]]="selectDay === day.day"
+            [class.text-white]="selectDay === day.day"
+            [class.shadow-md]="selectDay === day.day"
+            [class.hover:bg-gray-200]="selectDay !== day.day"
+            [class.text-gray-700]="selectDay !== day.day"
+            [class.bg-gray-100]="selectDay !== day.day"
+            class="shrink-0 cursor-pointer -translate-x-full w-auto md:w-full inline-flex items-center justify-center md:justify-start px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 border border-transparent capitalize">
+            {{ day.day }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Área Principal: Horários Disponíveis -->
+    <div class="flex-1 p-5 md:p-8">
+      
+      <!-- Cabeçalho do Mês/Dia -->
+      <div class="flex justify-between md:justify-between w-full  items-center mb-6 pb-4 border-b border-gray-100">
+        <h1 class="text-xl md:text-2xl font-semibold text-gray-800">
+          Horários para <span class="capitalize text-[var(--color-primary)]">{{ selectDay || '...' }}</span>
+        </h1>
+        <button (click)="closeDiv.emit()"><i class="bi bi-x text-5xl text-red-500 cursor-pointer hover:scale-110 transition-all inline-block"></i></button>
+      </div>
+      
+      @if (timesReserves.length) {
+        <!-- Grid responsivo: 2 colunas mobile, 3 tablet, 4 desktop -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          @for (timeReserve of timesReserves; track $index) {
+            <div  class="flex items-center justify-center py-2.5 px-2 border border-gray-200 rounded-xl hover:border-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-white transition-all duration-200 ease-out  text-gray-700 font-medium text-base shadow-sm hover:shadow-md">
+              {{ timeReserve.timeStart }} - {{ timeReserve.timeEnd }}
+            </div>
+          }
+        </div>
+      }
+      @else {
+        <!-- Estado Vazio (Empty State) melhorado -->
+        <div class="flex flex-col items-center justify-center py-12 px-4 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+          <svg class="w-10 h-10 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <h2 class="text-lg font-medium text-gray-500 text-center">
+            O restaurante não funciona neste dia
+          </h2>
+        </div>
+      }
+      
+    </div>
+  </div>
+</div>

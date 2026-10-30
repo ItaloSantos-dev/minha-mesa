@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { UtilityService } from '../../../service/utility-service/utility-service';
-import { RestaurantResponseDTO } from '../../../types/restaurant/restaurant-response';
-import { UserService } from '../../../service/user-service/user-service';
-import { ExceptionService } from '../../../service/exception-service/exception-service';
+import { UtilityService } from '../../../../service/utility-service/utility-service';
+import { RestaurantResponseDTO } from '../../../../types/restaurant/restaurant-response';
+import { UserService } from '../../../../service/user-service/user-service';
+import { ExceptionService } from '../../../../service/exception-service/exception-service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { ExceptionResponse } from '../../../types/exception/excpetion-response';
-import { MessageError } from '../../message-error/message-error';
-import { ClientRecentRestaurants } from '../client-home/client-recent-restaurants/client-recent-restaurants';
-import { RestaurantService } from '../../../service/restaurant-service/restaurant-service';
-import { ClientCardRestaurant } from '../client-card-restaurant/client-card-restaurant';
-import { DayOfWeek } from '../../../types/enums/day-of-week';
+import { ExceptionResponse } from '../../../../types/exception/excpetion-response';
+import { MessageError } from '../../../message-error/message-error';
+import { ClientRecentRestaurants } from '../../client-home/client-recent-restaurants/client-recent-restaurants';
+import { RestaurantService } from '../../../../service/restaurant-service/restaurant-service';
+import { ClientCardRestaurant } from '../../client-card-restaurant/client-card-restaurant';
+import { DayOfWeek } from '../../../../types/enums/day-of-week';
 
 @Component({
   selector: 'app-client-search-restaurants',

@@ -81,4 +81,10 @@ export class RestaurantService {
     )
   }
 
+  getRestaurantbyId(id:number):Observable<RestaurantResponseDTO>{
+    return this.httpClient.get<RestaurantResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.FIND(id)
+    )
+  }
+
 }
