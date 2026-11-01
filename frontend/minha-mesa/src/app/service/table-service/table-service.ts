@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { API_BACK_CONFIG } from '../../config/api-back-config';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CreateTableRequestDTO } from '../../types/table/create-table-request';
 import { TableResponseDTO } from '../../types/table/table-response';
@@ -25,5 +25,25 @@ export class TableService {
       this.url + API_BACK_CONFIG.ENDPOINTS.TABLE.CREATE,
       data
     )
+  }
+
+  getTablesAvailable(
+    restaurantId: number,
+    capacity: number,
+    date: string,
+    timeStart: string,
+    timeEnd: string,
+  ): Observable<TableResponseDTO[]> {
+    const params = new HttpParams()
+      .set('restaurantId', restaurantId)
+      .set('capacity', capacity)
+      .set('date', date)
+      .set('timeStart', timeStart)
+      .set('timeEnd', timeEnd);
+
+    return this.httpClient.get<TableResponseDTO[]>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.TABLE.AVAILABLE,
+      { params },
+    );
   }
 }

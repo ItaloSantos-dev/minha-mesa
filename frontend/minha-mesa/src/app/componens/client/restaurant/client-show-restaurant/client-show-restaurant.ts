@@ -12,6 +12,7 @@ import { DayOfWeek, mapDayNumber } from '../../../../types/enums/day-of-week';
 import { WorkingScheduleResponseDTO } from '../../../../types/working_schedule/working-schedule-response';
 import { ClientShowRestaurantWorkingSchedules } from '../client-show-restaurant-working-schedules/client-show-restaurant-working-schedules';
 import { gsap } from 'gsap/gsap-core';
+import { ClientCreateReserve } from '../../reserve/client-create-reserve/client-create-reserve';
 
 interface RestaurantReview {
   author: string;
@@ -30,7 +31,7 @@ interface MenuHighlight {
 
 @Component({
   selector: 'app-client-show-restaurant',
-  imports: [MessageError, ClientShowRestaurantWorkingSchedules],
+  imports: [MessageError, ClientShowRestaurantWorkingSchedules, ClientCreateReserve],
   templateUrl: './client-show-restaurant.html',
   styleUrl: './client-show-restaurant.css',
 })
@@ -123,6 +124,8 @@ export class ClientShowRestaurant {
   private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(){
+    console.log(this.restaurant().workingDays);
+    
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params =>{
       const id = Number(params.get('id'));
       if (Number.isInteger(id) && id > 0) {
@@ -132,6 +135,7 @@ export class ClientShowRestaurant {
   }
 
   buttonShowScheduleIsDisabled = signal(false);
+  readonly reserveModalOpen = signal(false);
 
   showWorkingSchedulesOfRestaurant(show:boolean){
     

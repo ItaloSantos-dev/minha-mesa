@@ -24,9 +24,11 @@ export const API_BACK_CONFIG = {
             }
         },
         RESERVE:{
+            CREATE:'/reserves',
             UPDATE:'/reserves'
         },
         TABLE:{
+            AVAILABLE:'/tables',
             UPDATE_STATUS: (id:number):string=>{
                 return `/tables/${id}/update-status`
             },

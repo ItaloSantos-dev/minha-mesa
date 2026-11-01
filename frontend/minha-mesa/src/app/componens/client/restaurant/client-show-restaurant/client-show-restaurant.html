@@ -1,4 +1,10 @@
 <app-message-error />
+@if (reserveModalOpen()) {
+  <app-client-create-reserve
+    [restaurant]="restaurant()"
+    (closed)="reserveModalOpen.set(false)"
+  />
+}
 <div #divWorkingSchedules class="w-screen hidden opacity-0 h-screen bg-black/20 fixed flex z-20">
   <div class="flex w-full h-full items-center justify-center">
     @if (restaurant() !== null) {
@@ -13,7 +19,7 @@
 <main class="min-h-full bg-[radial-gradient(circle_at_95%_0%,color-mix(in_srgb,var(--color-highlight)_12%,transparent),transparent_30rem)] px-4 py-6 pb-12 font-(--font-body) text-(--color-coffee) sm:px-6 sm:py-8 lg:px-[5vw]">
   <div class="mx-auto max-w-7xl">
     @if (restaurant(); as restaurant) {
-      <section class="relative isolate mb-8 min-h-[25rem] overflow-hidden rounded-[2rem] bg-(--color-primary) shadow-[0_1.5rem_4rem_rgba(47,32,24,.2)] sm:min-h-[30rem]">
+      <section class="relative isolate mb-8 min-h-[25rem] overflow-hidden roun  ded-[2rem] bg-(--color-primary) shadow-[0_1.5rem_4rem_rgba(47,32,24,.2)] sm:min-h-[30rem]">
         <img
           class="absolute inset-0 -z-20 h-full w-full object-cover"
           [src]="restaurant.imageBannerLink"
@@ -55,15 +61,15 @@
             </p>
           }
           <div class="flex flex-wrap gap-3">
-            @if (restaurant.phone) {
-              <a
-                class="inline-flex min-h-11 items-center gap-2 rounded-xl bg-(--color-primary) px-5 py-3 text-sm font-bold text-white shadow-lg ring-1 ring-white/35 transition hover:-translate-y-0.5 hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-primary)"
-                [href]="'tel:' + restaurant.phone"
+            <button
+                type="button"
+                [disabled]="!restaurant.active"
+                (click)="reserveModalOpen.set(true)"
+                class="inline-flex min-h-11 items-center gap-2 rounded-xl bg-(--color-primary) px-5 py-3 text-sm font-bold text-white shadow-lg ring-1 ring-white/35 transition hover:-translate-y-0.5 hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-primary) disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
               >
                 <i class="bi bi-calendar2-check" aria-hidden="true"></i>
                 Reservar uma mesa
-              </a>
-            }
+            </button>
             @if (restaurant.phone) {
               <a
                 class="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-(--color-primary) shadow-lg transition hover:-translate-y-0.5 hover:bg-[#fff8ed] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-primary)"
@@ -74,9 +80,9 @@
               </a>
             }
             <button
-              [disabled]="buttonShowScheduleIsDisabled()"
+              [disabled]="buttonShowScheduleIsDisabled() || !(restaurant.workingDays?.length)"
               (click)="showWorkingSchedulesOfRestaurant(true)"
-              class="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/45 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
+              class="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/45 bg-white/10 px-5 py-3 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer disabled:cursor-no-drop"
               
             >
               <i class="bi bi-clock" aria-hidden="true"></i>
