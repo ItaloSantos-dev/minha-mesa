@@ -19,4 +19,10 @@ export class UserService {
   public getDashboardOfUser():Observable<DashboardUserResponseDTO>{
     return this.httpClient.get<DashboardUserResponseDTO>( this.url+ API_BACK_CONFIG.ENDPOINTS.USER.DASHBOARD);
   }
+
+  public getReservesOfUser(page: number): Observable<ReserveResponseDTO[]> {
+    return this.httpClient.get<ReserveResponseDTO[]>(
+      `${this.url}${API_BACK_CONFIG.ENDPOINTS.USER.RESERVES}?page=${page}&size=10`,
+    );
+  }
 }

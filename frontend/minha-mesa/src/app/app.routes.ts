@@ -16,6 +16,7 @@ import { ClientLayout } from './componens/client/layout/client-layout/client-lay
 import { ClientHome } from './componens/client/client-home/client-home';
 import { ClientSearchRestaurants } from './componens/client/restaurant/client-search-restaurants/client-search-restaurants';
 import { ClientShowRestaurant } from './componens/client/restaurant/client-show-restaurant/client-show-restaurant';
+import { ClientShowReserves } from './componens/client/reserve/client-show-reserves/client-show-reserves';
 
 export const routes: Routes = [
     {
@@ -43,6 +44,10 @@ export const routes: Routes = [
             {
                 path:'home',
                 component:ClientHome
+            },
+            {
+                path:'reservations',
+                component:ClientShowReserves
             },
             {
                 path:'restaurants',
