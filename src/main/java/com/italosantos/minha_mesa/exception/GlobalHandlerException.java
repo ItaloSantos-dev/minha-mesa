@@ -92,4 +92,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerUploadMediaException(UploadMediaException exception){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
     }
+
+    @ExceptionHandler(AlreadyExistsCategoryOfRestaurantWithNameException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistsCategoryOfRestaurantWithNameException(AlreadyExistsCategoryOfRestaurantWithNameException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
 }
