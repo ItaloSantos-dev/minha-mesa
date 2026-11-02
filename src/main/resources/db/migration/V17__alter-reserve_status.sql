@@ -1,0 +1,2 @@
+ALTER TYPE reserve_status
+ADD VALUE 'IN_PROGRESS'
