@@ -34,5 +34,7 @@ public class DishCategoryModel {
     @Column(name = "slug", nullable = false)
     private String slug;
 
+    @OneToMany(mappedBy = "dishCategoryModel")
+    private List<DishModel> dishModels = new ArrayList<>();
 
 }
