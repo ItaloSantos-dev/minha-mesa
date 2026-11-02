@@ -86,4 +86,16 @@ public class DishCategoryService {
         );
 
     }
+
+    public DishCategoryResponseDTO getDishCategoryById(Integer id){
+        DishCategoryModel dishCategoryModel = this.dishCategoryRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        String imageLink = this.imageService.getAssignedUrl(dishCategoryModel.getImagePath());
+
+        return this.dishCategoryMapper.modelToResponse(dishCategoryModel, imageLink);
+    }
+
+
+
 }

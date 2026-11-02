@@ -68,4 +68,13 @@ public class DishCategoryController {
         DishCategoryResponseDTO dishCategoryResponseDTO = this.dishCategoryService.createDishCategory(userModel, createDishCategoryRequestDTO, image);
         return ResponseEntity.created(URI.create("/dish-category/" + dishCategoryResponseDTO.id())).body(dishCategoryResponseDTO);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DishCategoryResponseDTO> findBySlug(
+            @PathVariable Integer id
+    ){
+        return ResponseEntity.ok(this.dishCategoryService.getDishCategoryById(id));
+    }
+
+
 }
