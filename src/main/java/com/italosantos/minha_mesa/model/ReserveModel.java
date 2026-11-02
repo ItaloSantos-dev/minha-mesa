@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Table(name = "tb_reserve")
 @Entity
@@ -57,4 +58,6 @@ public class ReserveModel {
     @Column(name = "total_amount", scale = 10, precision = 2)
     private BigDecimal totalAmount;
 
+    @OneToMany(mappedBy = "reserveModel")
+    private List<ReserveDishModel> reserveDishModels;
 }

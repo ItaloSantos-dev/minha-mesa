@@ -52,7 +52,8 @@ public class DishModel {
     @Column(name = "active", nullable = false)
     private Boolean active;
 
-
+    @OneToMany(mappedBy = "dishModel")
+    private List<ReserveDishModel> reserveDishModels;
 
 
 
