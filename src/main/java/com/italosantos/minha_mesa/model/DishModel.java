@@ -29,6 +29,10 @@ public class DishModel {
     @JoinColumn(name = "category_id")
     private DishCategoryModel dishCategoryModel;
 
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private RestaurantModel restaurantModel;
+
     @Column(name = "description")
     private String description;
 

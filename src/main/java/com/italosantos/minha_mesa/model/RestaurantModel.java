@@ -51,4 +51,7 @@ public class RestaurantModel {
 
     @OneToMany(mappedBy = "restaurantModel")
     private List<DishCategoryModel> dishCategoryModels = new ArrayList<>();
+
+    @OneToMany(mappedBy = "restaurantModel")
+    private List<DishModel> dishModels = new ArrayList<>();
 }
