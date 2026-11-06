@@ -2,10 +2,8 @@ package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.dish.CreateDishRequestDTO;
 import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
-import com.italosantos.minha_mesa.exception.AlreadyExistsDishWithNameOfRestaurantException;
-import com.italosantos.minha_mesa.exception.IllegalParameterException;
-import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
-import com.italosantos.minha_mesa.exception.UserIsNotOwnerException;
+import com.italosantos.minha_mesa.dto.dish.UpdateDishRequestDTO;
+import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.infra.storage.MediaPath;
 import com.italosantos.minha_mesa.mapper.DishMapper;
 import com.italosantos.minha_mesa.model.DishCategoryModel;
@@ -15,6 +13,7 @@ import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.repository.DishCategoryRepository;
 import com.italosantos.minha_mesa.repository.DishRepository;
 import com.italosantos.minha_mesa.repository.OwnerRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -93,6 +92,103 @@ public class DishService {
                 .orElseThrow(ResourceNotFoundException::new);
 
         String imageLink = this.imageService.getAssignedUrl(dishModel.getImagePath());
+        return this.dishMapper.modelToResponse(dishModel, imageLink);
+    }
+
+
+    @Transactional
+    public DishResponseDTO updateDishById(
+            UserModel userModel,
+            Integer id,
+            UpdateDishRequestDTO updateDishRequestDTO,
+            MultipartFile newImage
+    ) {
+
+        if (updateDishRequestDTO.name() == null &&
+                updateDishRequestDTO.dishCategory() == null &&
+                updateDishRequestDTO.description() == null &&
+                updateDishRequestDTO.preparationTime() == null &&
+                updateDishRequestDTO.price() == null &&
+                updateDishRequestDTO.active() == null &&
+                (newImage == null || newImage.isEmpty())
+        )
+            throw new IllegalParameterException("Todos os campos estão vazios.");
+
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+        DishModel dishModel = this.dishRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Não foi possível encontrar um prato com esse id."));
+
+        if (!ownerModel.getId().equals(dishModel.getRestaurantModel().getOwnerModel().getId()))
+            throw new NotPermitedException();
+
+
+        String newSlug = null;
+        if (updateDishRequestDTO.name() != null) {
+
+            if (updateDishRequestDTO.name().isBlank())
+                throw new IllegalParameterException("O nome do prato não pode estar vazio.");
+
+            if (this.dishRepository.existsByNameAndRestaurantModelId(
+                    updateDishRequestDTO.name(),
+                    ownerModel.getRestaurantModel().getId()
+            ) && !dishModel.getName().equalsIgnoreCase(updateDishRequestDTO.name()))
+                throw new AlreadyExistsDishWithNameOfRestaurantException();
+            newSlug = this.generateSlug(updateDishRequestDTO.name());
+        }
+
+        DishCategoryModel newDishCategoryModel = null;
+        if (updateDishRequestDTO.dishCategory() != null) {
+
+            DishCategoryModel dishCategoryModel = this.dishCategoryRepository
+                    .findById(updateDishRequestDTO.dishCategory())
+                    .orElseThrow(() -> new ResourceNotFoundException(
+                            "Não foi possível encontrar uma categoria com esse id."
+                    ));
+
+            if (!dishCategoryModel.getRestaurantModel().getId()
+                    .equals(ownerModel.getRestaurantModel().getId()))
+                throw new NotPermitedException();
+
+            if (!dishCategoryModel.getActive())
+                throw new IllegalParameterException("Não é possível adicionar um prato a uma categoria inativa.");
+
+            newDishCategoryModel = dishCategoryModel;
+        }
+
+        if (updateDishRequestDTO.preparationTime() != null && updateDishRequestDTO.preparationTime() < 120)
+            throw new IllegalParameterException("O tempo mínimo de preparo para um prato é 2 minutos.");
+
+        if (updateDishRequestDTO.price() != null && updateDishRequestDTO.price().compareTo(BigDecimal.ONE) < 0)
+            throw new IllegalParameterException("O valor mínimo de um prato é R$ 1,00.");
+
+
+        String newImagePath = null;
+        if (newImage != null && !newImage.isEmpty()) {
+
+            String oldImagePath = dishModel.getImagePath();
+
+            String imagePath = this.imageService.uploadImage(newImage, MediaPath.DISH);
+
+            if (imagePath == null || imagePath.isBlank())
+                throw new UploadMediaException();
+
+            newImagePath = imagePath;
+
+            this.imageService.deleteImage(oldImagePath);
+
+        }
+
+       DishModel dishModelSaved = this.dishMapper.updateToModel(
+               dishModel,
+               updateDishRequestDTO,
+               newImagePath,
+               newSlug,
+               newDishCategoryModel
+
+       );
+        String imageLink = this.imageService.getAssignedUrl(dishModelSaved.getImagePath());
         return this.dishMapper.modelToResponse(dishModel, imageLink);
     }
 }

@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.mapper;
 
 import com.italosantos.minha_mesa.dto.dish.CreateDishRequestDTO;
 import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.dish.UpdateDishRequestDTO;
 import com.italosantos.minha_mesa.model.DishCategoryModel;
 import com.italosantos.minha_mesa.model.DishModel;
 import com.italosantos.minha_mesa.model.RestaurantModel;
@@ -40,5 +41,33 @@ public class DishMapper {
                 imageLink,
                 dishModel.getActive()
         );
+    }
+
+    public DishModel updateToModel(DishModel dishModel, UpdateDishRequestDTO updateDishRequestDTO, String newImagePath, String newSlug, DishCategoryModel newDishCategoryModel){
+        if (updateDishRequestDTO.name() != null) {
+            dishModel.setName(updateDishRequestDTO.name());
+            dishModel.setSlug(newSlug);
+        }
+
+        if (updateDishRequestDTO.dishCategory() != null)
+            dishModel.setDishCategoryModel(newDishCategoryModel);
+
+        if (updateDishRequestDTO.description() != null)
+            dishModel.setDescription(updateDishRequestDTO.description());
+
+        if (updateDishRequestDTO.preparationTime() != null)
+            dishModel.setPreparationTime(updateDishRequestDTO.preparationTime());
+
+        if (updateDishRequestDTO.price() != null)
+            dishModel.setPrice(updateDishRequestDTO.price());
+
+        if (updateDishRequestDTO.active() != null)
+            dishModel.setActive(updateDishRequestDTO.active());
+
+        if (newImagePath != null)
+            dishModel.setImagePath(newImagePath);
+
+        return dishModel;
+
     }
 }
