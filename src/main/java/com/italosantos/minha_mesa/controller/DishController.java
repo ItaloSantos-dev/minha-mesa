@@ -74,4 +74,22 @@ public class DishController {
         return ResponseEntity.created(URI.create("/dishes/" + dishResponseDTO.id().toString())).body(dishResponseDTO);
     }
 
+    @Operation(
+            summary = "Busca um prato pelo id",
+            description = "Restorna os dados do prato buscado pelo id."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "404", description = "O id do prato enviado não foi encontrado.",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            )
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<DishResponseDTO> getDishById(
+            @PathVariable Integer id
+    ){
+        return ResponseEntity.ok(this.dishService.getDishById(id));
+    }
 }

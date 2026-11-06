@@ -87,4 +87,12 @@ public class DishService {
 
         return this.dishMapper.modelToResponse(dishModel, imageLink);
     }
+
+    public DishResponseDTO getDishById(Integer id){
+        DishModel dishModel = this.dishRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        String imageLink = this.imageService.getAssignedUrl(dishModel.getImagePath());
+        return this.dishMapper.modelToResponse(dishModel, imageLink);
+    }
 }
