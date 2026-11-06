@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.text.Normalizer;
+import java.util.List;
 
 @Service
 public class DishService {
@@ -45,6 +46,16 @@ public class DishService {
                 .replaceAll("[^a-z0-9\\s-]", "")
                 .replaceAll("\\s+", "-")
                 .replaceAll("-+", "-");
+    }
+
+    public List<DishResponseDTO> getDishesByDishCategoryId(Integer id){
+        List<DishModel> dishModels =this.dishRepository.findAllByDishCategoryModelId(id);
+        return dishModels.stream()
+                .map(dish -> {
+                    String imageLink = this.imageService.getAssignedUrl(dish.getImagePath());
+                    return this.dishMapper.modelToResponse(dish, imageLink);
+                })
+                .toList();
     }
 
     public DishResponseDTO createDish(UserModel userModel, CreateDishRequestDTO createDishRequestDTO, MultipartFile image){

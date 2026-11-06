@@ -8,6 +8,5 @@ import java.util.List;
 public interface DishRepository extends JpaRepository<DishModel, Integer> {
 
     List<DishModel> findAllByDishCategoryModelId(Integer id);
-    List<DishModel> findAllByIdAndDishCategoryModelId(Integer id, Integer categoryModelId);
     Boolean existsByNameAndRestaurantModelId(String name, Integer categoryModelId);
 }

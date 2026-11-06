@@ -32,13 +32,15 @@ public class DishCategoryService {
     private final ImageService imageService;
     private final DishRepository dishRepository;
     private final DishCategoryMapper dishCategoryMapper;
+    private final DishService dishService;
 
-    public DishCategoryService(DishCategoryRepository dishCategoryRepository, OwnerRepository ownerRepository, ImageService imageService, DishRepository dishRepository, DishCategoryMapper dishCategoryMapper) {
+    public DishCategoryService(DishCategoryRepository dishCategoryRepository, OwnerRepository ownerRepository, ImageService imageService, DishRepository dishRepository, DishCategoryMapper dishCategoryMapper, DishService dishService) {
         this.dishCategoryRepository = dishCategoryRepository;
         this.ownerRepository = ownerRepository;
         this.imageService = imageService;
         this.dishRepository = dishRepository;
         this.dishCategoryMapper = dishCategoryMapper;
+        this.dishService = dishService;
     }
     public String generateSlug(String name) {
         return Normalizer.normalize(name, Normalizer.Form.NFD)
@@ -81,7 +83,8 @@ public class DishCategoryService {
 
         return this.dishCategoryMapper.modelToResponse(
                 dishCategoryModel,
-                imageLink
+                imageLink,
+                this.dishService.getDishesByDishCategoryId(dishCategoryModel.getId())
         );
 
     }
@@ -92,7 +95,7 @@ public class DishCategoryService {
 
         String imageLink = this.imageService.getAssignedUrl(dishCategoryModel.getImagePath());
 
-        return this.dishCategoryMapper.modelToResponse(dishCategoryModel, imageLink);
+        return this.dishCategoryMapper.modelToResponse(dishCategoryModel, imageLink, this.dishService.getDishesByDishCategoryId(dishCategoryModel.getId()));
     }
 
     @Transactional
@@ -126,7 +129,7 @@ public class DishCategoryService {
                             });
                     dishCategoryModel.setDishModels(null);
                 }
-                return this.dishCategoryMapper.modelToResponse(this.dishCategoryRepository.save(dishCategoryModel), imageLink);
+                return this.dishCategoryMapper.modelToResponse(this.dishCategoryRepository.save(dishCategoryModel), imageLink, this.dishService.getDishesByDishCategoryId(dishCategoryModel.getId()));
             }
         }
         else if(updateDishCategoryResponseDTO.dishesToRemove()!=null || updateDishCategoryResponseDTO.dishesToAdd()!=null){
@@ -193,7 +196,7 @@ public class DishCategoryService {
             this.imageService.deleteImage(oldImagePath);
         }
 
-        return this.dishCategoryMapper.modelToResponse(this.dishCategoryRepository.save(dishCategoryModel), imageLink);
+        return this.dishCategoryMapper.modelToResponse(this.dishCategoryRepository.save(dishCategoryModel), imageLink, this.dishService.getDishesByDishCategoryId(dishCategoryModel.getId()));
     }
 
 

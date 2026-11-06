@@ -14,10 +14,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
@@ -49,13 +46,22 @@ public class DishController {
                     )
             ),
             @ApiResponse(
-                    responseCode = "404", description = "O id da categoria enviada não foi encontrado."
+                    responseCode = "404", description = "O id da categoria enviada não foi encontrado.",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
             ),
             @ApiResponse(
-                    responseCode = "409", description = "Já existe um prato com o nome enviado"
+                    responseCode = "409", description = "Já existe um prato com o nome enviado",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
             ),
             @ApiResponse(
-                    responseCode = "400", description = "O preço ou tempo de preparo do prato está inválido."
+                    responseCode = "400", description = "O preço ou tempo de preparo do prato está inválido.",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
             )
     })
     @PostMapping
@@ -67,4 +73,5 @@ public class DishController {
         DishResponseDTO dishResponseDTO = this.dishService.createDish(userModel, createDishRequestDTO, image);
         return ResponseEntity.created(URI.create("/dishes/" + dishResponseDTO.id().toString())).body(dishResponseDTO);
     }
+
 }
