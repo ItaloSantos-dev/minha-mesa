@@ -26,7 +26,7 @@ import java.net.URI;
         description = "Operações relacionadas a categorias de pratos do restaurante"
 )
 @RestController
-@RequestMapping("dish-category")
+@RequestMapping("dish-categorys")
 public class DishCategoryController {
     private final DishCategoryService dishCategoryService;
 
@@ -72,11 +72,13 @@ public class DishCategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DishCategoryResponseDTO> findBySlug(
+    public ResponseEntity<DishCategoryResponseDTO> getById(
             @PathVariable Integer id
     ){
         return ResponseEntity.ok(this.dishCategoryService.getDishCategoryById(id));
     }
+
+
 
 
     @SecurityRequirement(name = "Bearer Authentication")
