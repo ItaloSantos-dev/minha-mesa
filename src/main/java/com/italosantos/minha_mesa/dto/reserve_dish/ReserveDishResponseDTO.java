@@ -11,7 +11,12 @@ public record ReserveDishResponseDTO(
         Integer dishId,
         BigDecimal dishPrice,
         Integer quantity,
+        Integer quantityCompleted,
+        Integer quantityCanceled,
+        Integer quantityPending,
+        BigDecimal priceFinal,
         LocalDateTime createdAt,
         ReserveDishStatus status
+
 ) {
 }

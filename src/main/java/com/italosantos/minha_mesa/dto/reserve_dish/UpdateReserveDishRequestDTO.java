@@ -5,8 +5,12 @@ import org.jspecify.annotations.Nullable;
 
 public record UpdateReserveDishRequestDTO(
         @Nullable
-        ReserveDishStatus newStatus,
+        Integer addQuantity,
+
         @Nullable
-        Integer newQuantity
+        Integer addCompletedQuantity,
+
+        @Nullable
+        Integer addCanceledQuantity
 ) {
 }

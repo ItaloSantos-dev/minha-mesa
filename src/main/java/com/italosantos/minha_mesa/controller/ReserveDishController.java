@@ -3,6 +3,7 @@ package com.italosantos.minha_mesa.controller;
 import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
 import com.italosantos.minha_mesa.dto.reserve_dish.CreateReserveDishRequestDTO;
 import com.italosantos.minha_mesa.dto.reserve_dish.ReserveDishResponseDTO;
+import com.italosantos.minha_mesa.dto.reserve_dish.UpdateReserveDishRequestDTO;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.service.ReserveDishService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,10 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -34,7 +32,7 @@ public class ReserveDishController {
         this.reserveDishService = reserveDishService;
     }
 
-    @SecurityRequirement(name = "******")
+    @SecurityRequirement(name = "Bearer Authentication")
     @Operation(
             summary = "Adiciona um prato a uma reserva",
             description = "Registra um prato em uma reserva em andamento pertencente ao restaurante do usuário autenticado."
@@ -70,4 +68,44 @@ public class ReserveDishController {
         return ResponseEntity.created(URI.create("/reserve-dishes/" + reserveDishResponseDTO.id()))
                 .body(reserveDishResponseDTO);
     }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Atualiza os dados de um prato da reserva",
+            description = "Atualiza as quantidades de pratos adicionados, cancelados ou completados em um registro de prato associado a uma reserva."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Prato da reserva atualizado com sucesso"),
+            @ApiResponse(
+                    responseCode = "400", description = "Os valores informados são inválidos ou ultrapassam a quantidade total de pratos",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "403", description = "O usuário não é proprietário do restaurante",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "Registro de prato da reserva não encontrado",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "409", description = "A reserva não permite mais alterações nos pratos",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            )
+    })
+    @PatchMapping("/{id}")
+    public ResponseEntity<ReserveDishResponseDTO> updateReserveDish(
+            @AuthenticationPrincipal UserModel userModel,
+            @PathVariable Integer id,
+            @RequestBody UpdateReserveDishRequestDTO updateReserveDishRequestDTO
+    ) {
+        ReserveDishResponseDTO reserveDishResponseDTO = this.reserveDishService.updateStatusById(
+                userModel,
+                id,
+                updateReserveDishRequestDTO
+        );
+
+        return ResponseEntity.ok(reserveDishResponseDTO);
+    }
+
 }
