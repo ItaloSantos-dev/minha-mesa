@@ -1,5 +1,6 @@
 package com.italosantos.minha_mesa.controller;
 
+import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
 import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
 import com.italosantos.minha_mesa.dto.reserve_dish.CreateReserveDishRequestDTO;
 import com.italosantos.minha_mesa.dto.reserve_dish.ReserveDishResponseDTO;
@@ -107,5 +108,36 @@ public class ReserveDishController {
 
         return ResponseEntity.ok(reserveDishResponseDTO);
     }
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Busca um prato da reserva pelo ID",
+            description = "Retorna os dados de um registro de prato associado a uma reserva do restaurante do proprietário."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Prato da reserva encontrado com sucesso"),
+            @ApiResponse(
+                    responseCode = "403", description = "O usuário não é proprietário do restaurante",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "Registro de prato da reserva não encontrado",
+                    content = @Content(schema = @Schema(implementation = ExceptionResponse.class))
+            )
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ReserveDishResponseDTO> getReserveDishById(
+            @AuthenticationPrincipal UserModel userModel,
+            @PathVariable Integer id
+    ) {
+        ReserveDishResponseDTO reserveDishResponseDTO = this.reserveDishService.getReserveDishById(
+                userModel,
+                id
+        );
+
+        return ResponseEntity.ok(reserveDishResponseDTO);
+    }
+
+
 
 }

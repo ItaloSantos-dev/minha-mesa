@@ -149,4 +149,20 @@ public class ReserveDishService {
         }
 
     }
+
+    public ReserveDishResponseDTO getReserveDishById(UserModel userModel, Integer id){
+
+        ReserveDishModel reserveDishModel =  this.reserveDIshRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        boolean userIsOwner = userModel.getId().equals(reserveDishModel.getDishModel().getRestaurantModel().getOwnerModel().getUserModel().getId());
+
+        boolean userIsClient = userModel.getId().equals(reserveDishModel.getReserveModel().getUserModel().getId());
+
+        if (!userIsOwner && !userIsClient)
+            throw new ResourceNotFoundException();
+
+        return this.reserveDishMapper.modelToResponse(reserveDishModel);
+
+    }
 }
