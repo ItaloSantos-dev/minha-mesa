@@ -42,6 +42,13 @@ public class ReserveDishModel {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+
+    @Column(name = "completed_quantity", nullable = false)
+    private Integer completedQuantity;
+
+    @Column(name = "canceled_quantity", nullable = false)
+    private Integer canceledQuantity;
+
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 

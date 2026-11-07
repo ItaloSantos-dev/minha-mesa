@@ -3,8 +3,7 @@ package com.italosantos.minha_mesa.model.enums;
 public enum ReserveDishStatus {
     PENDING("PENDING"),
     COMPLETED("COMPLETED"),
-    CANCELED("CANCELED"),
-    PARTIALLY_COMPLETED("PARTIALLY_COMPLETED");
+    CANCELED("CANCELED");
 
     private final String reserveDishStatus;
 
