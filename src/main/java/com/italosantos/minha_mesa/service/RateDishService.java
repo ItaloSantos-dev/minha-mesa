@@ -60,4 +60,12 @@ public class RateDishService {
         return this.rateDishMapper.modelToResponse(rateDishModel);
 
     }
+
+    public RateDishResponseDTO getRateDishById(Integer id){
+        RateDishModel rateDishModel = this.rateDishRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        return this.rateDishMapper.modelToResponse(rateDishModel);
+
+    }
 }

@@ -67,4 +67,24 @@ public class RateDishController {
                 URI.create("/rates-dish/" + rateDishResponseDTO.id())
         ).body(rateDishResponseDTO);
     }
+
+    @Operation(
+            summary = "Busca uma avaliação pelo ID",
+            description = "Retorna os dados da avaliação buscada pelo ID."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Avaliação encontrada com sucesso"),
+            @ApiResponse(
+                    responseCode = "404", description = "O ID da avaliação enviado não foi encontrado.",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            )
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<RateDishResponseDTO> getRateDishById(
+            @PathVariable Integer id
+    ) {
+        return ResponseEntity.ok(this.rateDishService.getRateDishById(id));
+    }
 }
