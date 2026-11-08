@@ -127,4 +127,9 @@ public class GlobalHandlerException {
     public ResponseEntity<ExceptionResponse> handlerAlreadyExistsReserveDishWithReserveAndDishException(AlreadyExistsReserveDishWithReserveAndDishException exception) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
+
+    @ExceptionHandler(AlreadyExistsRateDishOfReserveDishException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistsRateDishOfReserveDishException(AlreadyExistsRateDishOfReserveDishException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
 }

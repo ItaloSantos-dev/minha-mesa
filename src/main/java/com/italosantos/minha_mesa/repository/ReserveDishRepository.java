@@ -8,4 +8,6 @@ import java.util.Optional;
 
 public interface ReserveDishRepository extends JpaRepository<ReserveDishModel, Integer> {
     Boolean existsByReserveModelIdAndDishModelId(Integer reserveId, Integer dishId);
+
+    Optional<ReserveDishModel> findByIdAndReserveModelUserModelId(Integer id, Integer userModelId);
 }

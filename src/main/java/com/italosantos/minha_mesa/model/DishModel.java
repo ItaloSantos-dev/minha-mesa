@@ -6,11 +6,14 @@ import jakarta.validation.constraints.DecimalMin;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Table(name = "tb_dish")
 @Entity
 @Data
@@ -58,6 +61,33 @@ public class DishModel {
 
     @OneToMany(mappedBy = "dishModel")
     private List<ReserveDishModel> reserveDishModels;
+
+    public void updateRating(){
+        BigDecimal rateCount = BigDecimal.ZERO;
+        BigDecimal rateTotal = BigDecimal.ZERO;
+        for (ReserveDishModel reserveDishModel : this.reserveDishModels){
+            if (reserveDishModel.getRateDishModel()!=null){
+                rateCount = rateCount.add(BigDecimal.ONE);
+                rateTotal = rateTotal.add(BigDecimal.valueOf(reserveDishModel.getRateDishModel().getRating()));
+            }
+        }
+
+        if (rateCount.compareTo(BigDecimal.ZERO) == 0) {
+            System.out.println("Sem novo rating");
+
+            this.rating = null;
+            return;
+        }
+
+        BigDecimal avgRating = rateTotal.divide(rateCount, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(2))
+                .setScale(0, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(2));
+        System.out.println("Novo rating: " + avgRating);
+        this.rating = avgRating;
+
+
+    }
 
 
 

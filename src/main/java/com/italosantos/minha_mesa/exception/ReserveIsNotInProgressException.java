@@ -4,4 +4,8 @@ public class ReserveIsNotInProgressException extends RuntimeException {
     public ReserveIsNotInProgressException() {
         super("Só é possível adicionar pratos a reservas em andamento");
     }
+
+    public ReserveIsNotInProgressException(String message){
+        super(message);
+    }
 }
