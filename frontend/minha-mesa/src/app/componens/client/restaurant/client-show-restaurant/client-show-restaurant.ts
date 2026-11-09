@@ -14,20 +14,7 @@ import { ClientShowRestaurantWorkingSchedules } from '../client-show-restaurant-
 import { gsap } from 'gsap/gsap-core';
 import { ClientCreateReserve } from '../../reserve/client-create-reserve/client-create-reserve';
 
-interface RestaurantReview {
-  author: string;
-  initials: string;
-  rating: number;
-  comment: string;
-  date: string;
-}
 
-interface MenuHighlight {
-  name: string;
-  description: string;
-  price: string;
-  image: string;
-}
 
 @Component({
   selector: 'app-client-show-restaurant',
@@ -37,49 +24,7 @@ interface MenuHighlight {
 })
 export class ClientShowRestaurant {
   readonly restaurant = signal(<RestaurantResponseDTO> {});
-  readonly menuHighlights: MenuHighlight[] = [
-    {
-      name: 'Prato da casa',
-      description: 'Uma sugestão especial preparada com ingredientes frescos.',
-      price: 'R$ 42,90',
-      image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85',
-    },
-    {
-      name: 'Favorito da mesa',
-      description: 'Uma combinação saborosa para compartilhar bons momentos.',
-      price: 'R$ 36,90',
-      image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=900&q=85',
-    },
-    {
-      name: 'Doce momento',
-      description: 'Uma sobremesa especial para fechar a refeição.',
-      price: 'R$ 18,00',
-      image: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=85',
-    },
-  ];
-  readonly reviews: RestaurantReview[] = [
-    {
-      author: 'Mariana Costa',
-      initials: 'MC',
-      rating: 5,
-      comment: 'Ambiente acolhedor e pratos muito bem preparados. Foi uma ótima experiência!',
-      date: 'Há 2 dias',
-    },
-    {
-      author: 'Rafael Oliveira',
-      initials: 'RO',
-      rating: 5,
-      comment: 'Atendimento atencioso e comida deliciosa. Quero voltar em breve.',
-      date: 'Há 1 semana',
-    },
-    {
-      author: 'Camila Santos',
-      initials: 'CS',
-      rating: 4,
-      comment: 'Lugar agradável, perfeito para aproveitar uma refeição com calma.',
-      date: 'Há 2 semanas',
-    },
-  ];
+
   readonly weekDays: { value: DayOfWeek; label: string }[] = [
     { value: DayOfWeek.MONDAY, label: 'Segunda-feira' },
     { value: DayOfWeek.TUESDAY, label: 'Terça-feira' },
@@ -105,7 +50,40 @@ export class ClientShowRestaurant {
       { id: 4, dayOfWeek: DayOfWeek.THURSDAY, timeStart: "18:00", timeEnd: "23:00" },
       { id: 5, dayOfWeek: DayOfWeek.FRIDAY, timeStart: "18:00", timeEnd: "00:00" },
       { id: 6, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "18:00", timeEnd: "00:00" }
-    ]
+    ],
+    bestRatings: {
+      bestDishes: [
+        {
+          id: 1, name: "Hambúrguer da Casa", dishCategoryName: "Hambúrgueres", dishCategoryId: 1,
+          restaurantName: "Molho Sem Água", restaurantId: 1, description: "Hambúrguer artesanal com molho especial.",
+          preparationTime: 1200, rating: 4.9, price: 32.90, slug: "hamburguer-da-casa",
+          imageLink: "https://placehold.co/400x300", active: true
+        },
+        {
+          id: 2, name: "Batata Suprema", dishCategoryName: "Acompanhamentos", dishCategoryId: 2,
+          restaurantName: "Molho Sem Água", restaurantId: 1, description: "Batatas crocantes com cheddar e bacon.",
+          preparationTime: 900, rating: 4.8, price: 24.90, slug: "batata-suprema",
+          imageLink: "https://placehold.co/400x300", active: true
+        }
+      ],
+      bestRatesDish: [
+        {
+          id: 1, dishId: 1, clientName:'Agusto', dishName: "Hambúrguer da Casa", reserveId: 10,
+          restaurantName: "Molho Sem Água", rating: 5, comment: "Simplesmente perfeito!"
+        },
+        {
+          id: 2, dishId: 2, clientName:'Marcos', dishName: "Batata Suprema", reserveId: 11,
+          restaurantName: "Molho Sem Água", rating: 5, comment: "Muito saborosa!"
+        }
+      ]
+    }
+  }
+
+  getInitials(name:string):string{
+    return name
+    .split(' ')
+    .map(name => name[0])
+    .join('')
   }
 
   @ViewChild('divWorkingSchedules')
@@ -124,8 +102,6 @@ export class ClientShowRestaurant {
   private readonly destroyRef = inject(DestroyRef);
 
   ngOnInit(){
-    console.log(this.restaurant().workingDays);
-    
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params =>{
       const id = Number(params.get('id'));
       if (Number.isInteger(id) && id > 0) {

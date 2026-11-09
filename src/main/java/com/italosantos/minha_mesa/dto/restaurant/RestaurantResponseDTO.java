@@ -1,5 +1,7 @@
 package com.italosantos.minha_mesa.dto.restaurant;
 
+import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 
 import java.util.List;
@@ -12,6 +14,7 @@ public record RestaurantResponseDTO(
         Boolean active,
         String imagePerfilLink,
         String imageBannerLink,
-        List<WorkingScheduleResponseDTO> workingDays
+        List<WorkingScheduleResponseDTO> workingDays,
+        BestRatingsRestaurant bestRatings
 ) {
 }

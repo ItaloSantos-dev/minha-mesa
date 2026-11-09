@@ -1,19 +1,21 @@
 package com.italosantos.minha_mesa.service;
 
+import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.user.dashboard.DashboardUserResponseDTO;
 import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
 import com.italosantos.minha_mesa.infra.RedisCacheConfig;
+import com.italosantos.minha_mesa.mapper.DishMapper;
+import com.italosantos.minha_mesa.mapper.RateDishMapper;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
-import com.italosantos.minha_mesa.model.ReserveModel;
-import com.italosantos.minha_mesa.model.RestaurantModel;
-import com.italosantos.minha_mesa.model.UserModel;
+import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
-import com.italosantos.minha_mesa.repository.ReserveRepository;
-import com.italosantos.minha_mesa.repository.RestaurantRepository;
-import com.italosantos.minha_mesa.repository.UserRepository;
+import com.italosantos.minha_mesa.repository.*;
+import com.italosantos.minha_mesa.utility.RestaurantUtility;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,14 +35,16 @@ public class UserService implements UserDetailsService {
     private final RestaurantRepository restaurantRepository;
     private final RestaurantMapper restaurantMapper;
     private final ImageService imageService;
+    private final RestaurantUtility restaurantUtility;
 
-    public UserService(UserRepository userRepository, ReserveRepository reserveRepository, ReserveMapper reserveMapper, RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper, ImageService imageService) {
+    public UserService(UserRepository userRepository, ReserveRepository reserveRepository, ReserveMapper reserveMapper, RestaurantRepository restaurantRepository, RestaurantMapper restaurantMapper, ImageService imageService, RestaurantUtility restaurantUtility) {
         this.userRepository = userRepository;
         this.reserveRepository = reserveRepository;
         this.reserveMapper = reserveMapper;
         this.restaurantRepository = restaurantRepository;
         this.restaurantMapper = restaurantMapper;
         this.imageService = imageService;
+        this.restaurantUtility = restaurantUtility;
     }
 
     @Override
@@ -85,7 +89,7 @@ public class UserService implements UserDetailsService {
                 .map(r ->{
                     String imagePerfilUrl = this.imageService.getAssignedUrl(r.getImagePerfilPath());
                     String imageBannerUrl = this.imageService.getAssignedUrl(r.getImageBannerPath());
-                    return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl);
+                    return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(r));
                 }).toList();
 
         return new DashboardUserResponseDTO(recentRestaurantsDTO, reservesToday);

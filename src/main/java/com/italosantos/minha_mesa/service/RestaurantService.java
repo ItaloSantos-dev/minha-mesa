@@ -1,7 +1,10 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
+import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
@@ -17,6 +20,7 @@ import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.model.enums.UserRole;
 import com.italosantos.minha_mesa.repository.*;
+import com.italosantos.minha_mesa.utility.RestaurantUtility;
 import org.jspecify.annotations.Nullable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -47,9 +51,10 @@ public class RestaurantService {
     private final ScheduleExceptionRepository scheduleExceptionRepository;
     private final ScheduleExceptionMapper scheduleExceptionMapper;
     private final ImageService imageService;
+    private final RestaurantUtility restaurantUtility;
 
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper, ImageService imageService) {
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper, ImageService imageService, RestaurantUtility restaurantUtility) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
@@ -64,6 +69,7 @@ public class RestaurantService {
         this.scheduleExceptionRepository = scheduleExceptionRepository;
         this.scheduleExceptionMapper = scheduleExceptionMapper;
         this.imageService = imageService;
+        this.restaurantUtility = restaurantUtility;
     }
 
 
@@ -95,7 +101,9 @@ public class RestaurantService {
         String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
         this.restaurantRepository.save(restaurantModel);
 
-        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl);
+
+
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
     }
     @Cacheable(
             value = RedisCacheConfig.RESTAURANTCACHENAME,
@@ -109,7 +117,7 @@ public class RestaurantService {
         String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
         String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
 
-        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl);
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
     }
 
 
@@ -202,7 +210,7 @@ public class RestaurantService {
                 .map(r ->{
                     String imagePerfilUrl = this.imageService.getAssignedUrl(r.getImagePerfilPath());
                     String imageBannerUrl = this.imageService.getAssignedUrl(r.getImageBannerPath());
-                    return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl);
+                    return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(r));
                 }).toList();
     }
 }

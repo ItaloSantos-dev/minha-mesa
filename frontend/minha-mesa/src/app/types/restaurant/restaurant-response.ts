@@ -1,4 +1,5 @@
 import { WorkingScheduleResponseDTO } from "../working_schedule/working-schedule-response";
+import { BestRatingsrestaurant } from "./best-ratings-restaurant";
 
 export interface RestaurantResponseDTO{
     id:number;
@@ -9,5 +10,6 @@ export interface RestaurantResponseDTO{
     imagePerfilLink:string;
     imageBannerLink:string;
     workingDays:WorkingScheduleResponseDTO[];
+    bestRatings:BestRatingsrestaurant
 
 }

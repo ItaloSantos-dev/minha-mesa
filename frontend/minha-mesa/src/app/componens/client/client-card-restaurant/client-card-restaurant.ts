@@ -2,10 +2,11 @@ import { Component, input } from '@angular/core';
 import { RestaurantResponseDTO } from '../../../types/restaurant/restaurant-response';
 import { WorkingScheduleResponseDTO } from '../../../types/working_schedule/working-schedule-response';
 import { mapDayNumber } from '../../../types/enums/day-of-week';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-client-card-restaurant',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './client-card-restaurant.html',
   styleUrl: './client-card-restaurant.css',
 })

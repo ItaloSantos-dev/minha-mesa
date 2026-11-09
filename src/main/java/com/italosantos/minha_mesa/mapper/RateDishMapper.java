@@ -23,6 +23,7 @@ public class RateDishMapper {
     public RateDishResponseDTO modelToResponse(RateDishModel rateDishModel){
         return new RateDishResponseDTO(
                 rateDishModel.getId(),
+                rateDishModel.getReserveDishModel().getReserveModel().getUserModel().getName(),
                 rateDishModel.getReserveDishModel().getDishModel().getId(),
                 rateDishModel.getReserveDishModel().getDishModel().getName(),
                 rateDishModel.getReserveDishModel().getReserveModel().getId(),
