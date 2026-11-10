@@ -13,9 +13,14 @@
       </div>
     }
 
-    <span class="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-lg border border-white/70 bg-white/95 text-(--color-primary) shadow-sm" [title]="'Editar prato ' + dish().name">
+    <a
+      class="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-lg border border-white/70 bg-white/95 text-(--color-primary) shadow-sm transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+      [routerLink]="['/owner/restaurant/dishes', dish().id, 'update']"
+      [attr.aria-label]="'Editar prato ' + dish().name"
+      [title]="'Editar prato ' + dish().name"
+    >
       <i class="bi bi-pencil" aria-hidden="true"></i>
-    </span>
+    </a>
     <span class="absolute bottom-3 left-3 rounded-full bg-white/95 px-3 py-1.5 text-sm font-extrabold text-(--color-primary) shadow-sm backdrop-blur">
       {{ formatPrice() }}
     </span>

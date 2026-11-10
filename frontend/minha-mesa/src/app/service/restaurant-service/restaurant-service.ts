@@ -108,4 +108,17 @@ export class RestaurantService {
     )
   }
 
+  getDishById(id:number):Observable<DishResponseDTO>{
+    return this.httpClient.get<DishResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.FIND(id)
+    )
+  }
+
+  updateDishById(id:number, data:FormData):Observable<DishResponseDTO>{
+    return this.httpClient.patch<DishResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.UPDATE(id),
+      data
+    )
+  }
+
 }

@@ -1,8 +1,8 @@
 export interface DishResponseDTO{
     id: number;
     name: string;
-    dishCategoryName: string;
-    dishCategoryId: number;
+    dishCategoryName: string | null;
+    dishCategoryId: number | null;
     restaurantName: string;
     restaurantId: number;
     description: string | null;

@@ -29,7 +29,13 @@ export const API_BACK_CONFIG = {
             }
         },
         DISH:{
-            CREATE:'/dishes'
+            CREATE:'/dishes',
+            FIND:(id:number):string =>{
+                return `/dishes/${id}`
+            },
+            UPDATE:(id:number):string =>{
+                return `/dishes/${id}`
+            }
         },
         RESERVE:{
             CREATE:'/reserves',

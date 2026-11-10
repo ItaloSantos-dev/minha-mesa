@@ -20,6 +20,7 @@ import { ClientShowReserves } from './componens/client/reserve/client-show-reser
 import { ClientShowDishes } from './componens/client/restaurant/dish/client-show-dishes/client-show-dishes';
 import { OwnerShowDishes } from './componens/owner/restaurant/dish/owner-show-dishes/owner-show-dishes';
 import { OwnerCreateDish } from './componens/owner/restaurant/dish/owner-create-dish/owner-create-dish';
+import { OwnerUpdateDish } from './componens/owner/restaurant/dish/owner-update-dish/owner-update-dish';
 
 export const routes: Routes = [
     {
@@ -103,9 +104,14 @@ export const routes: Routes = [
                         component:OwnerShowReserve
 
                     },
+
                     {
                         path:'dishes/create',
                         component:OwnerCreateDish
+                    },
+                    {
+                        path:'dishes/:id/update',
+                        component:OwnerUpdateDish
                     },
                     {
                         path:'dishes',
