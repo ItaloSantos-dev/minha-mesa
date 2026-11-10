@@ -6,7 +6,7 @@ import { ExceptionService } from '../../../../../service/exception-service/excep
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { DishesOfRestauranteResponseDTO } from '../../../../../types/dish/dishes-of-restaurant-response';
 import { MessageError } from '../../../../message-error/message-error';
-import { OwnerCardDish } from './owner-card-dish/owner-card-dish';
+import { OwnerCardDish } from '../owner-card-dish/owner-card-dish';
 
 @Component({
   selector: 'app-owner-show-dishes',
