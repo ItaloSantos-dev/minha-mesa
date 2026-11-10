@@ -29,7 +29,7 @@ export class OwnerShowDishes {
   );
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(2);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.DISHES);
     this.loadDishes();
   }
 

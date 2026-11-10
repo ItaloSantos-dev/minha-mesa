@@ -158,7 +158,7 @@ export class OwnerShowTables {
   }
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(3);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.TABLES);
     this.loadTables();
   }
   createTableRequest():CreateTableRequestDTO {

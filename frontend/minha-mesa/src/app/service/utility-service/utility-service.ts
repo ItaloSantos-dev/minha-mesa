@@ -13,6 +13,7 @@ export class UtilityService {
     OWNER_DASHBOARD: 'owner/restaurant/dashboard',
     OWNER_SHOW_RESERVES: 'owner/restaurant/reservations',
     OWNER_SHOW_DISHES: 'owner/restaurant/dishes',
+    OWNER_SHOW_DISH_CATEGORIES: 'owner/restaurant/dish-cateogories',
     OWNER_SHOW_TABLES: 'owner/restaurant/tables',
     OWNER_SHOW_WORKING_SCHEDULES: 'owner/restaurant/working-schedules',
     OWNER_SHOW_SCHEDULE_EXCEPTIONS: 'owner/restaurant/schedule-exceptions',
@@ -20,6 +21,16 @@ export class UtilityService {
     CLIENT_SHOW_RESERVES: 'client/reservations',
     CLIENT_SHOW_DISHES: (id:number):string =>{return `client/restaurants/${id}/dishes`}
   }
+
+  static ownerMenuPosition = {
+    DASHBOARD: 0,
+    RESERVES: 1,
+    DISH_CATEGORIES: 2,
+    DISHES: 3,
+    TABLES: 4,
+    WORKING_SCHEDULES: 5,
+    SCHEDULE_EXCEPTIONS: 6
+  };
 
   private updateCurrentPageSubject = new Subject<number>();
   updateCurrentPage$ = this.updateCurrentPageSubject.asObservable();

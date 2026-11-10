@@ -47,7 +47,7 @@ export class OwnerUpdateDish {
   });
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(2);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.DISHES);
     this.loadDishCategories();
 
     const id = this.route.snapshot.paramMap.get('id');

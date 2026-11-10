@@ -265,7 +265,7 @@ export class OwnerShowReserve {
   }
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(1);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.RESERVES);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.restaurantService.getReserveOfRestaurantById(Number(id)).subscribe({

@@ -44,7 +44,7 @@ export class OwnerCreateDish {
   });
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(2);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.DISHES);
     this.loadDishCategories();
   }
 

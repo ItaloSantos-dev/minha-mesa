@@ -248,7 +248,7 @@ export class OwnerShowReserve {
   }
 
   ngOnInit(){
-    this.utilityService.updateCurrentPageOfOwnerMenu(1);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.RESERVES);
     this.loadReserves(1);
   }
 

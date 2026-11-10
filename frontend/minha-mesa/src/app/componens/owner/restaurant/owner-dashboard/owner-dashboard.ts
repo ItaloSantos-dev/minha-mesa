@@ -168,7 +168,7 @@ export class OwnerDashboard {
 
   ngOnInit(){
     const lastFetchedGetDashboard = localStorage.getItem(this.LASTFETCHEDGETDASHBOARDTOKEN);
-    this.utilityService.updateCurrentPageOfOwnerMenu(0);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.DASHBOARD);
     if (lastFetchedGetDashboard){     
       const dateTimeOflastFetchedGetDashboard = new Date(lastFetchedGetDashboard);
       const FIVE_MINUTES = 5 * 60 * 1000
