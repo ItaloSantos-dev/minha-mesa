@@ -17,7 +17,7 @@ import { ClientHome } from './componens/client/client-home/client-home';
 import { ClientSearchRestaurants } from './componens/client/restaurant/client-search-restaurants/client-search-restaurants';
 import { ClientShowRestaurant } from './componens/client/restaurant/client-show-restaurant/client-show-restaurant';
 import { ClientShowReserves } from './componens/client/reserve/client-show-reserves/client-show-reserves';
-import { ClientShowDishes } from './componens/client/dish/client-show-dishes/client-show-dishes';
+import { ClientShowDishes } from './componens/client/restaurant/dish/client-show-dishes/client-show-dishes';
 import { OwnerShowDishes } from './componens/owner/restaurant/dish/owner-show-dishes/owner-show-dishes';
 
 export const routes: Routes = [

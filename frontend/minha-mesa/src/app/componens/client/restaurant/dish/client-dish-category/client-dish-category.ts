@@ -9,7 +9,7 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { DishCategoryResponseDTO } from '../../../../types/dish_category/dish-category-response';
+import { DishCategoryResponseDTO } from '../../../../../types/dish_category/dish-category-response';
 import { ClientCardDish } from '../client-card-dish/client-card-dish';
 
 @Component({

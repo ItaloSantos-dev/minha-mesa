@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { DishResponseDTO } from '../../../../types/dish/dish-repsonse';
+import { DishResponseDTO } from '../../../../../types/dish/dish-repsonse';
 
 @Component({
   selector: 'app-client-card-dish',

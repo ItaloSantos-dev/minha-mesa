@@ -3,12 +3,12 @@ import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, signa
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EMPTY, catchError, switchMap } from 'rxjs';
-import { MessageError } from '../../../message-error/message-error';
-import { ExceptionService } from '../../../../service/exception-service/exception-service';
-import { RestaurantService } from '../../../../service/restaurant-service/restaurant-service';
-import { UtilityService } from '../../../../service/utility-service/utility-service';
-import { ExceptionResponse } from '../../../../types/exception/excpetion-response';
-import { DishesOfRestauranteResponseDTO } from '../../../../types/dish/dishes-of-restaurant-response';
+import { MessageError } from '../../../../message-error/message-error';
+import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { UtilityService } from '../../../../../service/utility-service/utility-service';
+import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
+import { DishesOfRestauranteResponseDTO } from '../../../../../types/dish/dishes-of-restaurant-response';
 import { ClientCardDish } from '../client-card-dish/client-card-dish';
 import { ClientDishCategory } from '../client-dish-category/client-dish-category';
 
