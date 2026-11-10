@@ -1,7 +1,7 @@
 import { Component, DestroyRef, ElementRef, inject, Output, signal, ViewChild, ViewChildren } from '@angular/core';
 import { RestaurantResponseDTO } from '../../../../types/restaurant/restaurant-response';
 import { RestaurantService } from '../../../../service/restaurant-service/restaurant-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MessageError } from '../../../message-error/message-error';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ExceptionService } from '../../../../service/exception-service/exception-service';
@@ -18,7 +18,7 @@ import { ClientCreateReserve } from '../../reserve/client-create-reserve/client-
 
 @Component({
   selector: 'app-client-show-restaurant',
-  imports: [MessageError, ClientShowRestaurantWorkingSchedules, ClientCreateReserve],
+  imports: [MessageError, ClientShowRestaurantWorkingSchedules, ClientCreateReserve, RouterLink],
   templateUrl: './client-show-restaurant.html',
   styleUrl: './client-show-restaurant.css',
 })
@@ -158,6 +158,7 @@ export class ClientShowRestaurant {
   }
 
   loadRestaurant(id: number) {
+    this.utilityService.updateCurrentPageOfOwnerMenu(1)
     this.restaurantService.getRestaurantbyId(id).subscribe({
       next:(dado) =>{
         this.restaurant.set(dado);

@@ -2,6 +2,8 @@ package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
+import com.italosantos.minha_mesa.dto.dish_category.DishCategoryResponseDTO;
 import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
@@ -52,9 +54,11 @@ public class RestaurantService {
     private final ScheduleExceptionMapper scheduleExceptionMapper;
     private final ImageService imageService;
     private final RestaurantUtility restaurantUtility;
+    private final DishMapper dishMapper;
+    private final DishCategoryMapper dishCategoryMapper;
 
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper, ImageService imageService, RestaurantUtility restaurantUtility) {
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper, ImageService imageService, RestaurantUtility restaurantUtility, DishMapper dishMapper, DishCategoryMapper dishCategoryMapper) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
@@ -70,6 +74,8 @@ public class RestaurantService {
         this.scheduleExceptionMapper = scheduleExceptionMapper;
         this.imageService = imageService;
         this.restaurantUtility = restaurantUtility;
+        this.dishMapper = dishMapper;
+        this.dishCategoryMapper = dishCategoryMapper;
     }
 
 
@@ -220,4 +226,38 @@ public class RestaurantService {
                     return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(r));
                 }).toList();
     }
+
+    public DishesOfRestauranteResponseDTO getDishesOfRestaurantById(Integer id){
+        RestaurantModel restaurantModel = this.restaurantRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        if (!restaurantModel.getActive())
+            throw new NotPermitedException("Este restaurante está inativo");
+
+        List<DishCategoryResponseDTO> categories = restaurantModel.getDishCategoryModels().stream()
+                .map(category ->{
+                    List<DishResponseDTO> dishes = category.getDishModels().stream()
+                            .filter(DishModel::getActive)
+                            .map(dish -> {
+                                String dishLink =this.imageService.getAssignedUrl(dish.getImagePath());
+                                return this.dishMapper.modelToResponse(dish, dishLink);
+                            })
+                            .toList();
+                    String imageLink = this.imageService.getAssignedUrl(category.getImagePath());
+                    return this.dishCategoryMapper.modelToResponse(category, imageLink, dishes);
+                })
+                .toList();
+
+        List<DishResponseDTO> dishesWithoutCategory = restaurantModel.getDishModels().stream()
+                .filter(dish -> dish.getDishCategoryModel()==null && dish.getActive())
+                .map(dish -> {
+                    String dishLink =this.imageService.getAssignedUrl(dish.getImagePath());
+                    return this.dishMapper.modelToResponse(dish, dishLink);
+                })
+                .toList();
+
+        return new DishesOfRestauranteResponseDTO(categories, dishesWithoutCategory);
+    }
+
+
 }

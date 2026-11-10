@@ -15,6 +15,9 @@ export const API_BACK_CONFIG = {
             FIND: (id:number) : string =>{
                 return `/restaurants/${id}`
             },
+            DISHES: (id:number):string =>{
+                return `/restaurants/${id}/dishes`
+            },
             DASHBOARD : '/restaurants/dashboard',
             RESERVES : '/restaurants/reserves',
             TABLES : '/restaurants/tables',

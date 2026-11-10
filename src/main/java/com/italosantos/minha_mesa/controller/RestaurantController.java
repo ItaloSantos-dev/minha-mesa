@@ -1,5 +1,7 @@
 package com.italosantos.minha_mesa.controller;
 
+import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
+import com.italosantos.minha_mesa.dto.dish_category.DishCategoryResponseDTO;
 import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
@@ -270,5 +272,30 @@ public class RestaurantController {
             Pageable pageable
     ){
         return ResponseEntity.ok(this.restaurantService.getRestaurantsLikeName(search, pageable));
+    }
+
+    @Operation(
+            summary = "Busca os pratos de um restaurante pelo id",
+            description = "Retorna os pratos do restaurante, organizados por categoria, incluindo os pratos que não possuem categoria."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pratos encontrados com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Restaurante está inativo"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Restaurante não encontrado"
+            )
+    })
+    @GetMapping("/{id}/dishes")
+    public ResponseEntity<DishesOfRestauranteResponseDTO> getDishesOfRestaurantById(
+            @PathVariable Integer id
+    ) {
+        return ResponseEntity.ok(this.restaurantService.getDishesOfRestaurantById(id));
     }
 }

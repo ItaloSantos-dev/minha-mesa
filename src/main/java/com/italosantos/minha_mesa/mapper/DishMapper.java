@@ -2,6 +2,7 @@ package com.italosantos.minha_mesa.mapper;
 
 import com.italosantos.minha_mesa.dto.dish.CreateDishRequestDTO;
 import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
 import com.italosantos.minha_mesa.dto.dish.UpdateDishRequestDTO;
 import com.italosantos.minha_mesa.model.DishCategoryModel;
 import com.italosantos.minha_mesa.model.DishModel;

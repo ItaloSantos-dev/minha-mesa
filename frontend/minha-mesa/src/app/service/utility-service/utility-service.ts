@@ -16,7 +16,8 @@ export class UtilityService {
     OWNER_SHOW_WORKING_SCHEDULES: 'owner/restaurant/working-schedules',
     OWNER_SHOW_SCHEDULE_EXCEPTIONS: 'owner/restaurant/schedule-exceptions',
     CLIENT_HOME: 'client/home',
-    CLIENT_SHOW_RESERVES: 'client/reservations'
+    CLIENT_SHOW_RESERVES: 'client/reservations',
+    CLIENT_SHOW_DISHES: (id:number):string =>{return `client/restaurants/${id}/dishes`}
   }
 
   private updateCurrentPageSubject = new Subject<number>();

@@ -1,0 +1,58 @@
+<section [attr.aria-labelledby]="'dish-category-' + category().id">
+  <header class="mb-5">
+    <h2
+      [id]="'dish-category-' + category().id"
+      class="mb-0 [font-family:var(--font-heading)] text-2xl font-bold text-(--color-primary)"
+    >
+      {{ category().name }}
+    </h2>
+  </header>
+
+  <div class="relative">
+    @if (carouselEnabled()) {
+      <button
+        type="button"
+        class="carousel-arrow left-2"
+        [attr.aria-label]="'Pratos anteriores: ' + category().name"
+        (click)="moveCarousel(-1)"
+      >
+        <i class="bi bi-chevron-left" aria-hidden="true"></i>
+      </button>
+    }
+
+    <div
+      #viewport
+      class="dish-carousel-viewport"
+      [class.dish-carousel-active]="carouselEnabled()"
+      role="region"
+      [attr.aria-labelledby]="'dish-category-' + category().id"
+      [attr.aria-label]="'Pratos da categoria ' + category().name"
+      (scroll)="onCarouselScroll()"
+    >
+      <div class="dish-carousel-track">
+        @for (set of visibleSets(); track set) {
+          <div
+            #dishSet
+            class="dish-carousel-set"
+            [attr.aria-hidden]="carouselEnabled() && set !== 1 ? 'true' : null"
+          >
+            @for (dish of category().dishes; track dish.id) {
+              <app-client-card-dish [dish]="dish" />
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (carouselEnabled()) {
+      <button
+        type="button"
+        class="carousel-arrow right-2"
+        [attr.aria-label]="'Próximos pratos: ' + category().name"
+        (click)="moveCarousel(1)"
+      >
+        <i class="bi bi-chevron-right" aria-hidden="true"></i>
+      </button>
+    }
+  </div>
+</section>
