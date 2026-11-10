@@ -89,9 +89,12 @@ public class DishCategoryService {
 
     }
 
-    public DishCategoryResponseDTO getDishCategoryById(Integer id){
+    public DishCategoryResponseDTO getDishCategoryById(UserModel userModel, Integer id){
         DishCategoryModel dishCategoryModel = this.dishCategoryRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
+
+        if (!dishCategoryModel.getActive() && !userModel.getId().equals(dishCategoryModel.getRestaurantModel().getOwnerModel().getUserModel().getId()))
+            throw new NotPermitedException("Categoria inativa");
 
         String imageLink = this.imageService.getAssignedUrl(dishCategoryModel.getImagePath());
 

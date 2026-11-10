@@ -90,7 +90,8 @@ public class DishService {
     public DishResponseDTO getDishById(Integer id){
         DishModel dishModel = this.dishRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-
+        if(!dishModel.getActive())
+            throw new NotPermitedException("Este prato está inativo.");
         String imageLink = this.imageService.getAssignedUrl(dishModel.getImagePath());
         return this.dishMapper.modelToResponse(dishModel, imageLink);
     }

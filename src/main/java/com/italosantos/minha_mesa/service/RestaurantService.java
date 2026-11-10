@@ -109,10 +109,15 @@ public class RestaurantService {
             value = RedisCacheConfig.RESTAURANTCACHENAME,
             key = "#id"
     )
+
+
     public RestaurantResponseDTO getRestaurantById(Integer id){
         RestaurantModel restaurantModel =
                 this.restaurantRepository.findById(id)
                         .orElseThrow(() -> new RestaurantNotFoundException(id));
+
+        if (!restaurantModel.getActive())
+            throw new NotPermitedException("Este resaurante está inativo");
 
         String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
         String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
@@ -150,7 +155,8 @@ public class RestaurantService {
         if (! this.restaurantRepository.existsById(id))
             throw new ResourceNotFoundException();
         List<WorkingScheduleModel> workingScheduleModels = this.workingScheduleRepository.findByRestaurantModelId(id, pageable).getContent();
-
+        if (!workingScheduleModels.getFirst().getRestaurantModel().getActive())
+            throw new NotPermitedException("Este restaurante está inativo.");
         return workingScheduleModels.stream()
                 .map(this.workingScheduleMapper::modelToResponse)
                 .toList();
@@ -194,6 +200,7 @@ public class RestaurantService {
     public List<TableResponseDTO> getTablesOfRestaurantById(@AuthenticationPrincipal UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
+
         return ownerModel.getRestaurantModel().getTableModels().stream()
                 .map(this.tableMapper::modelToResponse)
                 .toList();
@@ -204,7 +211,7 @@ public class RestaurantService {
             value = RedisCacheConfig.RESTAURANTSEARCHEDCACHENAME
     )
     public List<RestaurantResponseDTO> getRestaurantsLikeName(String search, Pageable pageable){
-        List<RestaurantModel> restaurants = this.restaurantRepository.findByNameContainingIgnoreCase(search, pageable);
+        List<RestaurantModel> restaurants = this.restaurantRepository.findByNameContainingIgnoreCaseAndActiveTrue(search, pageable);
 
         return restaurants.stream()
                 .map(r ->{

@@ -73,9 +73,10 @@ public class DishCategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DishCategoryResponseDTO> getById(
+            @AuthenticationPrincipal UserModel userModel,
             @PathVariable Integer id
     ){
-        return ResponseEntity.ok(this.dishCategoryService.getDishCategoryById(id));
+        return ResponseEntity.ok(this.dishCategoryService.getDishCategoryById(userModel, id));
     }
 
 

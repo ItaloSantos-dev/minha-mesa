@@ -2,10 +2,7 @@ package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.rate_dish.CreateRateDishRequestDTO;
 import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
-import com.italosantos.minha_mesa.exception.AlreadyExistsRateDishOfReserveDishException;
-import com.italosantos.minha_mesa.exception.IllegalParameterException;
-import com.italosantos.minha_mesa.exception.ReserveIsNotInProgressException;
-import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
+import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.mapper.RateDishMapper;
 import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
@@ -64,7 +61,8 @@ public class RateDishService {
     public RateDishResponseDTO getRateDishById(Integer id){
         RateDishModel rateDishModel = this.rateDishRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-
+        if (!rateDishModel.getReserveDishModel().getDishModel().getActive())
+            throw new NotPermitedException("O prato deste cometário está inativo.");
         return this.rateDishMapper.modelToResponse(rateDishModel);
 
     }

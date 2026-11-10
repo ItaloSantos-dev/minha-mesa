@@ -162,6 +162,9 @@ public class ReserveDishService {
         if (!userIsOwner && !userIsClient)
             throw new ResourceNotFoundException();
 
+        if (!reserveDishModel.getDishModel().getActive())
+            throw new NotPermitedException("O prato deste comentário está inativo.");
+
         return this.reserveDishMapper.modelToResponse(reserveDishModel);
 
     }

@@ -9,5 +9,5 @@ public interface DishRepository extends JpaRepository<DishModel, Integer> {
 
     List<DishModel> findAllByDishCategoryModelId(Integer id);
     Boolean existsByNameAndRestaurantModelId(String name, Integer categoryModelId);
-    List<DishModel> findTop5ByRestaurantModelIdOrderByRatingDesc(Integer restaurantId);
+    List<DishModel> findTop5ByRestaurantModelIdAndActiveTrueOrderByRatingDesc(Integer restaurantId);
 }

@@ -33,8 +33,8 @@ public class RestaurantUtility {
 
 
     public BestRatingsRestaurant getBestsRatingOfRestaurant(RestaurantModel restaurantModel){
-        List<DishModel> dishModels = this.dishRepository.findTop5ByRestaurantModelIdOrderByRatingDesc(restaurantModel.getId());
-        List<RateDishModel> rateDishModels = this.rateDishRepository.findTop5ByReserveDishModelDishModelRestaurantModelIdOrderByRatingDesc(restaurantModel.getId());
+        List<DishModel> dishModels = this.dishRepository.findTop5ByRestaurantModelIdAndActiveTrueOrderByRatingDesc(restaurantModel.getId());
+        List<RateDishModel> rateDishModels = this.rateDishRepository.findTop5ByReserveDishModelDishModelRestaurantModelIdAndReserveDishModelDishModelActiveTrueOrderByRatingDesc(restaurantModel.getId());
 
         List<DishResponseDTO> bestDishes = dishModels.stream()
                 .map(dish -> {

@@ -91,8 +91,8 @@ public class TableController {
             )
     })
     @GetMapping("/{id}")
-    public ResponseEntity<TableResponseDTO> getTableById(@PathVariable Integer id){
-        return ResponseEntity.ok(this.tableService.getTableById(id));
+    public ResponseEntity<TableResponseDTO> getTableById(@PathVariable Integer id, @AuthenticationPrincipal UserModel userModel){
+        return ResponseEntity.ok(this.tableService.getTableById(id, userModel));
     }
 
     @SecurityRequirement(name = "Bearer Authentication")

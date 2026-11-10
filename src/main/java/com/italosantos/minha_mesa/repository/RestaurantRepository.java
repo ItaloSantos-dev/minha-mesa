@@ -31,5 +31,5 @@ public interface RestaurantRepository extends JpaRepository<RestaurantModel, Int
             @Param("status") ReserveStatus status
     );
 
-    List<RestaurantModel> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    List<RestaurantModel> findByNameContainingIgnoreCaseAndActiveTrue(String name, Pageable pageable);
 }

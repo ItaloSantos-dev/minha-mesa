@@ -55,7 +55,7 @@ public class ReserveService {
             throw new ThisDateOfReserveIsNotPermitedException(scheduleExceptionModel.get());
 
         if (!tableModel.getActive())
-            throw new IllegalParameterException();
+            throw new NotPermitedException("Esta mesa está inativa");
 
         if (!this.workingScheduleRepository.existsByRestaurantModelIdAndDayOfWeekAndTimeStartAndTimeEnd(
                 tableModel.getRestaurantModel().getId(),
