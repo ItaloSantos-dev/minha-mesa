@@ -298,4 +298,28 @@ public class RestaurantController {
     ) {
         return ResponseEntity.ok(this.restaurantService.getDishesOfRestaurantById(id));
     }
+
+
+    @Operation(
+            summary = "Buscar pratos do restaurante do usuário autenticado",
+            description = "Retorna as categorias e os pratos cadastrados no restaurante vinculado ao proprietário autenticado."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pratos do restaurante retornados com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário não autenticado"
+            )
+    })
+    @GetMapping("/dishes")
+    public ResponseEntity<DishesOfRestauranteResponseDTO> getDishesOfRestaurantByUserModel(
+            @AuthenticationPrincipal UserModel userModel
+    ) {
+        return ResponseEntity.ok(this.restaurantService.getDishesOfRestaurantByUserModel(userModel));
+    }
+
+
 }

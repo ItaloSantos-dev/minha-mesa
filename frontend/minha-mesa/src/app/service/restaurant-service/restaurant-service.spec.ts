@@ -33,4 +33,14 @@ describe('RestaurantService', () => {
     expect(request.request.method).toBe('GET');
     request.flush({ categories: [], dishesWithoutCategories: [] });
   });
+
+  it('requests dishes for the authenticated restaurant', () => {
+    service.getDishesOfOwnerRestaurant().subscribe();
+
+    const request = httpTestingController.expectOne(
+      'http://localhost:8080/restaurants/dishes',
+    );
+    expect(request.request.method).toBe('GET');
+    request.flush({ categories: [], dishesWithoutCategories: [] });
+  });
 });

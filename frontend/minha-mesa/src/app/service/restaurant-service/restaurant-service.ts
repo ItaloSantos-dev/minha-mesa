@@ -94,4 +94,10 @@ export class RestaurantService {
     )
   }
 
+  getDishesOfOwnerRestaurant():Observable<DishesOfRestauranteResponseDTO>{
+    return this.httpClient.get<DishesOfRestauranteResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.OWNER_DISHES
+    )
+  }
+
 }

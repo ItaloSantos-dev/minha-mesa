@@ -128,7 +128,7 @@ export class OwnerShowWorkingSchedules {
 
   ngOnInit() {
     this.loadWorkingSchedules(true);
-    this.utilityService.updateCurrentPageOfOwnerMenu(3);
+    this.utilityService.updateCurrentPageOfOwnerMenu(4);
   }
 
 }

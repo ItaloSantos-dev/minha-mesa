@@ -18,6 +18,7 @@ export const API_BACK_CONFIG = {
             DISHES: (id:number):string =>{
                 return `/restaurants/${id}/dishes`
             },
+            OWNER_DISHES: '/restaurants/dishes',
             DASHBOARD : '/restaurants/dashboard',
             RESERVES : '/restaurants/reserves',
             TABLES : '/restaurants/tables',

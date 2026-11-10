@@ -28,6 +28,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -227,13 +228,7 @@ public class RestaurantService {
                 }).toList();
     }
 
-    public DishesOfRestauranteResponseDTO getDishesOfRestaurantById(Integer id){
-        RestaurantModel restaurantModel = this.restaurantRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new);
-
-        if (!restaurantModel.getActive())
-            throw new NotPermitedException("Este restaurante está inativo");
-
+    private DishesOfRestauranteResponseDTO getDishesOfRestaurant(RestaurantModel restaurantModel){
         List<DishCategoryResponseDTO> categories = restaurantModel.getDishCategoryModels().stream()
                 .map(category ->{
                     List<DishResponseDTO> dishes = category.getDishModels().stream()
@@ -258,6 +253,28 @@ public class RestaurantService {
 
         return new DishesOfRestauranteResponseDTO(categories, dishesWithoutCategory);
     }
+
+    public DishesOfRestauranteResponseDTO getDishesOfRestaurantById(Integer id){
+        RestaurantModel restaurantModel = this.restaurantRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        if (!restaurantModel.getActive())
+            throw new NotPermitedException("Este restaurante está inativo");
+
+
+
+        return this.getDishesOfRestaurant(restaurantModel);
+    }
+
+    public DishesOfRestauranteResponseDTO getDishesOfRestaurantByUserModel(UserModel userModel){
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+
+        return this.getDishesOfRestaurant(ownerModel.getRestaurantModel());
+    }
+
+
 
 
 }

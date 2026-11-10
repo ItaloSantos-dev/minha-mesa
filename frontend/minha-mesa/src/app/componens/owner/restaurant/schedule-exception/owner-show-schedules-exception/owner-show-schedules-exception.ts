@@ -200,7 +200,7 @@ export class OwnerShowSchedulesException {
   
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(4);
+    this.utilityService.updateCurrentPageOfOwnerMenu(5);
     this.loadScheduleExceptions(true);
   }
 
