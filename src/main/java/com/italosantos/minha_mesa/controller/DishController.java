@@ -67,7 +67,7 @@ public class DishController {
             )
     })
     @PostMapping
-    public ResponseEntity<DishResponseDTO> createDishresponseDTO(
+    public ResponseEntity<DishResponseDTO> createDish(
             @AuthenticationPrincipal UserModel userModel,
             @RequestPart("data")CreateDishRequestDTO createDishRequestDTO,
             @RequestPart("image")MultipartFile image

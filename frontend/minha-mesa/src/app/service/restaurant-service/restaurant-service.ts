@@ -10,6 +10,7 @@ import { TableResponseDTO } from '../../types/table/table-response';
 import { WorkingScheduleResponseDTO } from '../../types/working_schedule/working-schedule-response';
 import { ScheduleExceptionResponseDTO } from '../../types/schedule_exception/schedule-exception-response';
 import { DishesOfRestauranteResponseDTO } from '../../types/dish/dishes-of-restaurant-response';
+import { DishResponseDTO } from '../../types/dish/dish-repsonse';
 
 @Injectable({
   providedIn: 'root',
@@ -97,6 +98,13 @@ export class RestaurantService {
   getDishesOfOwnerRestaurant():Observable<DishesOfRestauranteResponseDTO>{
     return this.httpClient.get<DishesOfRestauranteResponseDTO>(
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.OWNER_DISHES
+    )
+  }
+
+  createDish(data:FormData):Observable<DishResponseDTO>{
+    return this.httpClient.post<DishResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.CREATE,
+      data
     )
   }
 

@@ -28,6 +28,9 @@ export const API_BACK_CONFIG = {
                 return `/restaurants?search=${search}&page=${page}`
             }
         },
+        DISH:{
+            CREATE:'/dishes'
+        },
         RESERVE:{
             CREATE:'/reserves',
             UPDATE:'/reserves'

@@ -43,4 +43,18 @@ describe('RestaurantService', () => {
     expect(request.request.method).toBe('GET');
     request.flush({ categories: [], dishesWithoutCategories: [] });
   });
+
+  it('creates a dish using the dishes endpoint', () => {
+    const formData = new FormData();
+    formData.append('data', new Blob(['{}'], { type: 'application/json' }));
+    formData.append('image', new File(['image'], 'dish.png', { type: 'image/png' }));
+
+    service.createDish(formData).subscribe();
+
+    const request = httpTestingController.expectOne('http://localhost:8080/dishes');
+    expect(request.request.method).toBe('POST');
+    expect(request.request.body.get('data')).toBeInstanceOf(Blob);
+    expect(request.request.body.get('image')).toBeInstanceOf(File);
+    request.flush({});
+  });
 });

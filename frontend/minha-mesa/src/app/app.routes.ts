@@ -19,6 +19,7 @@ import { ClientShowRestaurant } from './componens/client/restaurant/client-show-
 import { ClientShowReserves } from './componens/client/reserve/client-show-reserves/client-show-reserves';
 import { ClientShowDishes } from './componens/client/restaurant/dish/client-show-dishes/client-show-dishes';
 import { OwnerShowDishes } from './componens/owner/restaurant/dish/owner-show-dishes/owner-show-dishes';
+import { OwnerCreateDish } from './componens/owner/restaurant/dish/owner-create-dish/owner-create-dish';
 
 export const routes: Routes = [
     {
@@ -101,6 +102,10 @@ export const routes: Routes = [
                         path:'reservations',
                         component:OwnerShowReserve
 
+                    },
+                    {
+                        path:'dishes/create',
+                        component:OwnerCreateDish
                     },
                     {
                         path:'dishes',

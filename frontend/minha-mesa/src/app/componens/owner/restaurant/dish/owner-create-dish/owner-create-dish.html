@@ -1,0 +1,156 @@
+<app-message-error />
+
+<main class="min-h-full bg-[radial-gradient(circle_at_100%_0%,color-mix(in_srgb,var(--color-highlight)_12%,transparent),transparent_28rem)] px-5 py-10 pb-12 [font-family:var(--font-body)] text-(--color-coffee) sm:px-[4vw] max-[760px]:px-4 max-[760px]:py-6 max-[760px]:pb-8">
+  <header class="mb-8">
+    <a
+      [routerLink]="'/owner/restaurant/dishes'"
+      class="mb-4 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-(--color-secondary) transition hover:bg-white/70 hover:text-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+    >
+      <i class="bi bi-arrow-left" aria-hidden="true"></i>
+      Voltar aos pratos
+    </a>
+    <p class="mb-[.35rem] text-[.7rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Cardápio do restaurante</p>
+    <h1 class="mb-2 [font-family:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] text-(--color-primary)">Novo prato</h1>
+    <p class="mb-0 text-[.85rem] text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">Preencha as informações para adicionar um prato ao cardápio.</p>
+  </header>
+
+  <form
+    class="grid gap-6 rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 p-5 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)] sm:p-8"
+    [formGroup]="form"
+    (ngSubmit)="ngOnSubmit()"
+    novalidate
+  >
+    <div class="grid gap-5 md:grid-cols-2">
+      <label class="grid content-start gap-2 text-sm font-semibold" for="dish-name">
+        Nome do prato
+        <input
+          id="dish-name"
+          type="text"
+          formControlName="name"
+          class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+          placeholder="Ex.: Risoto de cogumelos"
+        />
+        @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+          <span class="text-xs font-medium text-[#a23b31]" role="alert">Informe o nome do prato.</span>
+        }
+      </label>
+
+      <label class="grid content-start gap-2 text-sm font-semibold" for="dish-category">
+        Categoria <span class="font-normal text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">(opcional)</span>
+        <select
+          id="dish-category"
+          formControlName="dishCategory"
+          class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+        >
+          <option [ngValue]="null">Sem categoria</option>
+          @for (category of dishCategories(); track category.id) {
+            <option [ngValue]="category.id">{{ category.name }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="grid content-start gap-2 text-sm font-semibold" for="dish-preparation-time">
+        Tempo de preparo <span class="font-normal text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">(segundos)</span>
+        <input
+          id="dish-preparation-time"
+          type="number"
+          formControlName="preparationTime"
+          min="1"
+          step="1"
+          class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+          placeholder="Ex.: 1800"
+        />
+        @if (form.controls.preparationTime.touched && form.controls.preparationTime.hasError('required')) {
+          <span class="text-xs font-medium text-[#a23b31]" role="alert">Informe o tempo de preparo em segundos.</span>
+        }
+        @if (form.controls.preparationTime.touched && form.controls.preparationTime.hasError('min')) {
+          <span class="text-xs font-medium text-[#a23b31]" role="alert">O tempo de preparo deve ser maior que zero.</span>
+        }
+      </label>
+
+      <label class="grid content-start gap-2 text-sm font-semibold" for="dish-price">
+        Preço
+        <span class="flex items-center rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white focus-within:border-(--color-secondary) focus-within:ring-2 focus-within:ring-(--color-secondary)">
+          <span class="border-r border-[color-mix(in_srgb,var(--color-coffee)_12%,transparent)] px-3 py-2.5 text-sm text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">R$</span>
+          <input
+            id="dish-price"
+            type="number"
+            formControlName="price"
+            min="0.01"
+            step="0.01"
+            class="w-full rounded-r-lg bg-transparent px-3 py-2.5 text-sm font-normal outline-none"
+            placeholder="0,00"
+          />
+        </span>
+        @if (form.controls.price.touched && form.controls.price.hasError('required')) {
+          <span class="text-xs font-medium text-[#a23b31]" role="alert">Informe o preço do prato.</span>
+        }
+        @if (form.controls.price.touched && form.controls.price.hasError('min')) {
+          <span class="text-xs font-medium text-[#a23b31]" role="alert">O preço deve ser maior que zero.</span>
+        }
+      </label>
+    </div>
+
+    <label class="grid gap-2 text-sm font-semibold" for="dish-description">
+      Descrição <span class="font-normal text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">(opcional)</span>
+      <textarea
+        id="dish-description"
+        rows="4"
+        formControlName="description"
+        class="w-full resize-y rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+        placeholder="Descreva os ingredientes ou detalhes do prato."
+      ></textarea>
+    </label>
+
+    <div class="grid gap-2">
+      <span class="text-sm font-semibold">Imagem do prato</span>
+      <label
+        for="dish-image"
+        class="group relative grid min-h-48 cursor-pointer place-items-center overflow-hidden rounded-xl border-2 border-dashed border-[color-mix(in_srgb,var(--color-coffee)_20%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_35%,white)] text-center transition hover:border-(--color-primary)"
+      >
+        @if (imagePath()) {
+          <img
+            [src]="imagePath()"
+            alt="Pré-visualização da imagem do prato"
+            class="absolute inset-0 h-full w-full object-contain"
+          />
+          <span class="absolute bottom-3 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-(--color-coffee) shadow">
+            Clique para trocar a imagem
+          </span>
+        } @else {
+          <span class="px-5 py-8">
+            <i class="bi bi-cloud-arrow-up mb-3 block text-3xl text-(--color-secondary)" aria-hidden="true"></i>
+            <span class="block text-sm font-semibold">Clique para selecionar uma imagem</span>
+            <span class="mt-1 block text-xs font-normal text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Selecione um arquivo de imagem para o prato.</span>
+          </span>
+        }
+        <input
+          id="dish-image"
+          type="file"
+          accept="image/*"
+          class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+          (change)="onFileSelected($event)"
+        />
+      </label>
+      @if (imageTouched() && !imagePath()) {
+        <span class="text-xs font-medium text-[#a23b31]" role="alert">Selecione uma imagem para o prato.</span>
+      }
+    </div>
+
+    <footer class="flex justify-end gap-3 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] pt-5 max-[480px]:flex-col-reverse">
+      <a
+        [routerLink]="'/owner/restaurant/dishes'"
+        class="inline-flex cursor-pointer items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] px-4 py-2.5 text-sm font-semibold transition hover:bg-[color-mix(in_srgb,var(--color-coffee)_6%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+      >
+        Cancelar
+      </a>
+      <button
+        type="submit"
+        class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-(--color-primary) px-4 py-2.5 text-sm font-bold text-white transition hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+      >
+        <i class="bi bi-check-lg" aria-hidden="true"></i>
+        Salvar prato
+      </button>
+    </footer>
+  </form>
+</main>
