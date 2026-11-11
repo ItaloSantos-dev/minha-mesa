@@ -1,3 +1,5 @@
+import { RateDishResponseDTO } from "../rate_dish/rate-dish-response";
+
 export interface DishResponseDTO{
     id: number;
     name: string;
@@ -12,4 +14,5 @@ export interface DishResponseDTO{
     slug: string;
     imageLink: string;
     active: boolean;
+    rates:RateDishResponseDTO[]
 }

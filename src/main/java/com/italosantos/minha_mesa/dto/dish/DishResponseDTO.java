@@ -1,8 +1,10 @@
 package com.italosantos.minha_mesa.dto.dish;
 
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public record DishResponseDTO(
         Integer id,
@@ -18,6 +20,7 @@ public record DishResponseDTO(
         BigDecimal price,
         String slug,
         String imageLink,
-        Boolean active
+        Boolean active,
+        List<RateDishResponseDTO> rates
 ) {
 }

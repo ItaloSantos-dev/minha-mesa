@@ -1,5 +1,7 @@
 import { DayOfWeek } from '../types/enums/day-of-week';
 import { RestaurantResponseDTO } from '../types/restaurant/restaurant-response';
+import { BestRatingsFactory } from './best-ratings-factory';
+import { WorkingScheduleFactory } from './working-schedule.factory';
 
 export class RestaurantFactory {
   private static readonly searchMocks: RestaurantResponseDTO[] = [
@@ -19,32 +21,7 @@ export class RestaurantFactory {
       { id: 5, dayOfWeek: DayOfWeek.FRIDAY, timeStart: "18:00", timeEnd: "00:00" },
       { id: 6, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "18:00", timeEnd: "00:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 1, name: "Hambúrguer da Casa", dishCategoryName: "Hambúrgueres", dishCategoryId: 1,
-          restaurantName: "Molho Sem Água", restaurantId: 1, description: "Hambúrguer artesanal com molho especial.",
-          preparationTime: 1200, rating: 4.9, price: 32.90, slug: "hamburguer-da-casa",
-          imageLink: "https://placehold.co/400x300", active: true
-        },
-        {
-          id: 2, name: "Batata Suprema", dishCategoryName: "Acompanhamentos", dishCategoryId: 2,
-          restaurantName: "Molho Sem Água", restaurantId: 1, description: "Batatas crocantes com cheddar e bacon.",
-          preparationTime: 900, rating: 4.8, price: 24.90, slug: "batata-suprema",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 1, clientName:'Autor',dishId: 1, dishName: "Hambúrguer da Casa", reserveId: 10,
-          restaurantName: "Molho Sem Água", rating: 5, comment: "Simplesmente perfeito!"
-        },
-        {
-          id: 2, clientName:'Autor',dishId: 2, dishName: "Batata Suprema", reserveId: 11,
-          restaurantName: "Molho Sem Água", rating: 5, comment: "Muito saborosa!"
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 2,
@@ -63,28 +40,7 @@ export class RestaurantFactory {
       { id: 12, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "11:00", timeEnd: "23:00" },
       { id: 13, dayOfWeek: DayOfWeek.SUNDAY, timeStart: "17:00", timeEnd: "22:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 3, name: "Double Bacon", dishCategoryName: "Hambúrgueres", dishCategoryId: 3,
-          restaurantName: "Burger House", restaurantId: 2, description: "Hambúrguer duplo com bacon crocante.",
-          preparationTime: 1500, rating: 4.9, price: 38.90, slug: "double-bacon",
-          imageLink: "https://placehold.co/400x300", active: true
-        },
-        {
-          id: 4, name: "Milkshake de Chocolate", dishCategoryName: "Bebidas", dishCategoryId: 4,
-          restaurantName: "Burger House", restaurantId: 2, description: "Milkshake cremoso de chocolate.",
-          preparationTime: 300, rating: 4.7, price: 16.90, slug: "milkshake-chocolate",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 3, clientName:'Autor',dishId: 3, dishName: "Double Bacon", reserveId: 12,
-          restaurantName: "Burger House", rating: 5, comment: "O melhor hambúrguer que já comi."
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 3,
@@ -102,22 +58,7 @@ export class RestaurantFactory {
       { id: 18, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "18:00", timeEnd: "00:00" },
       { id: 19, dayOfWeek: DayOfWeek.SUNDAY, timeStart: "18:00", timeEnd: "23:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 5, name: "Pizza Suprema", dishCategoryName: "Pizzas", dishCategoryId: 5,
-          restaurantName: "Pizza Suprema", restaurantId: 3, description: "Pizza especial da casa com ingredientes selecionados.",
-          preparationTime: 1800, rating: 4.9, price: 59.90, slug: "pizza-suprema",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 4, clientName:'Autor',dishId: 5, dishName: "Pizza Suprema", reserveId: 13,
-          restaurantName: "Pizza Suprema", rating: 5, comment: "Massa excelente e muito recheio!"
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 4,
@@ -134,22 +75,7 @@ export class RestaurantFactory {
       { id: 23, dayOfWeek: DayOfWeek.THURSDAY, timeStart: "11:00", timeEnd: "15:00" },
       { id: 24, dayOfWeek: DayOfWeek.FRIDAY, timeStart: "11:00", timeEnd: "15:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 6, name: "Carne de Sol com Macaxeira", dishCategoryName: "Pratos regionais", dishCategoryId: 6,
-          restaurantName: "Sabor Nordestino", restaurantId: 4, description: "Carne de sol acompanhada de macaxeira.",
-          preparationTime: 2100, rating: 4.8, price: 42.90, slug: "carne-de-sol-com-macaxeira",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 5, clientName:'Autor',dishId: 6, dishName: "Carne de Sol com Macaxeira", reserveId: 14,
-          restaurantName: "Sabor Nordestino", rating: 5, comment: "Comida deliciosa e bem servida."
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 5,
@@ -159,29 +85,8 @@ export class RestaurantFactory {
     active: true,
     imagePerfilLink: "https://placehold.co/200x200",
     imageBannerLink: "https://placehold.co/1200x400",
-    workingDays: [
-      { id: 25, dayOfWeek: DayOfWeek.TUESDAY, timeStart: "18:00", timeEnd: "23:00" },
-      { id: 26, dayOfWeek: DayOfWeek.WEDNESDAY, timeStart: "18:00", timeEnd: "23:00" },
-      { id: 27, dayOfWeek: DayOfWeek.THURSDAY, timeStart: "18:00", timeEnd: "23:00" },
-      { id: 28, dayOfWeek: DayOfWeek.FRIDAY, timeStart: "18:00", timeEnd: "23:30" },
-      { id: 29, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "18:00", timeEnd: "23:30" }
-    ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 7, name: "Lasanha à Bolonhesa", dishCategoryName: "Massas", dishCategoryId: 7,
-          restaurantName: "La Pasta Italiana", restaurantId: 5, description: "Lasanha artesanal com molho à bolonhesa.",
-          preparationTime: 2400, rating: 4.9, price: 39.90, slug: "lasanha-a-bolonhesa",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 6, clientName:'Autor',dishId: 7, dishName: "Lasanha à Bolonhesa", reserveId: 15,
-          restaurantName: "La Pasta Italiana", rating: 5, comment: "Sabor incrível, recomendo!"
-        }
-      ]
-    }
+    workingDays: WorkingScheduleFactory.createMocks(3),
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 6,
@@ -200,22 +105,7 @@ export class RestaurantFactory {
       { id: 35, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "14:00", timeEnd: "23:00" },
       { id: 36, dayOfWeek: DayOfWeek.SUNDAY, timeStart: "14:00", timeEnd: "22:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 8, name: "Açaí Tradicional", dishCategoryName: "Açaí", dishCategoryId: 8,
-          restaurantName: "Tropical Açaí", restaurantId: 6, description: "Açaí cremoso com acompanhamentos à escolha.",
-          preparationTime: 600, rating: 4.9, price: 19.90, slug: "acai-tradicional",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 7, clientName:'Autor',dishId: 8, dishName: "Açaí Tradicional", reserveId: 16,
-          restaurantName: "Tropical Açaí", rating: 5, comment: "Muito cremoso e saboroso!"
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 7,
@@ -234,22 +124,7 @@ export class RestaurantFactory {
       { id: 42, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "11:00", timeEnd: "16:00" },
       { id: 43, dayOfWeek: DayOfWeek.SUNDAY, timeStart: "11:00", timeEnd: "16:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 9, name: "Picanha na Brasa", dishCategoryName: "Carnes", dishCategoryId: 9,
-          restaurantName: "Churrascaria Boi na Brasa", restaurantId: 7, description: "Picanha grelhada acompanhada de guarnições.",
-          preparationTime: 1800, rating: 4.9, price: 69.90, slug: "picanha-na-brasa",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 8, clientName:'Autor',dishId: 9, dishName: "Picanha na Brasa", reserveId: 17,
-          restaurantName: "Churrascaria Boi na Brasa", rating: 5, comment: "Carne no ponto perfeito!"
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 8,
@@ -267,22 +142,7 @@ export class RestaurantFactory {
       { id: 48, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "18:00", timeEnd: "23:30" },
       { id: 49, dayOfWeek: DayOfWeek.SUNDAY, timeStart: "18:00", timeEnd: "22:30" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 10, name: "Temaki de Salmão", dishCategoryName: "Temakis", dishCategoryId: 10,
-          restaurantName: "Temaki Express", restaurantId: 8, description: "Temaki recheado com salmão fresco.",
-          preparationTime: 900, rating: 4.8, price: 29.90, slug: "temaki-de-salmao",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 9, clientName:'Autor',dishId: 10, dishName: "Temaki de Salmão", reserveId: 18,
-          restaurantName: "Temaki Express", rating: 5, comment: "Muito fresco e bem preparado!"
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 9,
@@ -300,22 +160,7 @@ export class RestaurantFactory {
       { id: 54, dayOfWeek: DayOfWeek.FRIDAY, timeStart: "11:00", timeEnd: "14:30" },
       { id: 55, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "11:00", timeEnd: "15:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 11, name: "Filé à Parmegiana", dishCategoryName: "Pratos executivos", dishCategoryId: 11,
-          restaurantName: "Cantina da Praça", restaurantId: 9, description: "Filé empanado com molho de tomate e queijo.",
-          preparationTime: 1800, rating: 4.7, price: 36.90, slug: "file-a-parmegiana",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 10, clientName:'Autor',dishId: 11, dishName: "Filé à Parmegiana", reserveId: 19,
-          restaurantName: "Cantina da Praça", rating: 5, comment: "Almoço muito bem servido."
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   },
   {
     id: 10,
@@ -333,22 +178,7 @@ export class RestaurantFactory {
       { id: 60, dayOfWeek: DayOfWeek.FRIDAY, timeStart: "08:00", timeEnd: "18:00" },
       { id: 61, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "08:00", timeEnd: "13:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 12, name: "Cappuccino Especial", dishCategoryName: "Bebidas quentes", dishCategoryId: 12,
-          restaurantName: "Doce Encanto Café", restaurantId: 10, description: "Cappuccino cremoso com chocolate.",
-          preparationTime: 300, rating: 4.9, price: 14.90, slug: "cappuccino-especial",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 11, clientName:'Autor',dishId: 12, dishName: "Cappuccino Especial", reserveId: 20,
-          restaurantName: "Doce Encanto Café", rating: 5, comment: "Perfeito para acompanhar o café da manhã."
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   }
   ];
   private static readonly detailMock: RestaurantResponseDTO = {
@@ -367,32 +197,7 @@ export class RestaurantFactory {
       { id: 5, dayOfWeek: DayOfWeek.FRIDAY, timeStart: "18:00", timeEnd: "00:00" },
       { id: 6, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "18:00", timeEnd: "00:00" }
     ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 1, name: "Hambúrguer da Casa", dishCategoryName: "Hambúrgueres", dishCategoryId: 1,
-          restaurantName: "Molho Sem Água", restaurantId: 1, description: "Hambúrguer artesanal com molho especial.",
-          preparationTime: 1200, rating: 4.9, price: 32.90, slug: "hamburguer-da-casa",
-          imageLink: "https://placehold.co/400x300", active: true
-        },
-        {
-          id: 2, name: "Batata Suprema", dishCategoryName: "Acompanhamentos", dishCategoryId: 2,
-          restaurantName: "Molho Sem Água", restaurantId: 1, description: "Batatas crocantes com cheddar e bacon.",
-          preparationTime: 900, rating: 4.8, price: 24.90, slug: "batata-suprema",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 1, dishId: 1, clientName:'Agusto', dishName: "Hambúrguer da Casa", reserveId: 10,
-          restaurantName: "Molho Sem Água", rating: 5, comment: "Simplesmente perfeito!"
-        },
-        {
-          id: 2, dishId: 2, clientName:'Marcos', dishName: "Batata Suprema", reserveId: 11,
-          restaurantName: "Molho Sem Água", rating: 5, comment: "Muito saborosa!"
-        }
-      ]
-    }
+    bestRatings: BestRatingsFactory.createMock()
   };
   private static readonly workingSchedulesMock = {
     id: 1,
@@ -471,52 +276,7 @@ export class RestaurantFactory {
         { id: 5, dayOfWeek: DayOfWeek.FRIDAY, timeStart: '18:00', timeEnd: '00:00' },
         { id: 6, dayOfWeek: DayOfWeek.SATURDAY, timeStart: '18:00', timeEnd: '00:00' }
       ],
-      bestRatings: {
-        bestDishes: [
-          {
-            id: 1,
-            name: 'Pizza Bella Napoli',
-            dishCategoryName: 'Pizzas',
-            dishCategoryId: 1,
-            restaurantName: 'Pizzaria Bella Napoli',
-            restaurantId: 1,
-            description: 'Pizza artesanal com molho especial, mussarela e manjericão.',
-            preparationTime: 1800,
-            rating: 4.9,
-            price: 49.90,
-            slug: 'pizza-bella-napoli',
-            imageLink: 'https://placehold.co/400x300?text=Pizza+Bella+Napoli',
-            active: true
-          },
-          {
-            id: 2,
-            name: 'Pizza Calabresa',
-            dishCategoryName: 'Pizzas',
-            dishCategoryId: 1,
-            restaurantName: 'Pizzaria Bella Napoli',
-            restaurantId: 1,
-            description: 'Pizza de calabresa com cebola e mussarela.',
-            preparationTime: 1500,
-            rating: 4.8,
-            price: 42.90,
-            slug: 'pizza-calabresa',
-            imageLink: 'https://placehold.co/400x300?text=Pizza+Calabresa',
-            active: true
-          }
-        ],
-        bestRatesDish: [
-          {
-            id: 1,
-            clientName:'Autor',
-            dishId: 1,
-            dishName: 'Pizza Bella Napoli',
-            reserveId: 101,
-            restaurantName: 'Pizzaria Bella Napoli',
-            rating: 5,
-            comment: 'Massa excelente e ingredientes de ótima qualidade!'
-          }
-        ]
-      }
+      bestRatings: BestRatingsFactory.createMock()
     },
     {
       id: 2,
@@ -534,52 +294,7 @@ export class RestaurantFactory {
         { id: 11, dayOfWeek: DayOfWeek.SATURDAY, timeStart: '18:00', timeEnd: '23:00' },
         { id: 12, dayOfWeek: DayOfWeek.SUNDAY, timeStart: '18:00', timeEnd: '22:00' }
       ],
-      bestRatings: {
-        bestDishes: [
-          {
-            id: 3,
-            name: 'Combo Sushi Especial',
-            dishCategoryName: 'Combos',
-            dishCategoryId: 2,
-            restaurantName: 'Sushi House',
-            restaurantId: 2,
-            description: 'Combo especial com sushis variados e sashimis.',
-            preparationTime: 1200,
-            rating: 4.9,
-            price: 59.90,
-            slug: 'combo-sushi-especial',
-            imageLink: 'https://placehold.co/400x300?text=Combo+Sushi',
-            active: true
-          },
-          {
-            id: 4,
-            name: 'Temaki de Salmão',
-            dishCategoryName: 'Temakis',
-            dishCategoryId: 3,
-            restaurantName: 'Sushi House',
-            restaurantId: 2,
-            description: 'Temaki recheado com salmão fresco e cream cheese.',
-            preparationTime: 600,
-            rating: 4.7,
-            price: 27.90,
-            slug: 'temaki-de-salmao',
-            imageLink: 'https://placehold.co/400x300?text=Temaki',
-            active: true
-          }
-        ],
-        bestRatesDish: [
-          {
-            id: 2,
-            clientName:'Autor',
-            dishId: 3,
-            dishName: 'Combo Sushi Especial',
-            reserveId: 102,
-            restaurantName: 'Sushi House',
-            rating: 5,
-            comment: 'Peças muito frescas e apresentação impecável!'
-          }
-        ]
-      }
+      bestRatings: BestRatingsFactory.createMock()
     },
     {
       id: 3,
@@ -598,52 +313,7 @@ export class RestaurantFactory {
         { id: 18, dayOfWeek: DayOfWeek.SATURDAY, timeStart: '11:00', timeEnd: '16:00' },
         { id: 19, dayOfWeek: DayOfWeek.SUNDAY, timeStart: '11:00', timeEnd: '16:00' }
       ],
-      bestRatings: {
-        bestDishes: [
-          {
-            id: 5,
-            name: 'Picanha na Brasa',
-            dishCategoryName: 'Carnes',
-            dishCategoryId: 4,
-            restaurantName: 'Churrascaria Fogo Nobre',
-            restaurantId: 3,
-            description: 'Picanha grelhada acompanhada de arroz, farofa e vinagrete.',
-            preparationTime: 1800,
-            rating: 4.9,
-            price: 69.90,
-            slug: 'picanha-na-brasa',
-            imageLink: 'https://placehold.co/400x300?text=Picanha',
-            active: true
-          },
-          {
-            id: 6,
-            name: 'Costela Assada',
-            dishCategoryName: 'Carnes',
-            dishCategoryId: 4,
-            restaurantName: 'Churrascaria Fogo Nobre',
-            restaurantId: 3,
-            description: 'Costela assada lentamente até ficar macia e suculenta.',
-            preparationTime: 2400,
-            rating: 4.8,
-            price: 59.90,
-            slug: 'costela-assada',
-            imageLink: 'https://placehold.co/400x300?text=Costela',
-            active: true
-          }
-        ],
-        bestRatesDish: [
-          {
-            id: 3,
-            clientName:'Autor',
-            dishId: 5,
-            dishName: 'Picanha na Brasa',
-            reserveId: 103,
-            restaurantName: 'Churrascaria Fogo Nobre',
-            rating: 5,
-            comment: 'Carne muito saborosa e no ponto perfeito!'
-          }
-        ]
-      }
+      bestRatings: BestRatingsFactory.createMock()
     }
   ];
 

@@ -4,14 +4,23 @@ import com.italosantos.minha_mesa.dto.dish.CreateDishRequestDTO;
 import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
 import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
 import com.italosantos.minha_mesa.dto.dish.UpdateDishRequestDTO;
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.model.DishCategoryModel;
 import com.italosantos.minha_mesa.model.DishModel;
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class DishMapper {
+    private final RateDishMapper rateDishMapper;
+
+    public DishMapper(RateDishMapper rateDishMapper) {
+        this.rateDishMapper = rateDishMapper;
+    }
+
     public DishModel createToModel(CreateDishRequestDTO createDishRequestDTO, RestaurantModel restaurantModel,  @Nullable DishCategoryModel dishCategoryModel, String slug , String imagePath){
         DishModel dishModel = new DishModel();
         dishModel.setName(createDishRequestDTO.name());
@@ -27,6 +36,11 @@ public class DishMapper {
     }
 
     public DishResponseDTO modelToResponse(DishModel dishModel, String imageLink) {
+        List<RateDishResponseDTO> rates = dishModel.getReserveDishModels().stream()
+                .filter(reserveDishModel -> reserveDishModel.getRateDishModel()!=null)
+                .map(reserveDishModel -> this.rateDishMapper.modelToResponse(reserveDishModel.getRateDishModel()))
+                .toList();
+
         return new DishResponseDTO(
                 dishModel.getId(),
                 dishModel.getName(),
@@ -40,7 +54,8 @@ public class DishMapper {
                 dishModel.getPrice(),
                 dishModel.getSlug(),
                 imageLink,
-                dishModel.getActive()
+                dishModel.getActive(),
+                rates
         );
     }
 
