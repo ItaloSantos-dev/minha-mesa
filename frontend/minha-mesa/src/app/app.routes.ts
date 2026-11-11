@@ -23,6 +23,7 @@ import { OwnerCreateDish } from './componens/owner/restaurant/dish/owner-create-
 import { OwnerUpdateDish } from './componens/owner/restaurant/dish/owner-update-dish/owner-update-dish';
 import { OwnerShowDishCateogries } from './componens/owner/restaurant/dish-category/owner-show-dish-cateogries/owner-show-dish-cateogries';
 
+import { OwnerUpdateDishCategory } from './componens/owner/restaurant/dish-category/owner-update-dish-category/owner-update-dish-category';
 export const routes: Routes = [
     {
         path:'',
@@ -117,6 +118,10 @@ export const routes: Routes = [
                     {
                         path:'dishes',
                         component:OwnerShowDishes
+                    },
+                    {
+                        path:'dish-categories/:id',
+                        component:OwnerUpdateDishCategory
                     },
                     {
                         path:'dish-categories',

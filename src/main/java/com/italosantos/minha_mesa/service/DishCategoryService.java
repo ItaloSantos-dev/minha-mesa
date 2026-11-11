@@ -107,7 +107,8 @@ public class DishCategoryService {
                 updateDishCategoryResponseDTO.updateActive() ==null&&
                 updateDishCategoryResponseDTO.dishesToAdd() ==null &&
                 updateDishCategoryResponseDTO.dishesToRemove()==null&&
-                updateDishCategoryResponseDTO.removeAllDishsOfCategory() == null)
+                updateDishCategoryResponseDTO.removeAllDishsOfCategory() == null &&
+                (newImage == null || newImage.isEmpty()))
             throw new IllegalParameterException("Todos os campos estão vazios");
 
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
@@ -127,6 +128,7 @@ public class DishCategoryService {
                 if (Boolean.TRUE.equals(updateDishCategoryResponseDTO.removeAllDishsOfCategory())){
                     dishCategoryModel.getDishModels()
                             .forEach(dish ->{
+                                dish.setDishCategoryModel(null);
                                 dish.setActive(false);
                                 this.dishRepository.save(dish);
                             });

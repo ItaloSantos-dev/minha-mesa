@@ -37,6 +37,14 @@ export const API_BACK_CONFIG = {
                 return `/dishes/${id}`
             }
         },
+        DISH_CATEGORY:{
+            FIND:(id:number):string =>{
+                return `/dish-categorys/${id}`
+            },
+            UPDATE:(id:number):string =>{
+                return `/dish-categorys/${id}`
+            }
+        },
         RESERVE:{
             CREATE:'/reserves',
             UPDATE:'/reserves'

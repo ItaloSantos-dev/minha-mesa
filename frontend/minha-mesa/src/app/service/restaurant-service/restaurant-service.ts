@@ -11,6 +11,7 @@ import { WorkingScheduleResponseDTO } from '../../types/working_schedule/working
 import { ScheduleExceptionResponseDTO } from '../../types/schedule_exception/schedule-exception-response';
 import { DishesOfRestauranteResponseDTO } from '../../types/dish/dishes-of-restaurant-response';
 import { DishResponseDTO } from '../../types/dish/dish-repsonse';
+import { DishCategoryResponseDTO } from '../../types/dish_category/dish-category-response';
 
 @Injectable({
   providedIn: 'root',
@@ -117,6 +118,19 @@ export class RestaurantService {
   updateDishById(id:number, data:FormData):Observable<DishResponseDTO>{
     return this.httpClient.patch<DishResponseDTO>(
       this.url + API_BACK_CONFIG.ENDPOINTS.DISH.UPDATE(id),
+      data
+    )
+  }
+
+  getDishCategoryById(id:number):Observable<DishCategoryResponseDTO>{
+    return this.httpClient.get<DishCategoryResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH_CATEGORY.FIND(id)
+    )
+  }
+
+  updateDishCategoryById(id:number, data:FormData):Observable<DishCategoryResponseDTO>{
+    return this.httpClient.patch<DishCategoryResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH_CATEGORY.UPDATE(id),
       data
     )
   }
