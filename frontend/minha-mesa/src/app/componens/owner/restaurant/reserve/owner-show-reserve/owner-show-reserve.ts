@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, ViewChild, ViewChildren } from '@angular/core';
+import { ReserveFactory } from '../../../../../factory/reserve.factory';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReserveStatus } from '../../../../../types/enums/reserve-status';
 import { ReserveResponseDTO } from '../../../../../types/reserve/reserve-response';
@@ -28,19 +29,7 @@ export class OwnerShowReserve {
   private utilityService = inject(UtilityService);
   private exceptioNService = inject(ExceptionService);
 
-  private reserveMock:ReserveResponseDTO = {
-        id: 1,
-        clientName: "Carice freire",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-09-04",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-  }
+  private reserveMock:ReserveResponseDTO = ReserveFactory.createMock();
   readonly reserve = signal<ReserveResponseDTO | null>(null);
   statusForUpdated = signal(<ReserveStatus>{});
 

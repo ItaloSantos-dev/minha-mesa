@@ -1,4 +1,5 @@
 import { Component, DestroyRef, ElementRef, inject, Output, signal, ViewChild, ViewChildren } from '@angular/core';
+import { RestaurantFactory } from '../../../../factory/restaurant.factory';
 import { RestaurantResponseDTO } from '../../../../types/restaurant/restaurant-response';
 import { RestaurantService } from '../../../../service/restaurant-service/restaurant-service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -35,49 +36,7 @@ export class ClientShowRestaurant {
     { value: DayOfWeek.SUNDAY, label: 'Domingo' },
   ];
 
-  restaurantMock = {
-    id: 1,
-    name: "Molho Sem Água",
-    phone: "(98) 99999-1111",
-    address: "Rua das Flores, 120 - Centro",
-    active: true,
-    imagePerfilLink: "https://placehold.co/200x200",
-    imageBannerLink: "https://placehold.co/1200x400",
-    workingDays: [
-      { id: 1, dayOfWeek: DayOfWeek.MONDAY, timeStart: "18:00", timeEnd: "23:00" },
-      { id: 2, dayOfWeek: DayOfWeek.TUESDAY, timeStart: "18:00", timeEnd: "23:00" },
-      { id: 3, dayOfWeek: DayOfWeek.WEDNESDAY, timeStart: "18:00", timeEnd: "23:00" },
-      { id: 4, dayOfWeek: DayOfWeek.THURSDAY, timeStart: "18:00", timeEnd: "23:00" },
-      { id: 5, dayOfWeek: DayOfWeek.FRIDAY, timeStart: "18:00", timeEnd: "00:00" },
-      { id: 6, dayOfWeek: DayOfWeek.SATURDAY, timeStart: "18:00", timeEnd: "00:00" }
-    ],
-    bestRatings: {
-      bestDishes: [
-        {
-          id: 1, name: "Hambúrguer da Casa", dishCategoryName: "Hambúrgueres", dishCategoryId: 1,
-          restaurantName: "Molho Sem Água", restaurantId: 1, description: "Hambúrguer artesanal com molho especial.",
-          preparationTime: 1200, rating: 4.9, price: 32.90, slug: "hamburguer-da-casa",
-          imageLink: "https://placehold.co/400x300", active: true
-        },
-        {
-          id: 2, name: "Batata Suprema", dishCategoryName: "Acompanhamentos", dishCategoryId: 2,
-          restaurantName: "Molho Sem Água", restaurantId: 1, description: "Batatas crocantes com cheddar e bacon.",
-          preparationTime: 900, rating: 4.8, price: 24.90, slug: "batata-suprema",
-          imageLink: "https://placehold.co/400x300", active: true
-        }
-      ],
-      bestRatesDish: [
-        {
-          id: 1, dishId: 1, clientName:'Agusto', dishName: "Hambúrguer da Casa", reserveId: 10,
-          restaurantName: "Molho Sem Água", rating: 5, comment: "Simplesmente perfeito!"
-        },
-        {
-          id: 2, dishId: 2, clientName:'Marcos', dishName: "Batata Suprema", reserveId: 11,
-          restaurantName: "Molho Sem Água", rating: 5, comment: "Muito saborosa!"
-        }
-      ]
-    }
-  }
+  restaurantMock = RestaurantFactory.createMock();
 
   getInitials(name:string):string{
     return name

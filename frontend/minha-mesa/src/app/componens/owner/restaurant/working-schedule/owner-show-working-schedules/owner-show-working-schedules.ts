@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { WorkingScheduleFactory } from '../../../../../factory/working-schedule.factory';
 import { OwnerCreateWorkingSchedules } from '../owner-create-working-schedules/owner-create-working-schedules';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { DayOfWeek } from '../../../../../types/enums/day-of-week';
@@ -25,19 +26,7 @@ export class OwnerShowWorkingSchedules {
   private exceptionService = inject(ExceptionService);
   private readonly router = inject(Router);
 
-  readonly schedulesMock: WorkingScheduleResponseDTO[] = [
-    { id: 1, dayOfWeek: DayOfWeek.MONDAY, timeStart: '11:00', timeEnd: '22:00' },
-    { id: 2, dayOfWeek: DayOfWeek.TUESDAY, timeStart: '11:00', timeEnd: '22:00' },
-    { id: 3, dayOfWeek: DayOfWeek.WEDNESDAY, timeStart: '11:00', timeEnd: '22:00' },
-    { id: 4, dayOfWeek: DayOfWeek.THURSDAY, timeStart: '11:00', timeEnd: '22:00' },
-    { id: 5, dayOfWeek: DayOfWeek.FRIDAY, timeStart: '11:00', timeEnd: '23:00' },
-    { id: 6, dayOfWeek: DayOfWeek.SATURDAY, timeStart: '12:00', timeEnd: '23:00' },
-    { id: 7, dayOfWeek: DayOfWeek.SUNDAY, timeStart: '12:00', timeEnd: '20:00' },
-
-    { id: 8, dayOfWeek: DayOfWeek.MONDAY, timeStart: '18:00', timeEnd: '23:00' },
-    { id: 9, dayOfWeek: DayOfWeek.TUESDAY, timeStart: '18:00', timeEnd: '23:00' },
-    { id: 10, dayOfWeek: DayOfWeek.WEDNESDAY, timeStart: '18:00', timeEnd: '23:00' },
-  ];
+  readonly schedulesMock: WorkingScheduleResponseDTO[] = WorkingScheduleFactory.createMocks();
 
   readonly schedules = signal(<WorkingScheduleResponseDTO[]>[]);
   readonly isCreateFormOpen = signal(false);

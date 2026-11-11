@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { DashboardFactory } from '../../../../factory/dashboard.factory';
 import { OwnerDashboardCard } from './owner-dashboard-card/owner-dashboard-card';
 import { DashboardResponseDTO } from '../../../../types/restaurant/dashboard/dashboard-response';
 import { ReserveStatus } from '../../../../types/enums/reserve-status';
@@ -23,52 +24,7 @@ interface Card{
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OwnerDashboard {
-  dashboardResponseMock: DashboardResponseDTO = {
-    restaurantName:'Sonho na cozinha',
-    totalReservations: 25,
-    scheduledReservations: 10,
-    confirmedReservations: 12,
-    peoplesExpectedInDay: 38,
-
-    nextReservations: [
-      {
-        id: 1,
-        clientName: 'João Silva',
-        restaurantName: 'Minha Mesa',
-        tableNumber: 1,
-        date: '2026-09-24',
-        dayOfWeek: 'THURSDAY',
-        timeStart: '18:00',
-        timeEnd: '19:30',
-        status: ReserveStatus.CONFIRMED,
-        observation: 'Mesa próxima à janela',
-        peoples: 4
-      },
-      {
-        id: 2,
-        clientName: 'Maria Santos',
-        restaurantName: 'Minha Mesa',
-        tableNumber: 1,
-        date: '2026-09-24',
-        dayOfWeek: 'THURSDAY',
-        timeStart: '20:00',
-        timeEnd: '21:30',
-        status: ReserveStatus.SCHEDULED,
-        observation: '',
-        peoples: 2
-      }
-    ],
-
-    tablesTotalCount: 15,
-    tablesActiveCount: 12,
-
-    realTimeTablesData: {
-      tablesOccupied: 5,
-      tablesFree: 7,
-      dataAndTimeFetchedAt: '2026-09-24T20:19:35.899157761-03:00'
-    },
-    dateOfDashboard:'2026-09-24'
-  };
+  dashboardResponseMock: DashboardResponseDTO = DashboardFactory.createMock();
   dashboardRestaurant = signal<DashboardResponseDTO>({
     restaurantName: '',
     totalReservations: 0,

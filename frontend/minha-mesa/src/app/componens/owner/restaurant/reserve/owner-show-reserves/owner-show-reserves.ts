@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ReserveFactory } from '../../../../../factory/reserve.factory';
 import { RouterLink } from '@angular/router';
 import { ReserveStatus } from '../../../../../types/enums/reserve-status';
 import { ReserveResponseDTO } from '../../../../../types/reserve/reserve-response';
@@ -24,140 +25,9 @@ export class OwnerShowReserve {
 
   reserves = signal<ReserveResponseDTO[]>([]);
 
-  readonly reservesMock:ReserveResponseDTO[] = [
-    {
-        id: 1,
-        clientName: "Carice freire",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-09-04",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.CANCELED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 2,
-        clientName: "Carice freire",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-10-02",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 3,
-        clientName: "italo",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-10-09",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 4,
-        clientName: "italo",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-10-16",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 5,
-        clientName: "italo",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-10-23",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 6,
-        clientName: "italo",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-10-30",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 7,
-        clientName: "italo",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-11-06",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 8,
-        clientName: "italo",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-11-13",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 9,
-        clientName: "italo",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-11-20",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    },
-    {
-        id: 9,
-        clientName: "italo",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-11-20",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-    }
-  ];
+  readonly reservesMock:ReserveResponseDTO[] = ReserveFactory.createMocks();
 
-  readonly reservesCleanMock:ReserveResponseDTO[] = [];
+  readonly reservesCleanMock:ReserveResponseDTO[] = ReserveFactory.createMocks(0);
 
   readonly currentPage = signal(0);
   readonly pageSize = signal(0);
