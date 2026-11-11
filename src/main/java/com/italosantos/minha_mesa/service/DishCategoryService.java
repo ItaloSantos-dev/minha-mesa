@@ -129,7 +129,6 @@ public class DishCategoryService {
                     dishCategoryModel.getDishModels()
                             .forEach(dish ->{
                                 dish.setDishCategoryModel(null);
-                                dish.setActive(false);
                                 this.dishRepository.save(dish);
                             });
                     dishCategoryModel.setDishModels(null);

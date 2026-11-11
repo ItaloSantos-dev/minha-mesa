@@ -228,11 +228,16 @@ public class RestaurantService {
                 }).toList();
     }
 
-    private DishesOfRestauranteResponseDTO getDishesOfRestaurant(RestaurantModel restaurantModel){
+    private DishesOfRestauranteResponseDTO getDishesOfRestaurant(RestaurantModel restaurantModel, boolean onlyDishesIsActives){
         List<DishCategoryResponseDTO> categories = restaurantModel.getDishCategoryModels().stream()
                 .map(category ->{
                     List<DishResponseDTO> dishes = category.getDishModels().stream()
-                            .filter(DishModel::getActive)
+                            .filter(dish -> {
+                                if (onlyDishesIsActives)
+                                    return dish.getActive();
+                                else
+                                    return true;
+                            })
                             .map(dish -> {
                                 String dishLink =this.imageService.getAssignedUrl(dish.getImagePath());
                                 return this.dishMapper.modelToResponse(dish, dishLink);
@@ -244,7 +249,12 @@ public class RestaurantService {
                 .toList();
 
         List<DishResponseDTO> dishesWithoutCategory = restaurantModel.getDishModels().stream()
-                .filter(dish -> dish.getDishCategoryModel()==null && dish.getActive())
+                .filter(dish -> {
+                    if (onlyDishesIsActives)
+                        return dish.getActive() && dish.getDishCategoryModel()==null;
+                    else
+                        return dish.getDishCategoryModel()==null;
+                })
                 .map(dish -> {
                     String dishLink =this.imageService.getAssignedUrl(dish.getImagePath());
                     return this.dishMapper.modelToResponse(dish, dishLink);
@@ -263,7 +273,7 @@ public class RestaurantService {
 
 
 
-        return this.getDishesOfRestaurant(restaurantModel);
+        return this.getDishesOfRestaurant(restaurantModel, true);
     }
 
     public DishesOfRestauranteResponseDTO getDishesOfRestaurantByUserModel(UserModel userModel){
@@ -271,7 +281,7 @@ public class RestaurantService {
                 .orElseThrow(UserIsNotOwnerException::new);
 
 
-        return this.getDishesOfRestaurant(ownerModel.getRestaurantModel());
+        return this.getDishesOfRestaurant(ownerModel.getRestaurantModel(), false);
     }
 
 
