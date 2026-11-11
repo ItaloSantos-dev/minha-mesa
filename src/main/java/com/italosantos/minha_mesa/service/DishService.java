@@ -87,10 +87,10 @@ public class DishService {
         return this.dishMapper.modelToResponse(dishModel, imageLink);
     }
 
-    public DishResponseDTO getDishById(Integer id){
+    public DishResponseDTO getDishById(Integer id, UserModel userModel){
         DishModel dishModel = this.dishRepository.findById(id)
                 .orElseThrow(ResourceNotFoundException::new);
-        if(!dishModel.getActive())
+        if(!dishModel.getActive() && !userModel.getId().equals(dishModel.getRestaurantModel().getOwnerModel().getUserModel().getId()))
             throw new NotPermitedException("Este prato está inativo.");
         String imageLink = this.imageService.getAssignedUrl(dishModel.getImagePath());
         return this.dishMapper.modelToResponse(dishModel, imageLink);

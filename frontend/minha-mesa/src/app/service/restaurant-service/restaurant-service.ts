@@ -122,6 +122,13 @@ export class RestaurantService {
     )
   }
 
+  createDishCategory(data:FormData):Observable<DishCategoryResponseDTO>{
+    return this.httpClient.post<DishCategoryResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH_CATEGORY.CREATE,
+      data
+    )
+  }
+
   getDishCategoryById(id:number):Observable<DishCategoryResponseDTO>{
     return this.httpClient.get<DishCategoryResponseDTO>(
       this.url + API_BACK_CONFIG.ENDPOINTS.DISH_CATEGORY.FIND(id)

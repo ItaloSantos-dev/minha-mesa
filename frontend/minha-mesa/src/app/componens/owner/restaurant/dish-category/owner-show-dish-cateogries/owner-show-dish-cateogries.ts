@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
@@ -10,7 +11,7 @@ import { OwnerDishCategoryCard } from '../owner-dish-category-card/owner-dish-ca
 
 @Component({
   selector: 'app-owner-show-dish-cateogries',
-  imports: [MessageError, OwnerDishCategoryCard],
+  imports: [MessageError, OwnerDishCategoryCard, RouterLink],
   templateUrl: './owner-show-dish-cateogries.html',
   styleUrl: './owner-show-dish-cateogries.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

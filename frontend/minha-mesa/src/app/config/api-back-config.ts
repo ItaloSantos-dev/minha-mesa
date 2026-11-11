@@ -38,6 +38,7 @@ export const API_BACK_CONFIG = {
             }
         },
         DISH_CATEGORY:{
+            CREATE:'/dish-categorys',
             FIND:(id:number):string =>{
                 return `/dish-categorys/${id}`
             },

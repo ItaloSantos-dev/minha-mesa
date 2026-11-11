@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -90,9 +91,10 @@ public class DishController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<DishResponseDTO> getDishById(
-            @PathVariable Integer id
-    ){
-        return ResponseEntity.ok(this.dishService.getDishById(id));
+            @PathVariable Integer id,
+            @AuthenticationPrincipal UserModel userModel
+            ){
+        return ResponseEntity.ok(this.dishService.getDishById(id, userModel));
     }
 
 
