@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
 import { ReserveFactory } from '../../../../../factory/reserve.factory';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReserveStatus } from '../../../../../types/enums/reserve-status';
@@ -13,17 +13,26 @@ import { ExceptionService } from '../../../../../service/exception-service/excep
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { MessageError } from '../../../../message-error/message-error';
 import { NotFound } from '../../../../not-found/not-found';
+import { DishesOfRestauranteResponseDTO } from '../../../../../types/dish/dishes-of-restaurant-response';
+import { DishResponseDTO } from '../../../../../types/dish/dish-repsonse';
+import { CreateReserveDishRequestDTO } from '../../../../../types/reserve_dish/create-reserve-dish-request';
+import { ReserveDishResponseDTO } from '../../../../../types/reserve_dish/reserve-dish-response';
+import { ReserveDishStatus } from '../../../../../types/enums/reserve-dish-status';
+import { ReserveDishService } from '../../../../../service/reserve-dish-service/reserve-dish-service';
+import { OwnerReserveDish } from '../owner-reserve-dish/owner-reserve-dish';
+import { ReserveAddDish } from '../reserve-add-dish/reserve-add-dish';
 interface StringAndStatus{
   value:string,
   status:ReserveStatus
 }
 @Component({
   selector: 'app-owner-show-reserve',
-  imports: [RouterLink, MessageError],
+  imports: [RouterLink, MessageError, OwnerReserveDish, ReserveAddDish],
   templateUrl: './owner-show-reserve.html',
+  styleUrl: './owner-show-reserve.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OwnerShowReserve {
+export class OwnerShowReserve implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private utilityService = inject(UtilityService);
@@ -36,6 +45,123 @@ export class OwnerShowReserve {
   private reserveService = inject(ReserveService);
 
   private restaurantService = inject(RestaurantService);
+  private reserveDishService = inject(ReserveDishService);
+  readonly loading = signal(true);
+  readonly loadingDishes = signal(false);
+  readonly availableDishes = signal<DishResponseDTO[]>([]);
+  readonly showAddDishDialog = signal(false);
+  readonly isAddingDish = signal(false);
+  readonly hasDishOverflow = signal(false);
+  readonly canScrollDishPrevious = signal(false);
+  readonly canScrollDishNext = signal(false);
+  readonly reserveStatus = ReserveStatus;
+  private dishesResizeObserver?: ResizeObserver;
+  private dishesViewport?: HTMLDivElement;
+
+  @ViewChild('dishesViewport')
+  set dishesViewportElement(element: ElementRef<HTMLDivElement> | undefined) {
+    this.dishesResizeObserver?.disconnect();
+    this.dishesViewport = element?.nativeElement;
+    if (this.dishesViewport && typeof ResizeObserver !== 'undefined') {
+      this.dishesResizeObserver = new ResizeObserver(() => this.updateDishCarousel());
+      this.dishesResizeObserver.observe(this.dishesViewport);
+    }
+    requestAnimationFrame(() => this.updateDishCarousel());
+  }
+
+  readonly selectableDishes = computed(() => {
+    const addedDishIds = new Set(this.reserve()?.reserveDishes.map((dish) => dish.dishId) ?? []);
+    return this.availableDishes().filter((dish) => !addedDishIds.has(dish.id));
+  });
+  openAddDishDialog() {
+    if (this.reserve()?.status !== ReserveStatus.IN_PROGRESS || this.selectableDishes().length === 0) {
+      return;
+    }
+    this.showAddDishDialog.set(true);
+  }
+
+  closeAddDishDialog() {
+    if (!this.isAddingDish()) {
+      this.showAddDishDialog.set(false);
+    }
+  }
+
+  addDish(dishSelection: { dishId: number; quantity: number }) {
+    const reserve = this.reserve();
+
+    if (
+      reserve?.status !== ReserveStatus.IN_PROGRESS ||
+      !this.selectableDishes().some((dish) => dish.id === dishSelection.dishId && dish.active) ||
+      !Number.isInteger(dishSelection.quantity) ||
+      dishSelection.quantity < 1 ||
+      this.isAddingDish()
+    ) {
+      return;
+    }
+
+    const request: CreateReserveDishRequestDTO = {
+      reserveId: reserve.id,
+      dishId: dishSelection.dishId,
+      quantity: dishSelection.quantity,
+    };
+
+    this.isAddingDish.set(true);
+    this.reserveDishService.createReserveDish(request).subscribe({
+      next: (reserveDish) => {
+        this.reserve.update((current) =>
+          current ? { ...current, reserveDishes: [...current.reserveDishes, reserveDish] } : current,
+        );
+        this.showAddDishDialog.set(false);
+        this.isAddingDish.set(false);
+        requestAnimationFrame(() => this.updateDishCarousel());
+      },
+      error: (error: HttpErrorResponse) => {
+        this.handlerShowError(error);
+        this.isAddingDish.set(false);
+      },
+    });
+  }
+
+  updateReserveDish(updatedDish: ReserveDishResponseDTO) {
+    this.reserve.update((current) =>
+      current
+        ? {
+            ...current,
+            reserveDishes: current.reserveDishes.map((dish) =>
+              dish.id === updatedDish.id ? updatedDish : dish,
+            ),
+          }
+        : current,
+    );
+    requestAnimationFrame(() => this.updateDishCarousel());
+  }
+
+  moveDishCarousel(direction: -1 | 1) {
+    const viewport = this.dishesViewport;
+    viewport?.scrollBy({
+      left: direction * (viewport.clientWidth * 0.8),
+      behavior: 'smooth',
+    });
+  }
+
+  updateDishCarousel() {
+    const viewport = this.dishesViewport;
+    if (!viewport) {
+      this.hasDishOverflow.set(false);
+      this.canScrollDishPrevious.set(false);
+      this.canScrollDishNext.set(false);
+      return;
+    }
+
+    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+    this.hasDishOverflow.set(maxScroll > 2);
+    this.canScrollDishPrevious.set(viewport.scrollLeft > 2);
+    this.canScrollDishNext.set(viewport.scrollLeft < maxScroll - 2);
+  }
+
+  ngOnDestroy() {
+    this.dishesResizeObserver?.disconnect();
+  }
 
   getStatusAvaliableForUpdated(): StringAndStatus[] {
     if (!this.reserve()) {
@@ -274,7 +400,13 @@ export class OwnerShowReserve {
   }
 
   handlerShowError(erro:HttpErrorResponse){
-    this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro));
+    const showError = this.exceptioNService.handlerRedirectExceptionResponse(
+      erro,
+      UtilityService.pathsOfApplication.OWNER_SHOW_RESERVES,
+    );
+    if (showError) {
+      this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro));
+    }
   }
 
   ngOnInit() {
@@ -285,8 +417,13 @@ export class OwnerShowReserve {
         next: (data) =>{
           this.reserve.set(data);
           this.statusForUpdated.set(this.reserve()?.status as ReserveStatus);
+          this.loading.set(false);
+          if (data.status === ReserveStatus.IN_PROGRESS) {
+            this.loadAvailableDishes();
+          }
         },
         error: (erro:HttpErrorResponse) =>{
+          this.loading.set(false);
           const showForm = this.exceptioNService.handlerRedirectExceptionResponse(erro, UtilityService.pathsOfApplication.OWNER_SHOW_RESERVES);
           if (showForm) {
             this.handlerShowError(erro)
@@ -295,6 +432,24 @@ export class OwnerShowReserve {
       })
     }    
 
+  }
+
+  private loadAvailableDishes() {
+    this.loadingDishes.set(true);
+    this.restaurantService.getDishesOfOwnerRestaurant().subscribe({
+      next: (data: DishesOfRestauranteResponseDTO) => {
+        const dishes = [
+          ...data.categories.flatMap((category) => category.dishes),
+          ...data.dishesWithoutCategories,
+        ];
+        this.availableDishes.set(dishes.filter((dish) => dish.active));
+        this.loadingDishes.set(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.loadingDishes.set(false);
+        this.handlerShowError(error);
+      },
+    });
   }
 
   ngOnUpdateStatusOfReserve(){

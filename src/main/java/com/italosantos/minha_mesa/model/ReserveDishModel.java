@@ -44,10 +44,10 @@ public class ReserveDishModel {
 
 
     @Column(name = "completed_quantity", nullable = false)
-    private Integer completedQuantity;
+    private Integer completedQuantity = 0;
 
     @Column(name = "canceled_quantity", nullable = false)
-    private Integer canceledQuantity;
+    private Integer canceledQuantity = 0;
 
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;

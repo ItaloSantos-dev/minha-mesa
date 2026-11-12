@@ -56,6 +56,10 @@ export const API_BACK_CONFIG = {
             CREATE:'/reserves',
             UPDATE:'/reserves'
         },
+        RESERVE_DISH:{
+            CREATE:'/reserve-dishes',
+            UPDATE:(id:number):string => `/reserve-dishes/${id}`
+        },
         RATE_DISH:{
             CREATE:'/rates-dish'
         },
