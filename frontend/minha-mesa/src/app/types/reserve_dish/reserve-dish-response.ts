@@ -1,4 +1,5 @@
 import { ReserveDishStatus } from "../enums/reserve-dish-status";
+import { RateDishResponseDTO } from "../rate_dish/rate-dish-response";
 
 export interface ReserveDishResponseDTO {
   id: number;
@@ -12,4 +13,5 @@ export interface ReserveDishResponseDTO {
   priceFinal: number;
   createdAt: string;
   status: ReserveDishStatus;
+  rateDish: RateDishResponseDTO | null;
 }

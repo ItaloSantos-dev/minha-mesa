@@ -27,6 +27,7 @@ import { OwnerShowDishCateogries } from './componens/owner/restaurant/dish-categ
 
 import { OwnerUpdateDishCategory } from './componens/owner/restaurant/dish-category/owner-update-dish-category/owner-update-dish-category';
 import { OwnerCreateDishCategory } from './componens/owner/restaurant/dish-category/owner-create-dish-category/owner-create-dish-category';
+import { ClientShowReserve } from './componens/client/reserve/client-show-reserve/client-show-reserve';
 
 export const routes: Routes = [
     {
@@ -58,6 +59,10 @@ export const routes: Routes = [
             {
                 path:'reservations',
                 component:ClientShowReserves
+            },
+            {
+                path:'reservations/:id',
+                component:ClientShowReserve
             },
             {
                 path:'restaurants',

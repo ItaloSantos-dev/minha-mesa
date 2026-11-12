@@ -58,6 +58,7 @@ export class ClientHome {
     const labels: Record<ReserveStatus, string> = {
       [ReserveStatus.SCHEDULED]: 'Agendada',
       [ReserveStatus.CONFIRMED]: 'Confirmada',
+      [ReserveStatus.IN_PROGRESS]: 'Em andamento',
       [ReserveStatus.CANCELED]: 'Cancelada',
       [ReserveStatus.COMPLETED]: 'Concluída',
       [ReserveStatus.NO_SHOW]: 'Não compareceu',
@@ -79,6 +80,7 @@ export class ClientHome {
     const classes: Record<ReserveStatus, string> = {
       [ReserveStatus.SCHEDULED]: 'bg-[#fff2c9] text-[#876200]',
       [ReserveStatus.CONFIRMED]: 'bg-[#e1f3e8] text-[#28734a]',
+      [ReserveStatus.IN_PROGRESS]: 'bg-[#e3edf5] text-[#236184]',
       [ReserveStatus.CANCELED]: 'bg-[#fde5e2] text-[#a23b31]',
       [ReserveStatus.COMPLETED]: 'bg-[#e3edf5] text-[#236184]',
       [ReserveStatus.NO_SHOW]: 'bg-[#f1e4ef] text-[#82436f]',

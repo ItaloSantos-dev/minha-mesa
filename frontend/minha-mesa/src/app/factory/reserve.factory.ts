@@ -14,7 +14,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.CANCELED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 2,
@@ -27,7 +28,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 3,
@@ -40,7 +42,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 4,
@@ -53,7 +56,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 5,
@@ -66,7 +70,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 6,
@@ -79,7 +84,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 7,
@@ -92,7 +98,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 8,
@@ -105,7 +112,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 9,
@@ -118,7 +126,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     },
     {
         id: 9,
@@ -131,7 +140,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
     }
   ];
   private static readonly detailMock: ReserveResponseDTO = {
@@ -145,7 +155,8 @@ export class ReserveFactory {
         timeEnd: "15:00:00",
         status: ReserveStatus.SCHEDULED,
         observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
   };
   private static readonly dashboardTodayMocks: ReserveResponseDTO[] = [
     {
@@ -159,7 +170,8 @@ export class ReserveFactory {
       timeEnd: '20:00',
       status: ReserveStatus.CONFIRMED,
       observation: 'Mesa próxima à janela',
-      peoples: 4
+      peoples: 4,
+      reserveDishes: []
     },
     {
       id: 102,
@@ -172,7 +184,8 @@ export class ReserveFactory {
       timeEnd: '20:30',
       status: ReserveStatus.SCHEDULED,
       observation: 'Comemoração de aniversário',
-      peoples: 2
+      peoples: 2,
+      reserveDishes: []
     },
     {
       id: 103,
@@ -185,7 +198,8 @@ export class ReserveFactory {
       timeEnd: '21:00',
       status: ReserveStatus.COMPLETED,
       observation: '',
-      peoples: 6
+      peoples: 6,
+      reserveDishes: []
     },
     {
       id: 104,
@@ -198,7 +212,8 @@ export class ReserveFactory {
       timeEnd: '21:30',
       status: ReserveStatus.CANCELED,
       observation: 'Cliente cancelou a reserva',
-      peoples: 2
+      peoples: 2,
+      reserveDishes: []
     },
     {
       id: 105,
@@ -211,7 +226,8 @@ export class ReserveFactory {
       timeEnd: '22:00',
       status: ReserveStatus.NO_SHOW,
       observation: 'Cliente não compareceu',
-      peoples: 3
+      peoples: 3,
+      reserveDishes: []
     }
   ];
   private static readonly dashboardNextMocks: ReserveResponseDTO[] = [
@@ -226,7 +242,8 @@ export class ReserveFactory {
         timeEnd: '19:30',
         status: ReserveStatus.CONFIRMED,
         observation: 'Mesa próxima à janela',
-        peoples: 4
+        peoples: 4,
+        reserveDishes: []
       },
       {
         id: 2,
@@ -239,7 +256,8 @@ export class ReserveFactory {
         timeEnd: '21:30',
         status: ReserveStatus.SCHEDULED,
         observation: '',
-        peoples: 2
+        peoples: 2,
+        reserveDishes: []
       }
     ];
 

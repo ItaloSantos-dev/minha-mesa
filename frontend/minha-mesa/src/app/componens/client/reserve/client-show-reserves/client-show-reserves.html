@@ -94,6 +94,13 @@
                   <span>{{ reserve.observation }}</span>
                 </p>
               }
+              <a
+                class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-(--color-primary) transition hover:text-(--color-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+                [routerLink]="['/client/reservations', reserve.id]"
+              >
+                Ver detalhes
+                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </a>
             </article>
           }
         </div>

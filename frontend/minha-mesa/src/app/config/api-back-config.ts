@@ -8,7 +8,10 @@ export const API_BACK_CONFIG = {
         },
         USER:{
             DASHBOARD:'/users/dashboard',
-            RESERVES:'/users/reserves'
+            RESERVES:'/users/reserves',
+            RESERVE:(id:number):string =>{
+                return `/users/reserves/${id}`
+            }
         },
         RESTAURANT: {
             CREATE : '/restaurants',
@@ -52,6 +55,9 @@ export const API_BACK_CONFIG = {
         RESERVE:{
             CREATE:'/reserves',
             UPDATE:'/reserves'
+        },
+        RATE_DISH:{
+            CREATE:'/rates-dish'
         },
         TABLE:{
             AVAILABLE:'/tables',

@@ -37,10 +37,14 @@ public class RateDishService {
         if (createRateDishRequestDTO.rating()>5 || createRateDishRequestDTO.rating()<1)
             throw new IllegalParameterException("A nota enviada é inválida");
 
+        if (!reserveDishModel.getDishModel().getActive()) 
+            throw new NotPermitedException();
+        
         ReserveModel reserveModel = reserveDishModel.getReserveModel();
         if (reserveModel.getStatus()!= ReserveStatus.COMPLETED && reserveModel.getStatus()!=ReserveStatus.IN_PROGRESS)
             throw new ReserveIsNotInProgressException("A reserva só pode receber comentários se estiver em progresso ou concluída.");
 
+        
         RateDishModel rateDishModel = this.rateDishMapper.createToModel(createRateDishRequestDTO, reserveDishModel);
 
         rateDishModel = this.rateDishRepository.save(rateDishModel);
