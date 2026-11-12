@@ -45,8 +45,12 @@ export class OwnerShowReserve {
     const reserve = this.reserve()!;
     const today = new Date();
     const reserveDate = new Date(`${reserve.date}T00:00:00`);
+    const now = new Date();
+    const reserveStart = new Date(`${reserve.date}T${reserve.timeStart}`);
+    const reserveEnd = new Date(`${reserve.date}T${reserve.timeEnd}`);
 
     const isTodayOrPast = reserveDate <= today;
+    const isWithinReserveTime = now >= reserveStart && now <= reserveEnd;
     const isAfterTomorrow = reserveDate > new Date(
       today.getFullYear(),
       today.getMonth(),
@@ -102,8 +106,20 @@ export class OwnerShowReserve {
           );
         }
 
+        if (isWithinReserveTime) {
+          statuses.push({
+            value: 'Em andamento',
+            status: ReserveStatus.IN_PROGRESS,
+          });
+        }
+
         return statuses;
       }
+
+      case ReserveStatus.IN_PROGRESS:
+        return isTodayOrPast
+          ? [{ value: 'Concluída', status: ReserveStatus.COMPLETED }]
+          : [];
 
       case ReserveStatus.CANCELED:
       case ReserveStatus.COMPLETED:
@@ -174,6 +190,10 @@ export class OwnerShowReserve {
         // Laranja para não comparecimento
         commomClass += 'bg-orange-100 text-orange-800';
         break;
+      case ReserveStatus.IN_PROGRESS:
+        // Roxo para reserva em andamento
+        commomClass += 'bg-purple-100 text-purple-800';
+        break;
       default:
         // Cinza padrão
         commomClass += 'bg-gray-100 text-gray-800';
@@ -201,7 +221,7 @@ export class OwnerShowReserve {
 
     case ReserveStatus.NO_SHOW:
       return 'Não compareceu';
-
+    
     default:
       return 'Desconhecido';
   }
