@@ -1,6 +1,8 @@
 package com.italosantos.minha_mesa.repository;
 
 import com.italosantos.minha_mesa.model.DishModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -22,6 +22,7 @@ import { OwnerShowDishes } from './componens/owner/restaurant/dish/owner-show-di
 import { OwnerCreateDish } from './componens/owner/restaurant/dish/owner-create-dish/owner-create-dish';
 import { OwnerUpdateDish } from './componens/owner/restaurant/dish/owner-update-dish/owner-update-dish';
 import { OwnerShowDish } from './componens/owner/restaurant/dish/owner-show-dish/owner-show-dish';
+import { OwnerShowRatesDish } from './componens/owner/restaurant/dish/owner-show-rates-dish/owner-show-rates-dish';
 import { OwnerShowDishCateogries } from './componens/owner/restaurant/dish-category/owner-show-dish-cateogries/owner-show-dish-cateogries';
 
 import { OwnerUpdateDishCategory } from './componens/owner/restaurant/dish-category/owner-update-dish-category/owner-update-dish-category';
@@ -117,6 +118,10 @@ export const routes: Routes = [
                     {
                         path:'dishes/:id/update',
                         component:OwnerUpdateDish
+                    },
+                    {
+                        path:'dishes/:id/rates',
+                        component:OwnerShowRatesDish
                     },
                     {
                         path:'dishes/:id',

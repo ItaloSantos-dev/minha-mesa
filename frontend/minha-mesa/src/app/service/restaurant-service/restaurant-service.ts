@@ -12,6 +12,7 @@ import { ScheduleExceptionResponseDTO } from '../../types/schedule_exception/sch
 import { DishesOfRestauranteResponseDTO } from '../../types/dish/dishes-of-restaurant-response';
 import { DishResponseDTO } from '../../types/dish/dish-repsonse';
 import { DishCategoryResponseDTO } from '../../types/dish_category/dish-category-response';
+import { RateDishResponseDTO } from '../../types/rate_dish/rate-dish-response';
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +21,8 @@ export class RestaurantService {
   private readonly url = API_BACK_CONFIG.URL;
   private httpClient = inject(HttpClient); 
 
-  private generatePageable(page:number){
-    return `?page=${page}&size=10`
+  private generatePageable(page:number, size = 10){
+    return `?page=${page}&size=${size}`
   }
   
 
@@ -112,6 +113,12 @@ export class RestaurantService {
   getDishById(id:number):Observable<DishResponseDTO>{
     return this.httpClient.get<DishResponseDTO>(
       this.url + API_BACK_CONFIG.ENDPOINTS.DISH.FIND(id)
+    )
+  }
+
+  getRatesOfDish(id:number, page:number, size:number):Observable<RateDishResponseDTO[]>{
+    return this.httpClient.get<RateDishResponseDTO[]>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.RATES(id) + this.generatePageable(page, size)
     )
   }
 

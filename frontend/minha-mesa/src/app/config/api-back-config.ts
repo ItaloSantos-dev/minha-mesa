@@ -33,6 +33,9 @@ export const API_BACK_CONFIG = {
             FIND:(id:number):string =>{
                 return `/dishes/${id}`
             },
+            RATES:(id:number):string =>{
+                return `/dishes/${id}/rates`
+            },
             UPDATE:(id:number):string =>{
                 return `/dishes/${id}`
             }

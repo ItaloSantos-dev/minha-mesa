@@ -4,6 +4,7 @@ import com.italosantos.minha_mesa.dto.dish.CreateDishRequestDTO;
 import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
 import com.italosantos.minha_mesa.dto.dish.UpdateDishRequestDTO;
 import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.service.DishService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nullable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("dishes")
@@ -150,6 +153,35 @@ public class DishController {
                         updateDishRequestDTO,
                         newImage
                 )
+        );
+    }
+
+    @Operation(
+            summary = "Busca as avaliações de um prato",
+            description = "Retorna a lista de avaliações associadas ao prato informado pelo id."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Avaliações encontradas com sucesso"),
+            @ApiResponse(
+                    responseCode = "403", description = "Usuário não possui permissão para acessar as avaliações deste prato",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404", description = "Prato não encontrado",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            )
+    })
+    @GetMapping("/{id}/rates")
+    public ResponseEntity<List<RateDishResponseDTO>> gerRatesDishBydDishId(
+            @PathVariable Integer id,
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(
+                this.dishService.getRatesDishByDishId(id, pageable)
         );
     }
 }

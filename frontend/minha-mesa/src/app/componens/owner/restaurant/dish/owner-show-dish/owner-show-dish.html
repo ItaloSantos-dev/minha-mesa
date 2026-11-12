@@ -111,13 +111,13 @@
         } @else {
           <p class="mb-0 rounded-xl bg-[color-mix(in_srgb,var(--color-background)_50%,white)] p-5 text-sm text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Este prato ainda não possui avaliações.</p>
         }
-        <button
-          type="button"
+        <a
+          [routerLink]="['/owner/restaurant/dishes', dish.id, 'rates']"
           class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--color-primary)_25%,transparent)] px-4 py-3 text-sm font-bold text-(--color-primary) transition hover:bg-[color-mix(in_srgb,var(--color-primary)_6%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
         >
           Ver todas as avaliações
           <i class="bi bi-arrow-right" aria-hidden="true"></i>
-        </button>
+        </a>
       </section>
     </section>
   }

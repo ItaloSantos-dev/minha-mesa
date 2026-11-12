@@ -3,17 +3,18 @@ package com.italosantos.minha_mesa.service;
 import com.italosantos.minha_mesa.dto.dish.CreateDishRequestDTO;
 import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
 import com.italosantos.minha_mesa.dto.dish.UpdateDishRequestDTO;
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.infra.storage.MediaPath;
 import com.italosantos.minha_mesa.mapper.DishMapper;
-import com.italosantos.minha_mesa.model.DishCategoryModel;
-import com.italosantos.minha_mesa.model.DishModel;
-import com.italosantos.minha_mesa.model.OwnerModel;
-import com.italosantos.minha_mesa.model.UserModel;
+import com.italosantos.minha_mesa.mapper.RateDishMapper;
+import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.repository.DishCategoryRepository;
 import com.italosantos.minha_mesa.repository.DishRepository;
 import com.italosantos.minha_mesa.repository.OwnerRepository;
+import com.italosantos.minha_mesa.repository.RateDishRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,13 +29,18 @@ public class DishService {
     private final OwnerRepository ownerRepository;
     private final DishCategoryRepository dishCategoryRepository;
     private final DishMapper dishMapper;
+    private final RateDishMapper rateDishMapper;
+    private final RateDishRepository rateDishRepository;
 
-    public DishService(DishRepository dishRepository, ImageService imageService, OwnerRepository ownerRepository, DishCategoryRepository dishCategoryRepository, DishMapper dishMapper) {
+
+    public DishService(DishRepository dishRepository, ImageService imageService, OwnerRepository ownerRepository, DishCategoryRepository dishCategoryRepository, DishMapper dishMapper, RateDishMapper rateDishMapper, RateDishRepository rateDishRepository) {
         this.dishRepository = dishRepository;
         this.imageService = imageService;
         this.ownerRepository = ownerRepository;
         this.dishCategoryRepository = dishCategoryRepository;
         this.dishMapper = dishMapper;
+        this.rateDishMapper = rateDishMapper;
+        this.rateDishRepository = rateDishRepository;
     }
 
     public String generateSlug(String name) {
@@ -191,5 +197,14 @@ public class DishService {
        );
         String imageLink = this.imageService.getAssignedUrl(dishModelSaved.getImagePath());
         return this.dishMapper.modelToResponse(dishModel, imageLink);
+    }
+
+    public List<RateDishResponseDTO> getRatesDishByDishId(Integer id, Pageable pageable){
+       List<RateDishModel> ratesDish = this.rateDishRepository.findByReserveDishModelDishModelId(id, pageable).getContent();
+
+        return ratesDish.stream()
+                .map(this.rateDishMapper::modelToResponse)
+                .toList();
+
     }
 }
