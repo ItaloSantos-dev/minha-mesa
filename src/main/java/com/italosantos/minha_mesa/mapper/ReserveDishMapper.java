@@ -14,6 +14,12 @@ import java.time.LocalDateTime;
 
 @Component
 public class ReserveDishMapper {
+    private final RateDishMapper rateDishMapper;
+
+    ReserveDishMapper (RateDishMapper rateDishMapper){
+        this.rateDishMapper = rateDishMapper;
+    }
+
     public ReserveDishModel createToModel(
             CreateReserveDishRequestDTO createReserveDishRequestDTO,
             ReserveModel reserveModel,
@@ -41,7 +47,8 @@ public class ReserveDishMapper {
                 reserveDishModel.getQuantity() - reserveDishModel.getCanceledQuantity() - reserveDishModel.getCompletedQuantity(),
                 reserveDishModel.getDishPrice().multiply(BigDecimal.valueOf(reserveDishModel.getCompletedQuantity())),
                 reserveDishModel.getCreatedAt(),
-                reserveDishModel.getStatus()
+                reserveDishModel.getStatus(),
+                reserveDishModel.getRateDishModel()==null ? null : this.rateDishMapper.modelToResponse(reserveDishModel.getRateDishModel())
         );
     }
 
