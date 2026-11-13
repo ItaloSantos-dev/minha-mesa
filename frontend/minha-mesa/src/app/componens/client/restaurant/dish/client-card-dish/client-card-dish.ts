@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { DishResponseDTO } from '../../../../../types/dish/dish-repsonse';
 
 @Component({
   selector: 'app-client-card-dish',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './client-card-dish.html',
   styleUrl: './client-card-dish.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

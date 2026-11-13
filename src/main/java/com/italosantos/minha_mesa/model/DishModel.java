@@ -60,7 +60,7 @@ public class DishModel {
     private Boolean active;
 
     @OneToMany(mappedBy = "dishModel")
-    private List<ReserveDishModel> reserveDishModels;
+    private List<ReserveDishModel> reserveDishModels = new ArrayList<>();
 
     public void updateRating(){
         BigDecimal rateCount = BigDecimal.ZERO;
