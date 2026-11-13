@@ -55,6 +55,23 @@ export class OwnerShowReserve implements OnDestroy {
   readonly canScrollDishPrevious = signal(false);
   readonly canScrollDishNext = signal(false);
   readonly reserveStatus = ReserveStatus;
+  readonly showPastReservationNoShowWarning = computed(() => {
+    const reserve = this.reserve();
+    if (
+      !reserve ||
+      reserve.status === ReserveStatus.CANCELED ||
+      reserve.status === ReserveStatus.COMPLETED ||
+      reserve.status === ReserveStatus.NO_SHOW
+    ) {
+      return false;
+    }
+
+    const [year, month, day] = reserve.date.split('-').map(Number);
+    const reservationDate = new Date(year, month - 1, day);
+    const today = new Date();
+    const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return reservationDate < todayDate;
+  });
   private dishesResizeObserver?: ResizeObserver;
   private dishesViewport?: HTMLDivElement;
 
@@ -176,6 +193,7 @@ export class OwnerShowReserve implements OnDestroy {
     const reserveEnd = new Date(`${reserve.date}T${reserve.timeEnd}`);
 
     const isTodayOrPast = reserveDate <= today;
+    const isPast = reserveDate < today;
     const isWithinReserveTime = now >= reserveStart && now <= reserveEnd;
     const isAfterTomorrow = reserveDate > new Date(
       today.getFullYear(),
@@ -192,7 +210,7 @@ export class OwnerShowReserve implements OnDestroy {
           }
         ];
 
-        if (isAfterTomorrow) {
+        if (isAfterTomorrow || isPast) {
           statuses.push({
             value: 'Cancelada',
             status: ReserveStatus.CANCELED
