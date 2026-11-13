@@ -17,6 +17,18 @@ import { ClientHome } from './componens/client/client-home/client-home';
 import { ClientSearchRestaurants } from './componens/client/restaurant/client-search-restaurants/client-search-restaurants';
 import { ClientShowRestaurant } from './componens/client/restaurant/client-show-restaurant/client-show-restaurant';
 import { ClientShowReserves } from './componens/client/reserve/client-show-reserves/client-show-reserves';
+import { ClientShowDishes } from './componens/client/restaurant/dish/client-show-dishes/client-show-dishes';
+import { OwnerShowDishes } from './componens/owner/restaurant/dish/owner-show-dishes/owner-show-dishes';
+import { OwnerCreateDish } from './componens/owner/restaurant/dish/owner-create-dish/owner-create-dish';
+import { OwnerUpdateDish } from './componens/owner/restaurant/dish/owner-update-dish/owner-update-dish';
+import { OwnerShowDish } from './componens/owner/restaurant/dish/owner-show-dish/owner-show-dish';
+import { OwnerShowRatesDish } from './componens/owner/restaurant/dish/owner-show-rates-dish/owner-show-rates-dish';
+import { OwnerShowDishCateogries } from './componens/owner/restaurant/dish-category/owner-show-dish-cateogries/owner-show-dish-cateogries';
+
+import { OwnerUpdateDishCategory } from './componens/owner/restaurant/dish-category/owner-update-dish-category/owner-update-dish-category';
+import { OwnerCreateDishCategory } from './componens/owner/restaurant/dish-category/owner-create-dish-category/owner-create-dish-category';
+import { ClientShowReserve } from './componens/client/reserve/client-show-reserve/client-show-reserve';
+import { ClientShowDish } from './componens/client/restaurant/dish/client-show-dish/client-show-dish';
 
 export const routes: Routes = [
     {
@@ -50,11 +62,23 @@ export const routes: Routes = [
                 component:ClientShowReserves
             },
             {
+                path:'reservations/:id',
+                component:ClientShowReserve
+            },
+            {
                 path:'restaurants',
                 children:[
                     {
                         path:'',
                         component:ClientSearchRestaurants
+                    },
+                    {
+                        path:':restaurantId/dishes/:dishId',
+                        component:ClientShowDish
+                    },
+                    {
+                        path:':id/dishes',
+                        component:ClientShowDishes
                     },
                     {
                         path:':id',
@@ -95,6 +119,39 @@ export const routes: Routes = [
                         path:'reservations',
                         component:OwnerShowReserve
 
+                    },
+
+                    {
+                        path:'dishes/create',
+                        component:OwnerCreateDish
+                    },
+                    {
+                        path:'dishes/:id/update',
+                        component:OwnerUpdateDish
+                    },
+                    {
+                        path:'dishes/:id/rates',
+                        component:OwnerShowRatesDish
+                    },
+                    {
+                        path:'dishes/:id',
+                        component:OwnerShowDish
+                    },
+                    {
+                        path:'dishes',
+                        component:OwnerShowDishes
+                    },
+                    {
+                        path:'dish-categories/create',
+                        component:OwnerCreateDishCategory
+                    },
+                    {
+                        path:'dish-categories/:id',
+                        component:OwnerUpdateDishCategory
+                    },
+                    {
+                        path:'dish-categories',
+                        component:OwnerShowDishCateogries
                     }
                 ]
             }

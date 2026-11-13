@@ -55,7 +55,7 @@ public class ReserveService {
             throw new ThisDateOfReserveIsNotPermitedException(scheduleExceptionModel.get());
 
         if (!tableModel.getActive())
-            throw new IllegalParameterException();
+            throw new NotPermitedException("Esta mesa está inativa");
 
         if (!this.workingScheduleRepository.existsByRestaurantModelIdAndDayOfWeekAndTimeStartAndTimeEnd(
                 tableModel.getRestaurantModel().getId(),
@@ -91,10 +91,13 @@ public class ReserveService {
         if (userIsCliente && newStatus!=ReserveStatus.CANCELED)
             throw new NotPermitedException();
 
+        if(reserveModel.getStatus()==ReserveStatus.IN_PROGRESS && newStatus!=ReserveStatus.COMPLETED)
+            throw new IllegalParameterException("Não é possível alterar o status atual da reserva para algo diferten de COMPLETED");
+
         if (!reserveModel.getDate().isAfter(LocalDate.now().plusDays(1)) && newStatus ==ReserveStatus.CANCELED)
             throw new NotPermitedException("A data limite para cancelamento da reserva expirou");
 
-        if ((newStatus==ReserveStatus.COMPLETED || newStatus==ReserveStatus.NO_SHOW) &&
+        if ((newStatus==ReserveStatus.COMPLETED || newStatus==ReserveStatus.NO_SHOW || newStatus==ReserveStatus.IN_PROGRESS) &&
             reserveModel.getDate().isAfter(LocalDate.now())
         )
             throw new IllegalParameterException("Não possível alterar o status para " + newStatus + " antes da data marcada para reserva");

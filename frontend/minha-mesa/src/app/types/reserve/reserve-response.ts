@@ -1,4 +1,5 @@
 import { ReserveStatus } from "../enums/reserve-status";
+import { ReserveDishResponseDTO } from "../reserve_dish/reserve-dish-response";
 
 export interface ReserveResponseDTO{
     id: number;
@@ -12,4 +13,5 @@ export interface ReserveResponseDTO{
     status: ReserveStatus;
     observation: string;
     peoples: number;
+    reserveDishes:ReserveDishResponseDTO[]
 }

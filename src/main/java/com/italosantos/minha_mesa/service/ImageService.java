@@ -42,4 +42,10 @@ public class ImageService {
     public String getAssignedUrl(String imagePath){
         return this.mediaStorage.getAssignedUrl(imagePath);
     }
+
+    public void deleteImage(String path){
+        this.mediaStorage.deleteMedia(path);
+    }
+
+
 }

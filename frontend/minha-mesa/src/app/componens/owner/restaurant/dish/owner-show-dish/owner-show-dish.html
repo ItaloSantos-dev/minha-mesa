@@ -1,0 +1,124 @@
+<app-message-error />
+<main class="min-h-full bg-[radial-gradient(circle_at_100%_0%,color-mix(in_srgb,var(--color-highlight)_12%,transparent),transparent_28rem)] px-5 py-10 pb-12 [font-family:var(--font-body)] text-(--color-coffee) sm:px-[4vw] max-[760px]:px-4 max-[760px]:py-6 max-[760px]:pb-8">
+  <a routerLink="/owner/restaurant/dishes" class="mb-8 inline-flex items-center gap-2 rounded-md text-sm font-semibold text-(--color-secondary) outline-none transition hover:text-(--color-primary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)">
+    <i class="bi bi-arrow-left" aria-hidden="true"></i>
+    Voltar para pratos
+  </a>
+
+  @if (loading()) {
+    <div class="rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 p-8 text-center text-sm text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">
+      Carregando prato...
+    </div>
+  } @else if (dish(); as dish) {
+    <header class="mb-8 flex items-start justify-between gap-6 max-[760px]:flex-col">
+      <div>
+        <p class="mb-2 text-[.7rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Detalhes do prato #{{ dish.id }}</p>
+        <h1 class="mb-2 [font-family:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] text-(--color-primary)">{{ dish.name }}</h1>
+        <p class="mb-0 text-sm text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">{{ dish.restaurantName }}</p>
+      </div>
+      <a
+        class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-[color-mix(in_srgb,var(--color-primary)_20%,transparent)] bg-white text-lg text-(--color-primary) shadow-sm transition hover:bg-[color-mix(in_srgb,var(--color-primary)_6%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+        [routerLink]="['/owner/restaurant/dishes', dish.id, 'update']"
+        [attr.aria-label]="'Editar prato ' + dish.name"
+        [title]="'Editar prato ' + dish.name"
+      >
+        <i class="bi bi-pencil" aria-hidden="true"></i>
+      </a>
+    </header>
+
+    <section class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,.85fr)]">
+      <article class="group overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/85 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)]">
+        <div class="aspect-[16/10] max-h-[28rem] bg-[color-mix(in_srgb,var(--color-background)_65%,white)]">
+          @if (dish.imageLink) {
+            <img class="h-full w-full object-cover transition duration-500 group-hover:scale-105" [src]="dish.imageLink" [alt]="'Foto do prato ' + dish.name">
+          } @else {
+            <div class="grid h-full place-items-center text-6xl text-(--color-secondary)" aria-hidden="true">
+              <i class="bi bi-egg-fried"></i>
+            </div>
+          }
+        </div>
+
+        <div class="p-6 max-[760px]:p-4">
+          <div class="mb-5 flex flex-wrap items-start justify-between gap-4">
+            <div>
+              @if (dish.dishCategoryName) {
+                <p class="mb-2 text-xs font-bold uppercase tracking-[.12em] text-(--color-secondary)">{{ dish.dishCategoryName }}</p>
+              } @else {
+                <p class="mb-2 text-xs italic text-[color-mix(in_srgb,var(--color-coffee)_55%,transparent)]">Sem categoria</p>
+              }
+              <h2 class="mb-0 [font-family:var(--font-heading)] text-2xl font-semibold text-(--color-primary)">{{ dish.name }}</h2>
+            </div>
+            <span class="rounded-full bg-[color-mix(in_srgb,var(--color-highlight)_18%,white)] px-4 py-2 font-bold text-(--color-coffee)">
+              {{ formatPrice(dish.price) }}
+            </span>
+          </div>
+
+          <p class="mb-6 whitespace-pre-line leading-7 text-[color-mix(in_srgb,var(--color-coffee)_75%,transparent)]">
+            {{ dish.description || 'Sem descrição.' }}
+          </p>
+
+          <dl class="grid grid-cols-2 gap-4 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] pt-5 max-[480px]:grid-cols-1">
+            <div>
+              <dt class="mb-1 text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Avaliação</dt>
+              <dd class="mb-0 flex items-center gap-2 font-semibold">
+                <i class="bi bi-star-fill text-(--color-highlight)" aria-hidden="true"></i>
+                {{ formatRating(dish.rating) }} / 5
+              </dd>
+            </div>
+            <div>
+              <dt class="mb-1 text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Tempo de preparo</dt>
+              <dd class="mb-0 font-semibold"><i class="bi bi-clock mr-2 text-(--color-secondary)" aria-hidden="true"></i>{{ preparationTimeInMinutes(dish.preparationTime) }} min</dd>
+            </div>
+            <div>
+              <dt class="mb-1 text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Categoria</dt>
+              <dd class="mb-0 font-semibold">{{ dish.dishCategoryName || 'Sem categoria' }}</dd>
+            </div>
+            <div>
+              <dt class="mb-1 text-xs font-semibold text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Status</dt>
+              <dd class="mb-0 font-semibold">{{ dish.active ? 'Ativo' : 'Desativado' }}</dd>
+            </div>
+          </dl>
+        </div>
+      </article>
+
+      <section class="rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 p-6 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)] max-[760px]:p-4" aria-labelledby="dish-rates-title">
+        <div class="mb-5 flex items-start justify-between gap-4">
+          <div>
+            <p class="mb-1 text-[.7rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Opiniões</p>
+            <h2 id="dish-rates-title" class="mb-0 [font-family:var(--font-heading)] text-xl font-semibold text-(--color-primary)">Avaliações</h2>
+          </div>
+          <span class="rounded-full bg-[color-mix(in_srgb,var(--color-highlight)_18%,white)] px-3 py-1 text-sm font-bold">{{ dish.rates.length }}</span>
+        </div>
+
+        @if (dish.rates.length > 0) {
+          <div class="space-y-3">
+            @for (rate of dish.rates.slice(0, 5); track rate.id) {
+              <article class="rounded-xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white p-4">
+                <div class="mb-2 flex items-start justify-between gap-3">
+                  <div>
+                    <h3 class="mb-1 [font-family:var(--font-heading)] text-sm font-semibold text-(--color-primary)">{{ rate.clientName }}</h3>
+                    <p class="mb-0 text-xs text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Reserva #{{ rate.reserveId }}</p>
+                  </div>
+                  <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-highlight)_18%,white)] px-2.5 py-1 text-xs font-bold text-(--color-coffee)" [attr.aria-label]="'Avaliação ' + rate.rating + ' de 5'">
+                    <i class="bi bi-star-fill text-(--color-highlight)" aria-hidden="true"></i>
+                    {{ rate.rating }} / 5
+                  </span>
+                </div>
+                <p class="mb-0 whitespace-pre-line text-sm leading-6 text-[color-mix(in_srgb,var(--color-coffee)_75%,transparent)]">{{ rate.comment }}</p>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="mb-0 rounded-xl bg-[color-mix(in_srgb,var(--color-background)_50%,white)] p-5 text-sm text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">Este prato ainda não possui avaliações.</p>
+        }
+        <a
+          [routerLink]="['/owner/restaurant/dishes', dish.id, 'rates']"
+          class="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[color-mix(in_srgb,var(--color-primary)_25%,transparent)] px-4 py-3 text-sm font-bold text-(--color-primary) transition hover:bg-[color-mix(in_srgb,var(--color-primary)_6%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+        >
+          Ver todas as avaliações
+          <i class="bi bi-arrow-right" aria-hidden="true"></i>
+        </a>
+      </section>
+    </section>
+  }
+</main>

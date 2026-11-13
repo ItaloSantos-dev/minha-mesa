@@ -1,0 +1,110 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-3 backdrop-blur-sm sm:p-6" role="presentation">
+  <section
+    class="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="add-reserve-dish-title"
+  >
+    <form class="flex min-h-0 flex-1 flex-col" (submit)="submit($event)">
+      <header class="flex shrink-0 items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] px-5 py-4 sm:px-7 sm:py-5">
+        <div>
+          <p class="mb-1 text-[.7rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Consumo da reserva</p>
+          <h2 id="add-reserve-dish-title" class="mb-0 [font-family:var(--font-heading)] text-xl font-semibold text-(--color-primary) sm:text-2xl">Adicionar prato</h2>
+        </div>
+        <button
+          type="button"
+          class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-(--color-coffee) transition hover:bg-[color-mix(in_srgb,var(--color-coffee)_8%,white)] disabled:opacity-40"
+          aria-label="Fechar"
+          [disabled]="isSubmitting()"
+          (click)="closed.emit()"
+        >
+          <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+      </header>
+
+      <div class="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-7">
+        @if (dishes().length > 0) {
+          <fieldset>
+            <legend class="mb-4 text-sm font-semibold text-(--color-coffee)">Selecione um prato</legend>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              @for (dish of dishes(); track dish.id) {
+                <button
+                  type="button"
+                  class="group overflow-hidden rounded-xl border bg-white text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+                  [class.border-(--color-primary)]="selectedDishId() === dish.id"
+                  [class.ring-2]="selectedDishId() === dish.id"
+                  [class.ring-(--color-secondary)]="selectedDishId() === dish.id"
+                  [class.border-[color-mix(in_srgb,var(--color-coffee)_12%,transparent)]]="selectedDishId() !== dish.id"
+                  [attr.aria-pressed]="selectedDishId() === dish.id"
+                  [disabled]="isSubmitting()"
+                  (click)="selectDish(dish.id)"
+                >
+                  <div class="relative aspect-[16/10] overflow-hidden bg-[color-mix(in_srgb,var(--color-background)_65%,white)]">
+                    <img
+                      class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                      [src]="dish.imageLink"
+                      [alt]="'Foto do prato ' + dish.name"
+                      loading="lazy"
+                    >
+                    <span class="absolute bottom-2 left-2 rounded-full bg-white/95 px-2.5 py-1 text-xs font-extrabold text-(--color-primary) shadow-sm">
+                      {{ formatPrice(dish.price) }}
+                    </span>
+                    @if (selectedDishId() === dish.id) {
+                      <span class="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-(--color-primary) text-white shadow" aria-hidden="true">
+                        <i class="bi bi-check-lg"></i>
+                      </span>
+                    }
+                  </div>
+                  <div class="p-3.5">
+                    <h3 class="mb-1 line-clamp-1 [font-family:var(--font-heading)] text-base font-semibold text-(--color-primary)">{{ dish.name }}</h3>
+                    <p class="mb-0 text-xs text-[color-mix(in_srgb,var(--color-coffee)_65%,transparent)]">{{ dish.preparationTime }} min de preparo</p>
+                  </div>
+                </button>
+              }
+            </div>
+          </fieldset>
+        } @else {
+          <p class="mb-0 rounded-xl bg-[color-mix(in_srgb,var(--color-background)_48%,white)] p-5 text-sm text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">Não há pratos ativos disponíveis para adicionar a esta reserva.</p>
+        }
+      </div>
+
+      <footer class="grid shrink-0 gap-4 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_35%,white)] px-5 py-4 sm:grid-cols-[minmax(12rem,1fr)_auto_auto] sm:items-end sm:px-7">
+        <label class="grid gap-2 text-sm font-semibold" for="reserve-dish-quantity">
+          Quantidade
+          <input
+            id="reserve-dish-quantity"
+            type="number"
+            min="1"
+            step="1"
+            required
+            class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+            [value]="quantity()"
+            [disabled]="isSubmitting()"
+            (input)="onQuantityChanged($event)"
+          >
+        </label>
+        <button
+          type="button"
+          class="min-h-11 rounded-xl border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] px-5 py-2.5 text-sm font-semibold text-(--color-coffee) transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) disabled:opacity-50"
+          [disabled]="isSubmitting()"
+          (click)="closed.emit()"
+        >
+          Fechar
+        </button>
+        <button
+          type="submit"
+          class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-(--color-primary) px-5 py-2.5 text-sm font-bold text-white transition hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) disabled:cursor-not-allowed disabled:opacity-50"
+          [disabled]="isSubmitting() || !selectedDishId() || !isValidQuantity()"
+        >
+          @if (isSubmitting()) {
+            <i class="bi bi-arrow-repeat animate-spin" aria-hidden="true"></i>
+            Adicionando...
+          } @else {
+            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+            Adicionar à reserva
+          }
+        </button>
+      </footer>
+    </form>
+  </section>
+</div>

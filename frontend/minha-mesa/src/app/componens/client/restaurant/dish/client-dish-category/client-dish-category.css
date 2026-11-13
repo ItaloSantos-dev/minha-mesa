@@ -1,0 +1,58 @@
+.dish-carousel-viewport {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dish-carousel-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.dish-carousel-track {
+  display: flex;
+  width: max-content;
+}
+
+.dish-carousel-set {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  padding: 0.25rem 0.125rem 1rem;
+}
+
+.dish-carousel-set > app-client-card-dish {
+  width: 17rem;
+  flex: 0 0 17rem;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 20%, white);
+  border-radius: 9999px;
+  background: white;
+  color: var(--color-primary);
+  box-shadow: 0 0.5rem 1.25rem rgb(90 69 60 / 16%);
+  transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+}
+
+.carousel-arrow:hover {
+  transform: translateY(-50%) scale(1.05);
+  background: var(--color-primary);
+  color: white;
+}
+
+.carousel-arrow:focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 3px;
+}

@@ -115,7 +115,7 @@ class ReserveServiceTest {
                 .thenReturn(Optional.empty());
 
 
-        assertThrows(IllegalParameterException.class, ()->{
+        assertThrows(NotPermitedException.class, ()->{
             this.reserveService.createReserve(createReserveRequestDTO, Mockito.any());
         });
     }

@@ -1,10 +1,12 @@
 package com.italosantos.minha_mesa.dto.reserve;
 
+import com.italosantos.minha_mesa.dto.reserve_dish.ReserveDishResponseDTO;
 import com.italosantos.minha_mesa.model.enums.DayOfWeek;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 public record ReserveResponseDTO(
         Integer id,
@@ -17,6 +19,7 @@ public record ReserveResponseDTO(
         LocalTime timeEnd,
         ReserveStatus status,
         String observation,
-        Integer peoples
+        Integer peoples,
+        List<ReserveDishResponseDTO> reserveDishes
 ) {
 }

@@ -1,0 +1,2 @@
+ALTER TABLE tb_dish
+    ALTER COLUMN category_id DROP NOT NULL;

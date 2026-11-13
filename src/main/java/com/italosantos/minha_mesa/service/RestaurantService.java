@@ -1,7 +1,12 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
+import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
+import com.italosantos.minha_mesa.dto.dish_category.DishCategoryResponseDTO;
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
@@ -17,11 +22,13 @@ import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.model.enums.UserRole;
 import com.italosantos.minha_mesa.repository.*;
+import com.italosantos.minha_mesa.utility.RestaurantUtility;
 import org.jspecify.annotations.Nullable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,9 +54,12 @@ public class RestaurantService {
     private final ScheduleExceptionRepository scheduleExceptionRepository;
     private final ScheduleExceptionMapper scheduleExceptionMapper;
     private final ImageService imageService;
+    private final RestaurantUtility restaurantUtility;
+    private final DishMapper dishMapper;
+    private final DishCategoryMapper dishCategoryMapper;
 
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper, ImageService imageService) {
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper, ImageService imageService, RestaurantUtility restaurantUtility, DishMapper dishMapper, DishCategoryMapper dishCategoryMapper) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
@@ -64,6 +74,9 @@ public class RestaurantService {
         this.scheduleExceptionRepository = scheduleExceptionRepository;
         this.scheduleExceptionMapper = scheduleExceptionMapper;
         this.imageService = imageService;
+        this.restaurantUtility = restaurantUtility;
+        this.dishMapper = dishMapper;
+        this.dishCategoryMapper = dishCategoryMapper;
     }
 
 
@@ -95,21 +108,28 @@ public class RestaurantService {
         String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
         this.restaurantRepository.save(restaurantModel);
 
-        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl);
+
+
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
     }
     @Cacheable(
             value = RedisCacheConfig.RESTAURANTCACHENAME,
             key = "#id"
     )
+
+
     public RestaurantResponseDTO getRestaurantById(Integer id){
         RestaurantModel restaurantModel =
                 this.restaurantRepository.findById(id)
                         .orElseThrow(() -> new RestaurantNotFoundException(id));
 
+        if (!restaurantModel.getActive())
+            throw new NotPermitedException("Este resaurante está inativo");
+
         String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
         String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
 
-        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl);
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
     }
 
 
@@ -142,7 +162,8 @@ public class RestaurantService {
         if (! this.restaurantRepository.existsById(id))
             throw new ResourceNotFoundException();
         List<WorkingScheduleModel> workingScheduleModels = this.workingScheduleRepository.findByRestaurantModelId(id, pageable).getContent();
-
+        if (!workingScheduleModels.getFirst().getRestaurantModel().getActive())
+            throw new NotPermitedException("Este restaurante está inativo.");
         return workingScheduleModels.stream()
                 .map(this.workingScheduleMapper::modelToResponse)
                 .toList();
@@ -186,6 +207,7 @@ public class RestaurantService {
     public List<TableResponseDTO> getTablesOfRestaurantById(@AuthenticationPrincipal UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
+
         return ownerModel.getRestaurantModel().getTableModels().stream()
                 .map(this.tableMapper::modelToResponse)
                 .toList();
@@ -196,13 +218,73 @@ public class RestaurantService {
             value = RedisCacheConfig.RESTAURANTSEARCHEDCACHENAME
     )
     public List<RestaurantResponseDTO> getRestaurantsLikeName(String search, Pageable pageable){
-        List<RestaurantModel> restaurants = this.restaurantRepository.findByNameContainingIgnoreCase(search, pageable);
+        List<RestaurantModel> restaurants = this.restaurantRepository.findByNameContainingIgnoreCaseAndActiveTrue(search, pageable);
 
         return restaurants.stream()
                 .map(r ->{
                     String imagePerfilUrl = this.imageService.getAssignedUrl(r.getImagePerfilPath());
                     String imageBannerUrl = this.imageService.getAssignedUrl(r.getImageBannerPath());
-                    return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl);
+                    return this.restaurantMapper.modelToResponse(r, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(r));
                 }).toList();
     }
+
+    private DishesOfRestauranteResponseDTO getDishesOfRestaurant(RestaurantModel restaurantModel, boolean onlyDishesIsActives){
+        List<DishCategoryResponseDTO> categories = restaurantModel.getDishCategoryModels().stream()
+                .map(category ->{
+                    List<DishResponseDTO> dishes = category.getDishModels().stream()
+                            .filter(dish -> {
+                                if (onlyDishesIsActives)
+                                    return dish.getActive();
+                                else
+                                    return true;
+                            })
+                            .map(dish -> {
+                                String dishLink =this.imageService.getAssignedUrl(dish.getImagePath());
+                                return this.dishMapper.modelToResponse(dish, dishLink);
+                            })
+                            .toList();
+                    String imageLink = this.imageService.getAssignedUrl(category.getImagePath());
+                    return this.dishCategoryMapper.modelToResponse(category, imageLink, dishes);
+                })
+                .toList();
+
+        List<DishResponseDTO> dishesWithoutCategory = restaurantModel.getDishModels().stream()
+                .filter(dish -> {
+                    if (onlyDishesIsActives)
+                        return dish.getActive() && dish.getDishCategoryModel()==null;
+                    else
+                        return dish.getDishCategoryModel()==null;
+                })
+                .map(dish -> {
+                    String dishLink =this.imageService.getAssignedUrl(dish.getImagePath());
+                    return this.dishMapper.modelToResponse(dish, dishLink);
+                })
+                .toList();
+
+        return new DishesOfRestauranteResponseDTO(categories, dishesWithoutCategory);
+    }
+
+    public DishesOfRestauranteResponseDTO getDishesOfRestaurantById(Integer id){
+        RestaurantModel restaurantModel = this.restaurantRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        if (!restaurantModel.getActive())
+            throw new NotPermitedException("Este restaurante está inativo");
+
+
+
+        return this.getDishesOfRestaurant(restaurantModel, true);
+    }
+
+    public DishesOfRestauranteResponseDTO getDishesOfRestaurantByUserModel(UserModel userModel){
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+
+        return this.getDishesOfRestaurant(ownerModel.getRestaurantModel(), false);
+    }
+
+
+
+
 }

@@ -1,5 +1,7 @@
 package com.italosantos.minha_mesa.controller;
 
+import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
+import com.italosantos.minha_mesa.dto.dish_category.DishCategoryResponseDTO;
 import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
@@ -271,4 +273,53 @@ public class RestaurantController {
     ){
         return ResponseEntity.ok(this.restaurantService.getRestaurantsLikeName(search, pageable));
     }
+
+    @Operation(
+            summary = "Busca os pratos de um restaurante pelo id",
+            description = "Retorna os pratos do restaurante, organizados por categoria, incluindo os pratos que não possuem categoria."
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pratos encontrados com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Restaurante está inativo"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Restaurante não encontrado"
+            )
+    })
+    @GetMapping("/{id}/dishes")
+    public ResponseEntity<DishesOfRestauranteResponseDTO> getDishesOfRestaurantById(
+            @PathVariable Integer id
+    ) {
+        return ResponseEntity.ok(this.restaurantService.getDishesOfRestaurantById(id));
+    }
+
+
+    @Operation(
+            summary = "Buscar pratos do restaurante do usuário autenticado",
+            description = "Retorna as categorias e os pratos cadastrados no restaurante vinculado ao proprietário autenticado."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pratos do restaurante retornados com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "Usuário não autenticado"
+            )
+    })
+    @GetMapping("/dishes")
+    public ResponseEntity<DishesOfRestauranteResponseDTO> getDishesOfRestaurantByUserModel(
+            @AuthenticationPrincipal UserModel userModel
+    ) {
+        return ResponseEntity.ok(this.restaurantService.getDishesOfRestaurantByUserModel(userModel));
+    }
+
+
 }

@@ -1,0 +1,111 @@
+<article class="flex h-full flex-col overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white shadow-[0_.5rem_1.5rem_rgba(90,69,60,.06)]">
+  <div class="relative aspect-[16/10] overflow-hidden bg-[color-mix(in_srgb,var(--color-background)_65%,white)]">
+    @if (dish()?.imageLink) {
+      <img class="h-full w-full object-cover" [src]="dish()!.imageLink" [alt]="'Foto do prato ' + dish()!.name" loading="lazy">
+    } @else {
+      <div class="grid h-full place-items-center text-5xl text-(--color-secondary)" aria-hidden="true">
+        <i class="bi bi-egg-fried"></i>
+      </div>
+    }
+    <span class="absolute bottom-2 left-2 rounded-full bg-white/95 px-2.5 py-1 text-xs font-extrabold text-(--color-primary) shadow-sm backdrop-blur">
+      {{ formatPrice(reserveDish().dishPrice) }}
+    </span>
+  </div>
+
+  <div class="flex flex-1 flex-col p-4">
+    <div class="mb-3 flex items-start justify-between gap-3">
+      <div class="min-w-0">
+        <h3 class="mb-1 line-clamp-2 [font-family:var(--font-heading)] text-base font-semibold leading-snug text-(--color-primary)">
+          {{ dish()?.name || reserveDish().rateDish?.dishName || 'Prato #' + reserveDish().dishId }}
+        </h3>
+        <p class="mb-0 text-[.7rem] text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Pedido #{{ reserveDish().id }}</p>
+      </div>
+      <span class="inline-flex shrink-0 rounded-full px-2 py-1 text-[.65rem] font-bold" [class]="getStatusClass(reserveDish().status)">
+        {{ getStatusLabel(reserveDish().status) }}
+      </span>
+    </div>
+
+    <dl class="mt-auto grid grid-cols-2 gap-x-3 gap-y-2 border-t border-[color-mix(in_srgb,var(--color-coffee)_9%,transparent)] pt-3 text-sm">
+      <div>
+        <dt class="text-[.68rem] text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Quantidade</dt>
+        <dd class="mb-0 font-semibold">{{ reserveDish().quantity }}</dd>
+      </div>
+      <div>
+        <dt class="text-[.68rem] text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Valor final</dt>
+        <dd class="mb-0 font-semibold">{{ formatPrice(reserveDish().priceFinal) }}</dd>
+      </div>
+      <div>
+        <dt class="text-[.68rem] text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Concluídos</dt>
+        <dd class="mb-0 font-semibold">{{ reserveDish().quantityCompleted }}</dd>
+      </div>
+      <div>
+        <dt class="text-[.68rem] text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Cancelados</dt>
+        <dd class="mb-0 font-semibold">{{ reserveDish().quantityCanceled }}</dd>
+      </div>
+      <div class="col-span-2">
+        <dt class="text-[.68rem] text-[color-mix(in_srgb,var(--color-coffee)_60%,transparent)]">Pendentes</dt>
+        <dd class="mb-0 font-semibold">{{ reserveDish().quantityPending }}</dd>
+      </div>
+    </dl>
+
+    @if (reserveDish().rateDish; as rateDish) {
+      <div class="mt-3 rounded-xl bg-[color-mix(in_srgb,var(--color-background)_48%,white)] p-3">
+        <div class="mb-2 flex items-center justify-between gap-3">
+          <p class="mb-0 text-sm font-semibold text-(--color-primary)">Avaliação do cliente</p>
+          <span class="inline-flex items-center gap-1 text-sm font-bold text-(--color-coffee)">
+            <i class="bi bi-star-fill text-(--color-highlight)" aria-hidden="true"></i>
+            {{ rateDish.rating }} / 5
+          </span>
+        </div>
+        <p class="mb-0 whitespace-pre-line text-sm leading-6 text-[color-mix(in_srgb,var(--color-coffee)_75%,transparent)]">{{ rateDish.comment || 'Sem comentário.' }}</p>
+      </div>
+    }
+
+    @if (canManage()) {
+      <div class="mt-3 grid grid-cols-3 gap-2">
+        <button type="button" class="rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] px-2 py-2 text-xs font-semibold text-(--color-primary) transition hover:bg-[color-mix(in_srgb,var(--color-background)_50%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" (click)="openUpdate('add')">Adicionar</button>
+        @if (reserveDish().quantityPending > 0) {
+          <button type="button" class="rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] px-2 py-2 text-xs font-semibold text-(--color-primary) transition hover:bg-[color-mix(in_srgb,var(--color-background)_50%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" (click)="openUpdate('complete')">Concluir</button>
+          @if (reserveDish().status === dishStatus.PENDING) {
+            <button type="button" class="rounded-lg border border-[color-mix(in_srgb,#a23b31_25%,transparent)] px-2 py-2 text-xs font-semibold text-[#a23b31] transition hover:bg-[#fde5e2] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)" (click)="openUpdate('cancel')">Cancelar</button>
+          }
+        }
+      </div>
+    }
+  </div>
+</article>
+
+@if (action(); as selectedAction) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm" role="presentation">
+    <section class="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="update-reserve-dish-title">
+      <form (submit)="saveUpdate($event)">
+        <header class="flex items-start justify-between gap-4 border-b border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] px-6 py-5">
+          <div>
+            <p class="mb-1 text-[.7rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Pedido #{{ reserveDish().id }}</p>
+            <h2 id="update-reserve-dish-title" class="mb-0 [font-family:var(--font-heading)] text-xl font-semibold text-(--color-primary)">{{ actionLabel(selectedAction) }}</h2>
+          </div>
+          <button type="button" class="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-(--color-coffee) transition hover:bg-[color-mix(in_srgb,var(--color-coffee)_8%,white)] disabled:opacity-40" aria-label="Fechar" [disabled]="isSaving()" (click)="closeUpdate()">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+          </button>
+        </header>
+        <div class="grid gap-5 px-6 py-5">
+          @if (selectedAction !== 'add') {
+            <p class="mb-0 text-sm text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">Quantidade pendente: {{ reserveDish().quantityPending }}</p>
+          }
+          <label class="grid gap-2 text-sm font-semibold">
+            Quantidade
+            <input type="number" min="1" step="1" [max]="selectedAction === 'add' ? null : reserveDish().quantityPending" required class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)" [value]="quantity()" (input)="onQuantityChanged($event)">
+          </label>
+          <button type="submit" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-(--color-primary) px-5 py-2.5 text-sm font-bold text-white transition hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) disabled:cursor-not-allowed disabled:opacity-50" [disabled]="isSaving() || !isValidQuantity(quantity()) || ((selectedAction === 'complete' || selectedAction === 'cancel') && quantity() > reserveDish().quantityPending) || (selectedAction === 'cancel' && reserveDish().status !== dishStatus.PENDING)">
+            @if (isSaving()) {
+              <i class="bi bi-arrow-repeat animate-spin" aria-hidden="true"></i>
+              Salvando...
+            } @else {
+              Confirmar
+            }
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+}

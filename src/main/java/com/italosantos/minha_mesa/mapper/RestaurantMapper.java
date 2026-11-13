@@ -1,11 +1,16 @@
 package com.italosantos.minha_mesa.mapper;
 
+import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.model.OwnerModel;
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.service.ImageService;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class RestaurantMapper {
@@ -26,7 +31,7 @@ public class RestaurantMapper {
         return restaurantModel;
     }
 
-    public RestaurantResponseDTO modelToResponse(RestaurantModel restaurantModel, String imagePerfilUrl, String imageBannerUrl){
+    public RestaurantResponseDTO modelToResponse(RestaurantModel restaurantModel, String imagePerfilUrl, String imageBannerUrl, BestRatingsRestaurant bestRatings){
         return new RestaurantResponseDTO(
                 restaurantModel.getId(),
                 restaurantModel.getName(),
@@ -37,7 +42,8 @@ public class RestaurantMapper {
                 imageBannerUrl,
                 restaurantModel.getWorkingScheduleModels().stream()
                         .map(this.workingScheduleMapper::modelToResponse)
-                        .toList()
+                        .toList(),
+                bestRatings
         );
     }
 }

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { TableFactory } from '../../../../../factory/table.factory';
 import { TableResponseDTO } from '../../../../../types/table/table-response';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
@@ -23,13 +24,7 @@ export class OwnerShowTables {
   private tableService = inject(TableService);
   private exceptionService = inject(ExceptionService);
 
-  readonly tablesMock: TableResponseDTO[] = [
-    { id: 1, number: 1, capacity: 2, active: false },
-    { id: 2, number: 2, capacity: 4, active: true },
-    { id: 3, number: 3, capacity: 6, active: true },
-    { id: 4, number: 4, capacity: 4, active: true },
-    { id: 5, number: 5, capacity: 8, active: true },
-  ];
+  readonly tablesMock: TableResponseDTO[] = TableFactory.createMocks();
 
   readonly tables = signal(<TableResponseDTO[]>[]);
 
@@ -158,7 +153,7 @@ export class OwnerShowTables {
   }
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(2);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.TABLES);
     this.loadTables();
   }
   createTableRequest():CreateTableRequestDTO {

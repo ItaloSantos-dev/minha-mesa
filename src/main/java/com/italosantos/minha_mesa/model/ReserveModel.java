@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Table(name = "tb_reserve")
 @Entity
@@ -53,4 +55,9 @@ public class ReserveModel {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "total_amount", scale = 10, precision = 2)
+    private BigDecimal totalAmount;
+
+    @OneToMany(mappedBy = "reserveModel")
+    private List<ReserveDishModel> reserveDishModels;
 }

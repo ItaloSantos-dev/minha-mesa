@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, signal, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, OnDestroy, signal, ViewChild } from '@angular/core';
+import { ReserveFactory } from '../../../../../factory/reserve.factory';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReserveStatus } from '../../../../../types/enums/reserve-status';
 import { ReserveResponseDTO } from '../../../../../types/reserve/reserve-response';
@@ -12,41 +13,172 @@ import { ExceptionService } from '../../../../../service/exception-service/excep
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { MessageError } from '../../../../message-error/message-error';
 import { NotFound } from '../../../../not-found/not-found';
+import { DishesOfRestauranteResponseDTO } from '../../../../../types/dish/dishes-of-restaurant-response';
+import { DishResponseDTO } from '../../../../../types/dish/dish-repsonse';
+import { CreateReserveDishRequestDTO } from '../../../../../types/reserve_dish/create-reserve-dish-request';
+import { ReserveDishResponseDTO } from '../../../../../types/reserve_dish/reserve-dish-response';
+import { ReserveDishStatus } from '../../../../../types/enums/reserve-dish-status';
+import { ReserveDishService } from '../../../../../service/reserve-dish-service/reserve-dish-service';
+import { OwnerReserveDish } from '../owner-reserve-dish/owner-reserve-dish';
+import { ReserveAddDish } from '../reserve-add-dish/reserve-add-dish';
 interface StringAndStatus{
   value:string,
   status:ReserveStatus
 }
 @Component({
   selector: 'app-owner-show-reserve',
-  imports: [RouterLink, MessageError],
+  imports: [RouterLink, MessageError, OwnerReserveDish, ReserveAddDish],
   templateUrl: './owner-show-reserve.html',
+  styleUrl: './owner-show-reserve.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OwnerShowReserve {
+export class OwnerShowReserve implements OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private utilityService = inject(UtilityService);
   private exceptioNService = inject(ExceptionService);
 
-  private reserveMock:ReserveResponseDTO = {
-        id: 1,
-        clientName: "Carice freire",
-        restaurantName: "Restaurante molho sem água",
-        tableNumber: 1,
-        date: "2026-09-04",
-        dayOfWeek: "FRIDAY",
-        timeStart: "14:00:00",
-        timeEnd: "15:00:00",
-        status: ReserveStatus.SCHEDULED,
-        observation: "Meu filho autista irá me acompanhar",
-        peoples: 2
-  }
+  private reserveMock:ReserveResponseDTO = ReserveFactory.createMock();
   readonly reserve = signal<ReserveResponseDTO | null>(null);
   statusForUpdated = signal(<ReserveStatus>{});
 
   private reserveService = inject(ReserveService);
 
   private restaurantService = inject(RestaurantService);
+  private reserveDishService = inject(ReserveDishService);
+  readonly loading = signal(true);
+  readonly loadingDishes = signal(false);
+  readonly availableDishes = signal<DishResponseDTO[]>([]);
+  readonly showAddDishDialog = signal(false);
+  readonly isAddingDish = signal(false);
+  readonly hasDishOverflow = signal(false);
+  readonly canScrollDishPrevious = signal(false);
+  readonly canScrollDishNext = signal(false);
+  readonly reserveStatus = ReserveStatus;
+  readonly showPastReservationNoShowWarning = computed(() => {
+    const reserve = this.reserve();
+    if (
+      !reserve ||
+      reserve.status === ReserveStatus.CANCELED ||
+      reserve.status === ReserveStatus.COMPLETED ||
+      reserve.status === ReserveStatus.NO_SHOW
+    ) {
+      return false;
+    }
+
+    const [year, month, day] = reserve.date.split('-').map(Number);
+    const reservationDate = new Date(year, month - 1, day);
+    const today = new Date();
+    const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    return reservationDate < todayDate;
+  });
+  private dishesResizeObserver?: ResizeObserver;
+  private dishesViewport?: HTMLDivElement;
+
+  @ViewChild('dishesViewport')
+  set dishesViewportElement(element: ElementRef<HTMLDivElement> | undefined) {
+    this.dishesResizeObserver?.disconnect();
+    this.dishesViewport = element?.nativeElement;
+    if (this.dishesViewport && typeof ResizeObserver !== 'undefined') {
+      this.dishesResizeObserver = new ResizeObserver(() => this.updateDishCarousel());
+      this.dishesResizeObserver.observe(this.dishesViewport);
+    }
+    requestAnimationFrame(() => this.updateDishCarousel());
+  }
+
+  readonly selectableDishes = computed(() => {
+    const addedDishIds = new Set(this.reserve()?.reserveDishes.map((dish) => dish.dishId) ?? []);
+    return this.availableDishes().filter((dish) => !addedDishIds.has(dish.id));
+  });
+  openAddDishDialog() {
+    if (this.reserve()?.status !== ReserveStatus.IN_PROGRESS || this.selectableDishes().length === 0) {
+      return;
+    }
+    this.showAddDishDialog.set(true);
+  }
+
+  closeAddDishDialog() {
+    if (!this.isAddingDish()) {
+      this.showAddDishDialog.set(false);
+    }
+  }
+
+  addDish(dishSelection: { dishId: number; quantity: number }) {
+    const reserve = this.reserve();
+
+    if (
+      reserve?.status !== ReserveStatus.IN_PROGRESS ||
+      !this.selectableDishes().some((dish) => dish.id === dishSelection.dishId && dish.active) ||
+      !Number.isInteger(dishSelection.quantity) ||
+      dishSelection.quantity < 1 ||
+      this.isAddingDish()
+    ) {
+      return;
+    }
+
+    const request: CreateReserveDishRequestDTO = {
+      reserveId: reserve.id,
+      dishId: dishSelection.dishId,
+      quantity: dishSelection.quantity,
+    };
+
+    this.isAddingDish.set(true);
+    this.reserveDishService.createReserveDish(request).subscribe({
+      next: (reserveDish) => {
+        this.reserve.update((current) =>
+          current ? { ...current, reserveDishes: [...current.reserveDishes, reserveDish] } : current,
+        );
+        this.showAddDishDialog.set(false);
+        this.isAddingDish.set(false);
+        requestAnimationFrame(() => this.updateDishCarousel());
+      },
+      error: (error: HttpErrorResponse) => {
+        this.handlerShowError(error);
+        this.isAddingDish.set(false);
+      },
+    });
+  }
+
+  updateReserveDish(updatedDish: ReserveDishResponseDTO) {
+    this.reserve.update((current) =>
+      current
+        ? {
+            ...current,
+            reserveDishes: current.reserveDishes.map((dish) =>
+              dish.id === updatedDish.id ? updatedDish : dish,
+            ),
+          }
+        : current,
+    );
+    requestAnimationFrame(() => this.updateDishCarousel());
+  }
+
+  moveDishCarousel(direction: -1 | 1) {
+    const viewport = this.dishesViewport;
+    viewport?.scrollBy({
+      left: direction * (viewport.clientWidth * 0.8),
+      behavior: 'smooth',
+    });
+  }
+
+  updateDishCarousel() {
+    const viewport = this.dishesViewport;
+    if (!viewport) {
+      this.hasDishOverflow.set(false);
+      this.canScrollDishPrevious.set(false);
+      this.canScrollDishNext.set(false);
+      return;
+    }
+
+    const maxScroll = viewport.scrollWidth - viewport.clientWidth;
+    this.hasDishOverflow.set(maxScroll > 2);
+    this.canScrollDishPrevious.set(viewport.scrollLeft > 2);
+    this.canScrollDishNext.set(viewport.scrollLeft < maxScroll - 2);
+  }
+
+  ngOnDestroy() {
+    this.dishesResizeObserver?.disconnect();
+  }
 
   getStatusAvaliableForUpdated(): StringAndStatus[] {
     if (!this.reserve()) {
@@ -56,8 +188,13 @@ export class OwnerShowReserve {
     const reserve = this.reserve()!;
     const today = new Date();
     const reserveDate = new Date(`${reserve.date}T00:00:00`);
+    const now = new Date();
+    const reserveStart = new Date(`${reserve.date}T${reserve.timeStart}`);
+    const reserveEnd = new Date(`${reserve.date}T${reserve.timeEnd}`);
 
     const isTodayOrPast = reserveDate <= today;
+    const isPast = reserveDate < today;
+    const isWithinReserveTime = now >= reserveStart && now <= reserveEnd;
     const isAfterTomorrow = reserveDate > new Date(
       today.getFullYear(),
       today.getMonth(),
@@ -73,7 +210,7 @@ export class OwnerShowReserve {
           }
         ];
 
-        if (isAfterTomorrow) {
+        if (isAfterTomorrow || isPast) {
           statuses.push({
             value: 'Cancelada',
             status: ReserveStatus.CANCELED
@@ -113,8 +250,20 @@ export class OwnerShowReserve {
           );
         }
 
+        if (isWithinReserveTime) {
+          statuses.push({
+            value: 'Em andamento',
+            status: ReserveStatus.IN_PROGRESS,
+          });
+        }
+
         return statuses;
       }
+
+      case ReserveStatus.IN_PROGRESS:
+        return isTodayOrPast
+          ? [{ value: 'Concluída', status: ReserveStatus.COMPLETED }]
+          : [];
 
       case ReserveStatus.CANCELED:
       case ReserveStatus.COMPLETED:
@@ -131,6 +280,7 @@ export class OwnerShowReserve {
     const classes: Record<ReserveStatus, string> = {
       [ReserveStatus.SCHEDULED]: 'bg-[#fff2c9] text-[#876200]',
       [ReserveStatus.CONFIRMED]: 'bg-[#e1f3e8] text-[#28734a]',
+      [ReserveStatus.IN_PROGRESS]: 'bg-[#e3edf5] text-[#236184]',
       [ReserveStatus.CANCELED]: 'bg-[#fde5e2] text-[#a23b31]',
       [ReserveStatus.COMPLETED]: 'bg-[#e3edf5] text-[#236184]',
       [ReserveStatus.NO_SHOW]: 'bg-[#f1e4ef] text-[#82436f]',
@@ -184,6 +334,10 @@ export class OwnerShowReserve {
         // Laranja para não comparecimento
         commomClass += 'bg-orange-100 text-orange-800';
         break;
+      case ReserveStatus.IN_PROGRESS:
+        // Roxo para reserva em andamento
+        commomClass += 'bg-purple-100 text-purple-800';
+        break;
       default:
         // Cinza padrão
         commomClass += 'bg-gray-100 text-gray-800';
@@ -200,6 +354,9 @@ export class OwnerShowReserve {
     case ReserveStatus.CONFIRMED:
       return 'Confirmada';
 
+    case ReserveStatus.IN_PROGRESS:
+      return 'Em andamento';
+
     case ReserveStatus.CANCELED:
       return 'Cancelada';
 
@@ -208,7 +365,7 @@ export class OwnerShowReserve {
 
     case ReserveStatus.NO_SHOW:
       return 'Não compareceu';
-
+    
     default:
       return 'Desconhecido';
   }
@@ -261,19 +418,30 @@ export class OwnerShowReserve {
   }
 
   handlerShowError(erro:HttpErrorResponse){
-    this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro));
+    const showError = this.exceptioNService.handlerRedirectExceptionResponse(
+      erro,
+      UtilityService.pathsOfApplication.OWNER_SHOW_RESERVES,
+    );
+    if (showError) {
+      this.utilityService.handlerShowMenssageErrorSubject(ExceptionResponse.fromHttpError(erro));
+    }
   }
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(1);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.RESERVES);
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.restaurantService.getReserveOfRestaurantById(Number(id)).subscribe({
         next: (data) =>{
           this.reserve.set(data);
           this.statusForUpdated.set(this.reserve()?.status as ReserveStatus);
+          this.loading.set(false);
+          if (data.status === ReserveStatus.IN_PROGRESS) {
+            this.loadAvailableDishes();
+          }
         },
         error: (erro:HttpErrorResponse) =>{
+          this.loading.set(false);
           const showForm = this.exceptioNService.handlerRedirectExceptionResponse(erro, UtilityService.pathsOfApplication.OWNER_SHOW_RESERVES);
           if (showForm) {
             this.handlerShowError(erro)
@@ -282,6 +450,24 @@ export class OwnerShowReserve {
       })
     }    
 
+  }
+
+  private loadAvailableDishes() {
+    this.loadingDishes.set(true);
+    this.restaurantService.getDishesOfOwnerRestaurant().subscribe({
+      next: (data: DishesOfRestauranteResponseDTO) => {
+        const dishes = [
+          ...data.categories.flatMap((category) => category.dishes),
+          ...data.dishesWithoutCategories,
+        ];
+        this.availableDishes.set(dishes.filter((dish) => dish.active));
+        this.loadingDishes.set(false);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.loadingDishes.set(false);
+        this.handlerShowError(error);
+      },
+    });
   }
 
   ngOnUpdateStatusOfReserve(){

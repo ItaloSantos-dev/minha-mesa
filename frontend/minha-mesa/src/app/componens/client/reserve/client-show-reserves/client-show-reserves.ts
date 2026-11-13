@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ExceptionService } from '../../../../service/exception-service/exception-service';
 import { UserService } from '../../../../service/user-service/user-service';
 import { UtilityService } from '../../../../service/utility-service/utility-service';
@@ -12,7 +13,7 @@ const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-client-show-reserves',
-  imports: [MessageError],
+  imports: [MessageError, RouterLink],
   templateUrl: './client-show-reserves.html',
   styleUrl: './client-show-reserves.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,6 +64,7 @@ export class ClientShowReserves {
     const labels: Record<ReserveStatus, string> = {
       [ReserveStatus.SCHEDULED]: 'Agendada',
       [ReserveStatus.CONFIRMED]: 'Confirmada',
+      [ReserveStatus.IN_PROGRESS]: 'Em andamento',
       [ReserveStatus.CANCELED]: 'Cancelada',
       [ReserveStatus.COMPLETED]: 'Concluída',
       [ReserveStatus.NO_SHOW]: 'Não compareceu',
@@ -74,6 +76,7 @@ export class ClientShowReserves {
     const classes: Record<ReserveStatus, string> = {
       [ReserveStatus.SCHEDULED]: 'bg-[#fff2c9] text-[#876200]',
       [ReserveStatus.CONFIRMED]: 'bg-[#e1f3e8] text-[#28734a]',
+      [ReserveStatus.IN_PROGRESS]: 'bg-[#e3edf5] text-[#236184]',
       [ReserveStatus.CANCELED]: 'bg-[#fde5e2] text-[#a23b31]',
       [ReserveStatus.COMPLETED]: 'bg-[#e3edf5] text-[#236184]',
       [ReserveStatus.NO_SHOW]: 'bg-[#f1e4ef] text-[#82436f]',

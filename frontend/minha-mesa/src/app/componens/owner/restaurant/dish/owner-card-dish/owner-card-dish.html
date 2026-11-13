@@ -1,0 +1,61 @@
+<a [routerLink]="[dish().id]" class="cursor-pointer">
+  <article class="group relative overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/90 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)] transition hover:-translate-y-1 hover:shadow-[0_.9rem_2rem_rgba(90,69,60,.12)]" [class.opacity-60]="!dish().active">
+  <div class="relative h-48 overflow-hidden bg-[color-mix(in_srgb,var(--color-background)_65%,white)]">
+    @if (dish().imageLink) {
+      <img
+        class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        [src]="dish().imageLink"
+        [alt]="'Foto do prato ' + dish().name"
+        loading="lazy"
+      >
+    } @else {
+      <div class="grid h-full place-items-center text-4xl text-(--color-secondary)" aria-hidden="true">
+        <i class="bi bi-egg-fried"></i>
+      </div>
+    }
+
+    <a
+      class="absolute right-3 top-3 grid h-9 w-9 place-items-center rounded-lg border border-white/70 bg-white/95 text-(--color-primary) shadow-sm transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+      [routerLink]="['/owner/restaurant/dishes', dish().id, 'update']"
+      [attr.aria-label]="'Editar prato ' + dish().name"
+      [title]="'Editar prato ' + dish().name"
+    >
+      <i class="bi bi-pencil" aria-hidden="true"></i>
+    </a>
+    <span class="absolute bottom-3 left-3 rounded-full bg-white/95 px-3 py-1.5 text-sm font-extrabold text-(--color-primary) shadow-sm backdrop-blur">
+      {{ formatPrice() }}
+    </span>
+  </div>
+
+  <div class="p-5">
+    <div class="mb-2 flex items-start justify-between gap-3">
+      <h3 class="mb-0 [font-family:var(--font-heading)] text-base font-semibold leading-snug text-(--color-coffee)">
+        {{ dish().name }}
+      </h3>
+      <span class="inline-flex shrink-0 items-center gap-1 rounded-full bg-[color-mix(in_srgb,var(--color-highlight)_18%,white)] px-2 py-1 text-xs font-bold text-(--color-coffee)" [attr.aria-label]="'Avaliação ' + formatRating() + ' de 5'">
+        <i class="bi bi-star-fill text-(--color-highlight)" aria-hidden="true"></i>
+        {{ formatRating() }}
+      </span>
+    </div>
+
+    @if (dish().description) {
+      <p class="mb-4 line-clamp-3 min-h-[3.75rem] text-sm leading-5 text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">
+        {{ dish().description }}
+      </p>
+    } @else {
+      <p class="mb-4 min-h-[3.75rem] text-sm italic text-[color-mix(in_srgb,var(--color-coffee)_55%,transparent)]">Sem descrição.</p>
+    }
+
+    <div class="flex items-center justify-between gap-3 border-t border-[color-mix(in_srgb,var(--color-coffee)_9%,transparent)] pt-3">
+      <span class="flex items-center gap-2 text-xs font-medium text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">
+        <i class="bi bi-clock text-(--color-secondary)" aria-hidden="true"></i>
+        {{ preparationTimeInMinutes() }} min de preparo
+      </span>
+      <span class="text-xs font-bold text-(--color-secondary)">
+        {{ dish().active ? 'Ativo' : 'Desativado' }}
+      </span>
+    </div>
+  </div>
+</article>
+
+</a>

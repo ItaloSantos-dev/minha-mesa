@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { DashboardUserFactory } from '../../../factory/dashboard-user.factory';
 import { ReserveResponseDTO } from '../../../types/reserve/reserve-response';
 import { ReserveStatus } from '../../../types/enums/reserve-status';
 import { UserService } from '../../../service/user-service/user-service';
@@ -7,10 +8,8 @@ import { UtilityService } from '../../../service/utility-service/utility-service
 import { HttpErrorResponse } from '@angular/common/http';
 import { ExceptionService } from '../../../service/exception-service/exception-service';
 import { ExceptionResponse } from '../../../types/exception/excpetion-response';
-import { DashboardResponseDTO } from '../../../types/restaurant/dashboard/dashboard-response';
 import { DashboardUserResponseDTO } from '../../../types/user/dashboard/dashboard-user-response';
 import { ClientRecentRestaurants } from './client-recent-restaurants/client-recent-restaurants';
-import { DayOfWeek } from '../../../types/enums/day-of-week';
 
 @Component({
   selector: 'app-client-home',
@@ -59,6 +58,7 @@ export class ClientHome {
     const labels: Record<ReserveStatus, string> = {
       [ReserveStatus.SCHEDULED]: 'Agendada',
       [ReserveStatus.CONFIRMED]: 'Confirmada',
+      [ReserveStatus.IN_PROGRESS]: 'Em andamento',
       [ReserveStatus.CANCELED]: 'Cancelada',
       [ReserveStatus.COMPLETED]: 'Concluída',
       [ReserveStatus.NO_SHOW]: 'Não compareceu',
@@ -80,6 +80,7 @@ export class ClientHome {
     const classes: Record<ReserveStatus, string> = {
       [ReserveStatus.SCHEDULED]: 'bg-[#fff2c9] text-[#876200]',
       [ReserveStatus.CONFIRMED]: 'bg-[#e1f3e8] text-[#28734a]',
+      [ReserveStatus.IN_PROGRESS]: 'bg-[#e3edf5] text-[#236184]',
       [ReserveStatus.CANCELED]: 'bg-[#fde5e2] text-[#a23b31]',
       [ReserveStatus.COMPLETED]: 'bg-[#e3edf5] text-[#236184]',
       [ReserveStatus.NO_SHOW]: 'bg-[#f1e4ef] text-[#82436f]',
@@ -105,225 +106,7 @@ export class ClientHome {
     return true;
   }
 
-  dashboardUserMock: DashboardUserResponseDTO = {
-  recentRestaurants: [
-    {
-      id: 1,
-      name: 'Pizzaria Bella Napoli',
-      phone: '(99) 99123-4567',
-      address: 'Av. Castelo Branco, 120, Centro',
-      active: true,
-      imagePerfilLink: 'https://placehold.co/200x200?text=Bella+Napoli',
-      imageBannerLink: 'https://placehold.co/800x400?text=Bella+Napoli',
-      workingDays: [
-        {
-          id: 1,
-          dayOfWeek: DayOfWeek.MONDAY,
-          timeStart: '18:00',
-          timeEnd: '23:00'
-        },
-        {
-          id: 2,
-          dayOfWeek: DayOfWeek.TUESDAY,
-          timeStart: '18:00',
-          timeEnd: '23:00'
-        },
-        {
-          id: 3,
-          dayOfWeek: DayOfWeek.WEDNESDAY,
-          timeStart: '17:00',
-          timeEnd: '18:00'
-        },
-        {
-          id: 4,
-          dayOfWeek: DayOfWeek.THURSDAY,
-          timeStart: '18:00',
-          timeEnd: '23:00'
-        },
-        {
-          id: 5,
-          dayOfWeek: DayOfWeek.FRIDAY,
-          timeStart: '18:00',
-          timeEnd: '00:00'
-        },
-        {
-          id: 6,
-          dayOfWeek: DayOfWeek.SATURDAY,
-          timeStart: '18:00',
-          timeEnd: '00:00'
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Sushi House',
-      phone: '(99) 99234-5678',
-      address: 'Rua das Flores, 45, Centro',
-      active: true,
-      imagePerfilLink: 'https://placehold.co/200x200?text=Sushi+House',
-      imageBannerLink: 'https://placehold.co/800x400?text=Sushi+House',
-      workingDays: [
-        {
-          id: 7,
-          dayOfWeek: DayOfWeek.TUESDAY,
-          timeStart: '11:00',
-          timeEnd: '14:30'
-        },
-        {
-          id: 8,
-          dayOfWeek: DayOfWeek.WEDNESDAY,
-          timeStart: '11:00',
-          timeEnd: '14:30'
-        },
-        {
-          id: 9,
-          dayOfWeek: DayOfWeek.THURSDAY,
-          timeStart: '11:00',
-          timeEnd: '14:30'
-        },
-        {
-          id: 10,
-          dayOfWeek: DayOfWeek.FRIDAY,
-          timeStart: '18:00',
-          timeEnd: '23:00'
-        },
-        {
-          id: 11,
-          dayOfWeek: DayOfWeek.SATURDAY,
-          timeStart: '18:00',
-          timeEnd: '23:00'
-        },
-        {
-          id: 12,
-          dayOfWeek: DayOfWeek.SUNDAY,
-          timeStart: '18:00',
-          timeEnd: '22:00'
-        }
-      ]
-    },
-    {
-      id: 3,
-      name: 'Churrascaria Fogo Nobre',
-      phone: '(99) 99345-6789',
-      address: 'Av. Principal, 500, Nova Cidade',
-      active: true,
-      imagePerfilLink: 'https://placehold.co/200x200?text=Fogo+Nobre',
-      imageBannerLink: 'https://placehold.co/800x400?text=Fogo+Nobre',
-      workingDays: [
-        {
-          id: 13,
-          dayOfWeek: DayOfWeek.MONDAY,
-          timeStart: '11:00',
-          timeEnd: '15:00'
-        },
-        {
-          id: 14,
-          dayOfWeek: DayOfWeek.TUESDAY,
-          timeStart: '11:00',
-          timeEnd: '15:00'
-        },
-        {
-          id: 15,
-          dayOfWeek: DayOfWeek.WEDNESDAY,
-          timeStart: '11:00',
-          timeEnd: '15:00'
-        },
-        {
-          id: 16,
-          dayOfWeek: DayOfWeek.THURSDAY,
-          timeStart: '11:00',
-          timeEnd: '15:00'
-        },
-        {
-          id: 17,
-          dayOfWeek: DayOfWeek.FRIDAY,
-          timeStart: '11:00',
-          timeEnd: '15:00'
-        },
-        {
-          id: 18,
-          dayOfWeek: DayOfWeek.SATURDAY,
-          timeStart: '11:00',
-          timeEnd: '16:00'
-        },
-        {
-          id: 19,
-          dayOfWeek: DayOfWeek.SUNDAY,
-          timeStart: '11:00',
-          timeEnd: '16:00'
-        }
-      ]
-    }
-  ],
-
-  reservesToday: [
-    {
-      id: 101,
-      clientName: 'João Silva',
-      restaurantName: 'Pizzaria Bella Napoli',
-      tableNumber: 4,
-      date: '2026-10-20',
-      dayOfWeek: 'TUESDAY',
-      timeStart: '19:00',
-      timeEnd: '20:00',
-      status: ReserveStatus.CONFIRMED,
-      observation: 'Mesa próxima à janela',
-      peoples: 4
-    },
-    {
-      id: 102,
-      clientName: 'Maria Oliveira',
-      restaurantName: 'Sushi House',
-      tableNumber: 2,
-      date: '2026-10-20',
-      dayOfWeek: 'TUESDAY',
-      timeStart: '19:30',
-      timeEnd: '20:30',
-      status: ReserveStatus.SCHEDULED,
-      observation: 'Comemoração de aniversário',
-      peoples: 2
-    },
-    {
-      id: 103,
-      clientName: 'Pedro Santos',
-      restaurantName: 'Churrascaria Fogo Nobre',
-      tableNumber: 8,
-      date: '2026-10-20',
-      dayOfWeek: 'TUESDAY',
-      timeStart: '20:00',
-      timeEnd: '21:00',
-      status: ReserveStatus.COMPLETED,
-      observation: '',
-      peoples: 6
-    },
-    {
-      id: 104,
-      clientName: 'Ana Costa',
-      restaurantName: 'Pizzaria Bella Napoli',
-      tableNumber: 3,
-      date: '2026-10-20',
-      dayOfWeek: 'TUESDAY',
-      timeStart: '20:30',
-      timeEnd: '21:30',
-      status: ReserveStatus.CANCELED,
-      observation: 'Cliente cancelou a reserva',
-      peoples: 2
-    },
-    {
-      id: 105,
-      clientName: 'Lucas Ferreira',
-      restaurantName: 'Sushi House',
-      tableNumber: 5,
-      date: '2026-10-20',
-      dayOfWeek: 'TUESDAY',
-      timeStart: '21:00',
-      timeEnd: '22:00',
-      status: ReserveStatus.NO_SHOW,
-      observation: 'Cliente não compareceu',
-      peoples: 3
-    }
-  ]
-  };
+  dashboardUserMock: DashboardUserResponseDTO = DashboardUserFactory.createMock();
 
   ngOnInit(){
     this.utilityService.updateCurrentPageOfOwnerMenu(0)

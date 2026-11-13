@@ -69,9 +69,12 @@ public class TableService {
         this.tableRepository.save(tableModel);
     }
 
-    public TableResponseDTO getTableById(Integer id){
-        return this.tableMapper.modelToResponse(this.tableRepository.findById(id)
-                .orElseThrow(ResourceNotFoundException::new));
+    public TableResponseDTO getTableById(Integer id, UserModel userModel){
+        TableModel tableModel =this.tableRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+        if (!tableModel.getActive() && !userModel.getId().equals(tableModel.getRestaurantModel().getOwnerModel().getUserModel().getId()))
+            throw new NotPermitedException("Esta mesa está inativa.");
+        return this.tableMapper.modelToResponse(tableModel);
     }
 
     private void validateParams(

@@ -8,13 +8,20 @@ export const API_BACK_CONFIG = {
         },
         USER:{
             DASHBOARD:'/users/dashboard',
-            RESERVES:'/users/reserves'
+            RESERVES:'/users/reserves',
+            RESERVE:(id:number):string =>{
+                return `/users/reserves/${id}`
+            }
         },
         RESTAURANT: {
             CREATE : '/restaurants',
             FIND: (id:number) : string =>{
                 return `/restaurants/${id}`
             },
+            DISHES: (id:number):string =>{
+                return `/restaurants/${id}/dishes`
+            },
+            OWNER_DISHES: '/restaurants/dishes',
             DASHBOARD : '/restaurants/dashboard',
             RESERVES : '/restaurants/reserves',
             TABLES : '/restaurants/tables',
@@ -24,9 +31,37 @@ export const API_BACK_CONFIG = {
                 return `/restaurants?search=${search}&page=${page}`
             }
         },
+        DISH:{
+            CREATE:'/dishes',
+            FIND:(id:number):string =>{
+                return `/dishes/${id}`
+            },
+            RATES:(id:number):string =>{
+                return `/dishes/${id}/rates`
+            },
+            UPDATE:(id:number):string =>{
+                return `/dishes/${id}`
+            }
+        },
+        DISH_CATEGORY:{
+            CREATE:'/dish-categorys',
+            FIND:(id:number):string =>{
+                return `/dish-categorys/${id}`
+            },
+            UPDATE:(id:number):string =>{
+                return `/dish-categorys/${id}`
+            }
+        },
         RESERVE:{
             CREATE:'/reserves',
             UPDATE:'/reserves'
+        },
+        RESERVE_DISH:{
+            CREATE:'/reserve-dishes',
+            UPDATE:(id:number):string => `/reserve-dishes/${id}`
+        },
+        RATE_DISH:{
+            CREATE:'/rates-dish'
         },
         TABLE:{
             AVAILABLE:'/tables',

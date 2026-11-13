@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, output, signal, ViewChild } from '@angular/core';
+import { ScheduleExceptionFactory } from '../../../../../factory/schedule-exception.factory';
 import { OwnerCreateScheduleException } from '../owner-create-schedule-exception/owner-create-schedule-exception';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { ScheduleExceptionResponseDTO } from '../../../../../types/schedule_exception/schedule-exception-response';
@@ -35,13 +36,7 @@ export class OwnerShowSchedulesException {
   statusConfirmationOverlay!: ElementRef<HTMLElement>;
   private readonly restaurantService = inject(RestaurantService);
 
-  readonly scheduleExceptionsMock: ScheduleExceptionResponseDTO[] = [
-    { id: 1, date: '2026-10-02', reason: 'Manutenção da cozinha', active: true },
-    { id: 2, date: '2026-10-07', reason: 'Evento privado no restaurante', active: true },
-    { id: 3, date: '2026-10-12', reason: 'Feriado nacional', active: true },
-    { id: 4, date: '2026-11-02', reason: 'Reforma do salão', active: true },
-    { id: 5, date: '2026-12-25', reason: 'Recesso de Natal', active: false },
-  ];
+  readonly scheduleExceptionsMock: ScheduleExceptionResponseDTO[] = ScheduleExceptionFactory.createMocks();
 
   readonly scheduleExceptions = signal(<ScheduleExceptionResponseDTO[]>[]);
   readonly selectedExceptionForStatusChange = signal<ScheduleExceptionResponseDTO | null>(null);
@@ -200,7 +195,7 @@ export class OwnerShowSchedulesException {
   
 
   ngOnInit() {
-    this.utilityService.updateCurrentPageOfOwnerMenu(4);
+    this.utilityService.updateCurrentPageOfOwnerMenu(UtilityService.ownerMenuPosition.SCHEDULE_EXCEPTIONS);
     this.loadScheduleExceptions(true);
   }
 

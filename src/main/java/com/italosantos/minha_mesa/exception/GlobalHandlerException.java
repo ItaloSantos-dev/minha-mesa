@@ -33,6 +33,11 @@ public class GlobalHandlerException {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage()));
     }
 
+    @ExceptionHandler(ReserveIsNotInProgressException.class)
+    public ResponseEntity<ExceptionResponse> handlerReserveIsNotInProgressException(ReserveIsNotInProgressException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
     @ExceptionHandler(AlreadyExistTableWithNumberException.class)
     public ResponseEntity<ExceptionResponse> handlerAlreadyExistTableWithNumberException(AlreadyExistTableWithNumberException exception){
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
@@ -91,5 +96,40 @@ public class GlobalHandlerException {
     @ExceptionHandler(UploadMediaException.class)
     public ResponseEntity<ExceptionResponse> handlerUploadMediaException(UploadMediaException exception){
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(HttpStatus.INTERNAL_SERVER_ERROR, exception.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyExistsCategoryOfRestaurantWithNameException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistsCategoryOfRestaurantWithNameException(AlreadyExistsCategoryOfRestaurantWithNameException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyExistsDishWithNameOfRestaurantException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistsDishWithNameOfRestaurantException(AlreadyExistsDishWithNameOfRestaurantException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
+    @ExceptionHandler(ReserveIsNotYourRestaurantException.class)
+    public ResponseEntity<ExceptionResponse> handlerReserveIsNotYourRestaurantException(ReserveIsNotYourRestaurantException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage()));
+    }
+
+    @ExceptionHandler(DishIsNotYourRestaurantException.class)
+    public ResponseEntity<ExceptionResponse> handlerDishIsNotYourRestaurantException(DishIsNotYourRestaurantException exception) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(HttpStatus.FORBIDDEN, exception.getMessage()));
+    }
+
+    @ExceptionHandler(DishIsNotActive.class)
+    public ResponseEntity<ExceptionResponse> handlerDishIsNotActive(DishIsNotActive exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyExistsReserveDishWithReserveAndDishException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistsReserveDishWithReserveAndDishException(AlreadyExistsReserveDishWithReserveAndDishException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyExistsRateDishOfReserveDishException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistsRateDishOfReserveDishException(AlreadyExistsRateDishOfReserveDishException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
     }
 }
