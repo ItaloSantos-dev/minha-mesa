@@ -19,9 +19,10 @@ public class RestaurantMapper {
         this.workingScheduleMapper = workingScheduleMapper;
     }
 
-    public RestaurantModel createToModel(CreateRestaurantRequestDTO createRestaurantRequestDTO, OwnerModel ownerModel, String imagePerfilPath, String imageBannerPath){
+    public RestaurantModel createToModel(CreateRestaurantRequestDTO createRestaurantRequestDTO, OwnerModel ownerModel, String imagePerfilPath, String imageBannerPath, String slug){
         RestaurantModel restaurantModel = new RestaurantModel();
         restaurantModel.setOwnerModel(ownerModel);
+        restaurantModel.setSlug(slug);
         restaurantModel.setName(createRestaurantRequestDTO.name());
         restaurantModel.setPhone(createRestaurantRequestDTO.phone());
         restaurantModel.setAddress(createRestaurantRequestDTO.address());
@@ -35,6 +36,7 @@ public class RestaurantMapper {
         return new RestaurantResponseDTO(
                 restaurantModel.getId(),
                 restaurantModel.getName(),
+                restaurantModel.getSlug(),
                 restaurantModel.getPhone(),
                 restaurantModel.getAddress(),
                 restaurantModel.getActive(),

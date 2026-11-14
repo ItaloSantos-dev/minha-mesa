@@ -23,6 +23,7 @@ import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.model.enums.UserRole;
 import com.italosantos.minha_mesa.repository.*;
 import com.italosantos.minha_mesa.utility.RestaurantUtility;
+import com.italosantos.minha_mesa.utility.SlugUtility;
 import org.jspecify.annotations.Nullable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -96,13 +97,15 @@ public class RestaurantService {
         else
             throw new IllegalParameterException();
 
+        if (this.restaurantRepository.existsByName(createRestaurantRequestDTO.name()))
+            throw new AlreadyExistsRestaurantWithNameException();
 
         OwnerModel ownerModel = this.ownerService.createOwner(createRestaurantRequestDTO.ownerData(), realUser);
 
         String imagePerfilPath = this.imageService.uploadImage(imagePerfil, MediaPath.RESTAURANT_PERFIL_PATH);
         String imageBannerPath = this.imageService.uploadImage(imageBanner, MediaPath.RESTAURANT_BANNER_PATH);
 
-        RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel, imagePerfilPath, imageBannerPath);
+        RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel, imagePerfilPath, imageBannerPath, SlugUtility.generateRestaurantSlug(createRestaurantRequestDTO.name()));
 
         String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
         String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());

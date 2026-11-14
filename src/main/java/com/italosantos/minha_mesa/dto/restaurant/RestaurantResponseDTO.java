@@ -9,6 +9,7 @@ import java.util.List;
 public record RestaurantResponseDTO(
         Integer id,
         String name,
+        String slug,
         String phone,
         String address,
         Boolean active,
