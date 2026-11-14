@@ -7,6 +7,7 @@ import { DishCategoryResponseDTO } from '../../../../../types/dish_category/dish
 import { UpdateDishCategoryResponseDTO } from '../../../../../types/dish_category/update-dish-category-request';
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
+import { DishCategoryService } from '../../../../../service/dish-category-service/dish-category-service';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { MessageError } from '../../../../message-error/message-error';
@@ -22,6 +23,7 @@ export class OwnerUpdateDishCategory {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly restaurantService = inject(RestaurantService);
+  private readonly dishCategoryService = inject(DishCategoryService);
   private readonly exceptionService = inject(ExceptionService);
   private readonly utilityService = inject(UtilityService);
 
@@ -57,7 +59,7 @@ export class OwnerUpdateDishCategory {
   }
 
   loadDishCategory(id: number) {
-    this.restaurantService.getDishCategoryById(id).subscribe({
+    this.dishCategoryService.getDishCategoryById(id).subscribe({
       next: (category) => {
         this.category.set(category);
         this.imagePath.set(category.imageLink);
@@ -258,7 +260,7 @@ export class OwnerUpdateDishCategory {
       return;
     }
 
-    this.restaurantService
+    this.dishCategoryService
       .updateDishCategoryById(
         category.id,
         this.generateFormDataUpdateDishCategoryRequest(changes),
