@@ -62,9 +62,9 @@ export class ClientShowRestaurant {
 
   ngOnInit(){
     this.route.paramMap.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params =>{
-      const id = Number(params.get('id'));
-      if (Number.isInteger(id) && id > 0) {
-        this.loadRestaurant(id);
+      const slug = params.get('slug');
+      if (slug) {
+        this.loadRestaurant(slug);
       }
     })
   }
@@ -116,9 +116,9 @@ export class ClientShowRestaurant {
     }
   }
 
-  loadRestaurant(id: number) {
-    this.utilityService.updateCurrentPageOfOwnerMenu(1)
-    this.restaurantService.getRestaurantbyId(id).subscribe({
+  loadRestaurant(slug:string) {
+    this.utilityService.updateCurrentPageOfOwnerMenu(1);
+    this.restaurantService.getRestaurantbySlug(slug).subscribe({
       next:(dado) =>{
         this.restaurant.set(dado);
       },error: (error:HttpErrorResponse) => {

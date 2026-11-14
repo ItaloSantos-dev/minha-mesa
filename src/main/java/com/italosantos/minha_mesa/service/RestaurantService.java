@@ -135,6 +135,20 @@ public class RestaurantService {
         return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
     }
 
+    public RestaurantResponseDTO getRestaurantBySlug(String slug){
+        RestaurantModel restaurantModel =
+                this.restaurantRepository.findBySlug(slug)
+                        .orElseThrow(ResourceNotFoundException::new);
+
+        if (!restaurantModel.getActive())
+            throw new NotPermitedException("Este resaurante está inativo");
+
+        String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
+        String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
+
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
+    }
+
 
 
     @Cacheable(
@@ -269,6 +283,18 @@ public class RestaurantService {
 
     public DishesOfRestauranteResponseDTO getDishesOfRestaurantById(Integer id){
         RestaurantModel restaurantModel = this.restaurantRepository.findById(id)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        if (!restaurantModel.getActive())
+            throw new NotPermitedException("Este restaurante está inativo");
+
+
+
+        return this.getDishesOfRestaurant(restaurantModel, true);
+    }
+
+    public DishesOfRestauranteResponseDTO getDishesOfRestaurantByRestaurantSlug(String slug){
+        RestaurantModel restaurantModel = this.restaurantRepository.findBySlug(slug)
                 .orElseThrow(ResourceNotFoundException::new);
 
         if (!restaurantModel.getActive())

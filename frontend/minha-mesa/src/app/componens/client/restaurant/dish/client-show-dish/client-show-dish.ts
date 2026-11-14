@@ -22,22 +22,19 @@ export class ClientShowDish {
   private readonly utilityService = inject(UtilityService);
 
   readonly dish = signal<DishResponseDTO | null>(null);
-  readonly restaurantId = signal<number | null>(null);
+  readonly restaurantSlug = signal<string | null>(null);
   readonly loading = signal(true);
   readonly loadFailed = signal(false);
 
   ngOnInit() {
-    const restaurantId = Number(this.route.snapshot.paramMap.get('restaurantId'));
-    const dishId = Number(this.route.snapshot.paramMap.get('dishId'));
+    const restaurantSlug = this.route.snapshot.paramMap.get('restaurantSlug');
+    const dishSlug = this.route.snapshot.paramMap.get('dishSlug');
 
     if (
-      Number.isInteger(restaurantId) &&
-      restaurantId > 0 &&
-      Number.isInteger(dishId) &&
-      dishId > 0
+      restaurantSlug && dishSlug
     ) {
-      this.restaurantId.set(restaurantId);
-      this.loadDish(dishId, restaurantId);
+      this.restaurantSlug.set(restaurantSlug);
+      this.loadDish(restaurantSlug, dishSlug);
       return;
     }
 
@@ -45,8 +42,8 @@ export class ClientShowDish {
     this.loadFailed.set(true);
   }
 
-  loadDish(dishId: number, restaurantId: number) {
-    this.dishService.getDishById(dishId).subscribe({
+  loadDish(restaurantSlug:string, dishSlug:string) {
+    this.dishService.getDishOfRestaurantByRestaurantSlugAndDishSlug(restaurantSlug, dishSlug).subscribe({
       next: (dish) => {
         this.dish.set(dish);
         this.loading.set(false);
@@ -54,15 +51,15 @@ export class ClientShowDish {
       error: (error: HttpErrorResponse) => {
         this.loading.set(false);
         this.loadFailed.set(true);
-        this.handlerShowError(error, restaurantId);
+        this.handlerShowError(error, restaurantSlug);
       },
     });
   }
 
-  handlerShowError(error: HttpErrorResponse, restaurantId: number) {
+  handlerShowError(error: HttpErrorResponse, restaurantSlug:string) {
     const showError = this.exceptionService.handlerRedirectExceptionResponse(
       error,
-      UtilityService.pathsOfApplication.CLIENT_SHOW_DISHES(restaurantId),
+      UtilityService.pathsOfApplication.CLIENT_SHOW_DISHES(restaurantSlug),
     );
 
     if (showError) {

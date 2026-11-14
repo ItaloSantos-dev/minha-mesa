@@ -2,9 +2,9 @@
 
 <main class="min-h-full bg-[radial-gradient(circle_at_100%_0%,color-mix(in_srgb,var(--color-highlight)_12%,transparent),transparent_28rem)] px-4 py-6 pb-12 font-(--font-body) text-(--color-coffee) sm:px-6 sm:py-8 lg:px-[5vw]">
   <div class="mx-auto w-full max-w-7xl">
-    @if (restaurantId(); as id) {
+    @if (restaurantSlug(); as restaurantSlug) {
       <a
-        [routerLink]="['/client/restaurants', id, 'dishes']"
+        [routerLink]="['/client/restaurants', restaurantSlug, 'dishes']"
         class="mb-6 inline-flex min-h-10 items-center gap-2 rounded-lg px-2 text-sm font-semibold text-(--color-secondary) transition hover:bg-white/70 hover:text-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
       >
         <i class="bi bi-arrow-left" aria-hidden="true"></i>

@@ -73,15 +73,15 @@ export const routes: Routes = [
                         component:ClientSearchRestaurants
                     },
                     {
-                        path:':restaurantId/dishes/:dishId',
+                        path:':restaurantSlug/dishes/:dishSlug',
                         component:ClientShowDish
                     },
                     {
-                        path:':id/dishes',
+                        path:':slug/dishes',
                         component:ClientShowDishes
                     },
                     {
-                        path:':id',
+                        path:':slug',
                         component:ClientShowRestaurant
                     }
                 ]

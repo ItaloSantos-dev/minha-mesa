@@ -17,9 +17,9 @@ export class DishService {
     return `?page=${page}&size=${size}`;
   }
 
-  getDishesOfRestaurant(id: number): Observable<DishesOfRestauranteResponseDTO> {
+  getDishesOfRestaurantByRestaurantSlug(slug:string): Observable<DishesOfRestauranteResponseDTO> {
     return this.httpClient.get<DishesOfRestauranteResponseDTO>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.DISHES(id),
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.DISHES(slug),
     );
   }
 
@@ -39,6 +39,12 @@ export class DishService {
   getDishById(id: number): Observable<DishResponseDTO> {
     return this.httpClient.get<DishResponseDTO>(
       this.url + API_BACK_CONFIG.ENDPOINTS.DISH.FIND(id),
+    );
+  }
+
+  getDishOfRestaurantByRestaurantSlugAndDishSlug(restaurantSlug:string, dishSlug:string): Observable<DishResponseDTO> {
+    return this.httpClient.get<DishResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.FINDBYRESTAURANTSLUGANDDISHSLUG(restaurantSlug, dishSlug),
     );
   }
 
