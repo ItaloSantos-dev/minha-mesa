@@ -101,6 +101,18 @@ public class DishCategoryService {
         return this.dishCategoryMapper.modelToResponse(dishCategoryModel, imageLink, this.dishService.getDishesByDishCategoryId(dishCategoryModel.getId()));
     }
 
+    public DishCategoryResponseDTO getDishCategoryBySlug(UserModel userModel, String slug){
+        DishCategoryModel dishCategoryModel = this.dishCategoryRepository.findBySlug(slug)
+                .orElseThrow(ResourceNotFoundException::new);
+
+        if (!dishCategoryModel.getActive() && !userModel.getId().equals(dishCategoryModel.getRestaurantModel().getOwnerModel().getUserModel().getId()))
+            throw new NotPermitedException("Categoria inativa");
+
+        String imageLink = this.imageService.getAssignedUrl(dishCategoryModel.getImagePath());
+
+        return this.dishCategoryMapper.modelToResponse(dishCategoryModel, imageLink, this.dishService.getDishesByDishCategoryId(dishCategoryModel.getId()));
+    }
+
     @Transactional
     public DishCategoryResponseDTO updateDishCategoryById(UserModel userModel, Integer id, UpdateDishCategoryResponseDTO updateDishCategoryResponseDTO, MultipartFile newImage){
         if (updateDishCategoryResponseDTO.name()==null &&

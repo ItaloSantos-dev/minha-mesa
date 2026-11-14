@@ -146,7 +146,7 @@ export const routes: Routes = [
                         component:OwnerCreateDishCategory
                     },
                     {
-                        path:'dish-categories/:id',
+                        path:'dish-categories/:slug',
                         component:OwnerUpdateDishCategory
                     },
                     {

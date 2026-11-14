@@ -45,8 +45,8 @@ export const API_BACK_CONFIG = {
         },
         DISH_CATEGORY:{
             CREATE:'/dish-categorys',
-            FIND:(id:number):string =>{
-                return `/dish-categorys/${id}`
+            FINDBYSLUG:(slug:string):string =>{
+                return `/dish-categorys/${slug}`
             },
             UPDATE:(id:number):string =>{
                 return `/dish-categorys/${id}`
