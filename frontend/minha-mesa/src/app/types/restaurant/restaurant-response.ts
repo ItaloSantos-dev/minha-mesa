@@ -4,6 +4,7 @@ import { BestRatingsrestaurant } from "./best-ratings-restaurant";
 export interface RestaurantResponseDTO{
     id:number;
     name:string;
+    slug:string;
     phone:string;
     address:string;
     active:boolean;

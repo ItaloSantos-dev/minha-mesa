@@ -8,6 +8,7 @@ export class RestaurantFactory {
   {
     id: 1,
     name: "Molho Sem Água",
+    slug: "molho-sem-agua",
     phone: "(98) 99999-1111",
     address: "Rua das Flores, 120 - Centro",
     active: true,
@@ -26,6 +27,7 @@ export class RestaurantFactory {
   {
     id: 2,
     name: "Burger House",
+    slug: "burger-house",
     phone: "(98) 98888-2222",
     address: "Av. Principal, 450 - Centro",
     active: true,
@@ -45,6 +47,7 @@ export class RestaurantFactory {
   {
     id: 3,
     name: "Pizza Suprema",
+    slug: "pizza-suprema",
     phone: "(98) 97777-3333",
     address: "Rua do Comércio, 85 - Vila Nova",
     active: true,
@@ -63,6 +66,7 @@ export class RestaurantFactory {
   {
     id: 4,
     name: "Sabor Nordestino",
+    slug: "sabor-nordestino",
     phone: "(98) 96666-4444",
     address: "Rua São Pedro, 230 - Centro",
     active: true,
@@ -80,6 +84,7 @@ export class RestaurantFactory {
   {
     id: 5,
     name: "La Pasta Italiana",
+    slug: "la-pasta-italiana",
     phone: "(98) 95555-5555",
     address: "Av. Brasil, 510 - Jardim",
     active: true,
@@ -91,6 +96,7 @@ export class RestaurantFactory {
   {
     id: 6,
     name: "Tropical Açaí",
+    slug: "tropical-acai",
     phone: "(98) 94444-6666",
     address: "Rua das Palmeiras, 90 - Centro",
     active: true,
@@ -110,6 +116,7 @@ export class RestaurantFactory {
   {
     id: 7,
     name: "Churrascaria Boi na Brasa",
+    slug: "churrascaria-boi-na-brasa",
     phone: "(98) 93333-7777",
     address: "Av. dos Restaurantes, 700 - Centro",
     active: true,
@@ -129,6 +136,7 @@ export class RestaurantFactory {
   {
     id: 8,
     name: "Temaki Express",
+    slug: "temaki-express",
     phone: "(98) 92222-8888",
     address: "Rua das Acácias, 150 - Jardim",
     active: true,
@@ -147,6 +155,7 @@ export class RestaurantFactory {
   {
     id: 9,
     name: "Cantina da Praça",
+    slug: "cantina-da-praca",
     phone: "(98) 91111-9999",
     address: "Praça Central, 35 - Centro",
     active: true,
@@ -165,6 +174,7 @@ export class RestaurantFactory {
   {
     id: 10,
     name: "Doce Encanto Café",
+    slug: "doce-encanto-cafe",
     phone: "(98) 90000-1010",
     address: "Rua do Sol, 65 - Centro",
     active: true,
@@ -184,6 +194,7 @@ export class RestaurantFactory {
   private static readonly detailMock: RestaurantResponseDTO = {
     id: 1,
     name: "Molho Sem Água",
+    slug: "molho-sem-agua",
     phone: "(98) 99999-1111",
     address: "Rua das Flores, 120 - Centro",
     active: true,
@@ -263,6 +274,7 @@ export class RestaurantFactory {
     {
       id: 1,
       name: 'Pizzaria Bella Napoli',
+      slug: 'pizzaria-bella-napoli',
       phone: '(99) 99123-4567',
       address: 'Av. Castelo Branco, 120, Centro',
       active: true,
@@ -281,6 +293,7 @@ export class RestaurantFactory {
     {
       id: 2,
       name: 'Sushi House',
+      slug: 'sushi-house',
       phone: '(99) 99234-5678',
       address: 'Rua das Flores, 45, Centro',
       active: true,
@@ -299,6 +312,7 @@ export class RestaurantFactory {
     {
       id: 3,
       name: 'Churrascaria Fogo Nobre',
+      slug: 'churrascaria-fogo-nobre',
       phone: '(99) 99345-6789',
       address: 'Av. Principal, 500, Nova Cidade',
       active: true,
