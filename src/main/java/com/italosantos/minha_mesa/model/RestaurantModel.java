@@ -34,6 +34,9 @@ public class RestaurantModel {
     @Column(name = "active", nullable = false)
     private Boolean active;
 
+    @Column(name = "slug", nullable = false, unique = true)
+    private String  slug;
+
     @Column(name = "name", nullable = false)
     private String name;
 

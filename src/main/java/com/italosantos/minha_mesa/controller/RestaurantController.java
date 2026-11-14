@@ -1,5 +1,6 @@
 package com.italosantos.minha_mesa.controller;
 
+import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
 import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
 import com.italosantos.minha_mesa.dto.dish_category.DishCategoryResponseDTO;
 import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
@@ -18,6 +19,7 @@ import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.model.WorkingScheduleModel;
 import com.italosantos.minha_mesa.service.DashboardService;
+import com.italosantos.minha_mesa.service.DishService;
 import com.italosantos.minha_mesa.service.RestaurantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,13 +50,14 @@ import java.util.List;
 public class RestaurantController {
     private final RestaurantService restaurantService;
     private final DashboardService dashboardService;
+    private final DishService dishService;
 
 
-
-    public RestaurantController(RestaurantService restaurantService, DashboardService dashboardService) {
+    public RestaurantController(RestaurantService restaurantService, DashboardService dashboardService, DishService dishService) {
 
         this.restaurantService = restaurantService;
         this.dashboardService = dashboardService;
+        this.dishService = dishService;
     }
 
     @SecurityRequirement(name = "Bearer Authentication")
@@ -89,22 +92,27 @@ public class RestaurantController {
         return ResponseEntity.created(URI.create("/restaurants" + restaurantResponseDTO.id())).body(restaurantResponseDTO);
     }
 
+
+
     @Operation(
-            summary = "Busca restaurante pelo id",
-            description = "Retorna dados de um restaurante, caso não encontre retorna erro"
+            summary = "Busca restaurante pelo slug",
+            description = "Retorna os dados de um restaurante correspondente ao slug informado."
     )
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Restaurante encontrado com sucesso"),
             @ApiResponse(
-                    responseCode = "404", description = "Restaurante não encontrado",
+                    responseCode = "404",
+                    description = "Restaurante não encontrado.",
                     content = @Content(
                             schema = @Schema(implementation = ExceptionResponse.class)
                     )
             )
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<RestaurantResponseDTO> getRestaurantBydId(@PathVariable Integer id){
-        return ResponseEntity.ok(this.restaurantService.getRestaurantById(id));
+    @GetMapping("/{slug}")
+    public ResponseEntity<RestaurantResponseDTO> getRestaurantBySlug(
+            @PathVariable String slug
+    ) {
+        return ResponseEntity.ok(this.restaurantService.getRestaurantBySlug(slug));
     }
 
 
@@ -275,8 +283,8 @@ public class RestaurantController {
     }
 
     @Operation(
-            summary = "Busca os pratos de um restaurante pelo id",
-            description = "Retorna os pratos do restaurante, organizados por categoria, incluindo os pratos que não possuem categoria."
+            summary = "Busca os pratos de um restaurante pelo slug",
+            description = "Retorna os pratos do restaurante correspondente ao slug informado, organizados por categoria, incluindo os pratos que não possuem categoria."
     )
     @ApiResponses({
             @ApiResponse(
@@ -289,14 +297,14 @@ public class RestaurantController {
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Restaurante não encontrado"
+                    description = "Restaurante não encontrado."
             )
     })
-    @GetMapping("/{id}/dishes")
-    public ResponseEntity<DishesOfRestauranteResponseDTO> getDishesOfRestaurantById(
-            @PathVariable Integer id
+    @GetMapping("/{slug}/dishes")
+    public ResponseEntity<DishesOfRestauranteResponseDTO> getDishesOfRestaurantByRestaurantSlug(
+            @PathVariable String slug
     ) {
-        return ResponseEntity.ok(this.restaurantService.getDishesOfRestaurantById(id));
+        return ResponseEntity.ok(this.restaurantService.getDishesOfRestaurantByRestaurantSlug(slug));
     }
 
 
@@ -319,6 +327,18 @@ public class RestaurantController {
             @AuthenticationPrincipal UserModel userModel
     ) {
         return ResponseEntity.ok(this.restaurantService.getDishesOfRestaurantByUserModel(userModel));
+    }
+
+    @GetMapping("/{restaurantSlug}/dishes/{dishSlug}")
+    public ResponseEntity<DishResponseDTO> getDishOfRestaurantByRestaurantSlugAndDishSlug(
+            @AuthenticationPrincipal UserModel userModel,
+            @PathVariable String restaurantSlug,
+            @PathVariable String dishSlug
+    ){
+        return ResponseEntity.ok(this.dishService.getDishByRestaurantSlugAndDishSlug(
+                userModel, restaurantSlug, dishSlug
+        ));
+
     }
 
 

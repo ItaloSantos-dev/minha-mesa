@@ -15,11 +15,11 @@ export const API_BACK_CONFIG = {
         },
         RESTAURANT: {
             CREATE : '/restaurants',
-            FIND: (id:number) : string =>{
-                return `/restaurants/${id}`
+            FINDBYSLUG: (slug:string) : string =>{
+                return `/restaurants/${slug}`
             },
-            DISHES: (id:number):string =>{
-                return `/restaurants/${id}/dishes`
+            DISHES: (slug:string):string =>{
+                return `/restaurants/${slug}/dishes`
             },
             OWNER_DISHES: '/restaurants/dishes',
             DASHBOARD : '/restaurants/dashboard',
@@ -36,6 +36,9 @@ export const API_BACK_CONFIG = {
             FIND:(id:number):string =>{
                 return `/dishes/${id}`
             },
+            FINDBYRESTAURANTSLUGANDDISHSLUG:(restaurantSlug:string, dishSlug:string):string =>{
+                return `/restaurants/${restaurantSlug}/dishes/${dishSlug}`
+            },
             RATES:(id:number):string =>{
                 return `/dishes/${id}/rates`
             },
@@ -45,8 +48,8 @@ export const API_BACK_CONFIG = {
         },
         DISH_CATEGORY:{
             CREATE:'/dish-categorys',
-            FIND:(id:number):string =>{
-                return `/dish-categorys/${id}`
+            FINDBYSLUG:(slug:string):string =>{
+                return `/dish-categorys/${slug}`
             },
             UPDATE:(id:number):string =>{
                 return `/dish-categorys/${id}`

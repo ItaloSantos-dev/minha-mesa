@@ -28,7 +28,7 @@ export class ClientShowDishes {
   private readonly destroyRef = inject(DestroyRef);
 
   readonly dishesOfRestaurant = signal(<DishesOfRestauranteResponseDTO>{});
-  readonly restaurantId = signal<number | null>(null);
+  readonly restaurantId = signal<string | null>(null);
   readonly loading = signal(true);
   readonly loadFailed = signal(false);
 
@@ -50,17 +50,17 @@ export class ClientShowDishes {
     this.route.paramMap
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
-        const id = Number(params.get('id'));
+        const slug = params.get('slug');
 
-        if (Number.isInteger(id) && id > 0) {
-          this.restaurantId.set(id);
-          this.loadDishes(id);
+        if (slug) {
+          this.restaurantId.set(slug);
+          this.loadDishes(slug);
         }
       });
   }
 
-  loadDishes(id: number) {
-    this.dishService.getDishesOfRestaurant(id).subscribe({
+  loadDishes(slug:string) {
+    this.dishService.getDishesOfRestaurantByRestaurantSlug(slug).subscribe({
       next: (response) => {
         this.dishesOfRestaurant.set(response);
         this.loading.set(false);
@@ -71,7 +71,7 @@ export class ClientShowDishes {
 
         const showError = this.exceptionService.handlerRedirectExceptionResponse(
           error,
-          UtilityService.pathsOfApplication.CLIENT_SHOW_DISHES(id),
+          UtilityService.pathsOfApplication.CLIENT_SHOW_DISHES(slug),
         );
 
         if (showError) {

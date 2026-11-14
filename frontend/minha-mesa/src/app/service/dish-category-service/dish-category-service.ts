@@ -18,9 +18,9 @@ export class DishCategoryService {
     );
   }
 
-  getDishCategoryById(id: number): Observable<DishCategoryResponseDTO> {
+  getDishCategoryBySlug(slug:string): Observable<DishCategoryResponseDTO> {
     return this.httpClient.get<DishCategoryResponseDTO>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.DISH_CATEGORY.FIND(id),
+      this.url + API_BACK_CONFIG.ENDPOINTS.DISH_CATEGORY.FINDBYSLUG(slug),
     );
   }
 

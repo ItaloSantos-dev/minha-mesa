@@ -71,12 +71,12 @@ public class DishCategoryController {
         return ResponseEntity.created(URI.create("/dish-category/" + dishCategoryResponseDTO.id())).body(dishCategoryResponseDTO);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{slug}")
     public ResponseEntity<DishCategoryResponseDTO> getById(
             @AuthenticationPrincipal UserModel userModel,
-            @PathVariable Integer id
+            @PathVariable String  slug
     ){
-        return ResponseEntity.ok(this.dishCategoryService.getDishCategoryById(userModel, id));
+        return ResponseEntity.ok(this.dishCategoryService.getDishCategoryBySlug(userModel, slug));
     }
 
 

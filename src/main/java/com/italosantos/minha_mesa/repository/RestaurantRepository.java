@@ -32,4 +32,8 @@ public interface RestaurantRepository extends JpaRepository<RestaurantModel, Int
     );
 
     List<RestaurantModel> findByNameContainingIgnoreCaseAndActiveTrue(String name, Pageable pageable);
+
+    boolean existsByName(String name);
+
+    Optional<RestaurantModel> findBySlug(String slug);
 }

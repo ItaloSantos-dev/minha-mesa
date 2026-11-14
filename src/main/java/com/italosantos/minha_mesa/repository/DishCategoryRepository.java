@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface DishCategoryRepository extends JpaRepository<DishCategoryModel, Integer> {
     Boolean existsByNameAndRestaurantModelOwnerModelUserModelId(String name, Integer userId);
+
+    Optional<DishCategoryModel> findBySlug(String slug);
 }

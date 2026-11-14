@@ -50,16 +50,16 @@ export class OwnerUpdateDishCategory {
     );
     this.loadAvailableDishes();
 
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadDishCategory(Number(id));
+    const slug = this.route.snapshot.paramMap.get('slug');
+    if (slug) {
+      this.loadDishCategory(slug);
     } else {
       this.loading.set(false);
     }
   }
 
-  loadDishCategory(id: number) {
-    this.dishCategoryService.getDishCategoryById(id).subscribe({
+  loadDishCategory(slug:string) {
+    this.dishCategoryService.getDishCategoryBySlug(slug).subscribe({
       next: (category) => {
         this.category.set(category);
         this.imagePath.set(category.imageLink);
