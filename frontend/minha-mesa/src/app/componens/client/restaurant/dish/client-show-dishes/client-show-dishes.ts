@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EMPTY, catchError, switchMap } from 'rxjs';
 import { MessageError } from '../../../../message-error/message-error';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { DishesOfRestauranteResponseDTO } from '../../../../../types/dish/dishes-of-restaurant-response';
@@ -22,7 +22,7 @@ import { ClientDishCategory } from '../client-dish-category/client-dish-category
 export class ClientShowDishes {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly restaurantService = inject(RestaurantService);
+  private readonly dishService = inject(DishService);
   private readonly exceptionService = inject(ExceptionService);
   private readonly utilityService = inject(UtilityService);
   private readonly destroyRef = inject(DestroyRef);
@@ -60,7 +60,7 @@ export class ClientShowDishes {
   }
 
   loadDishes(id: number) {
-    this.restaurantService.getDishesOfRestaurant(id).subscribe({
+    this.dishService.getDishesOfRestaurant(id).subscribe({
       next: (response) => {
         this.dishesOfRestaurant.set(response);
         this.loading.set(false);

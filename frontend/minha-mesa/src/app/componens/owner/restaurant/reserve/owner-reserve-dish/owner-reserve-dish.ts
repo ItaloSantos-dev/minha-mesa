@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { ReserveDishService } from '../../../../../service/reserve-dish-service/reserve-dish-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { DishResponseDTO } from '../../../../../types/dish/dish-repsonse';
@@ -18,7 +18,7 @@ type ReserveDishUpdateAction = 'add' | 'complete' | 'cancel';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OwnerReserveDish {
-  private readonly restaurantService = inject(RestaurantService);
+  private readonly dishService = inject(DishService);
   private readonly reserveDishService = inject(ReserveDishService);
   private readonly exceptionService = inject(ExceptionService);
   private readonly utilityService = inject(UtilityService);
@@ -33,7 +33,7 @@ export class OwnerReserveDish {
   readonly dishStatus = ReserveDishStatus;
 
   ngOnInit() {
-    this.restaurantService.getDishById(this.reserveDish().dishId).subscribe({
+    this.dishService.getDishById(this.reserveDish().dishId).subscribe({
       next: (dish) => this.dish.set(dish),
       error: (error: HttpErrorResponse) => {
         if (error.status !== 403) {

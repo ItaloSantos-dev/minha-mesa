@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { DishesOfRestauranteResponseDTO } from '../../../../../types/dish/dishes-of-restaurant-response';
 
 import { OwnerShowDishes } from './owner-show-dishes';
@@ -19,7 +19,7 @@ describe('OwnerShowDishes', () => {
       imports: [OwnerShowDishes],
       providers: [
         {
-          provide: RestaurantService,
+          provide: DishService,
           useValue: {
             getDishesOfOwnerRestaurant: () => of(dishesResponse),
           },

@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
@@ -17,7 +17,7 @@ import { OwnerCardDish } from '../owner-card-dish/owner-card-dish';
 })
 export class OwnerShowDishes {
   private readonly utilityService = inject(UtilityService);
-  private readonly restaurantService = inject(RestaurantService);
+  private readonly dishService = inject(DishService);
   private readonly exceptionService = inject(ExceptionService);
 
   readonly dishesOfRestaurant = signal(<DishesOfRestauranteResponseDTO>{});
@@ -34,7 +34,7 @@ export class OwnerShowDishes {
   }
 
   loadDishes() {
-    this.restaurantService.getDishesOfOwnerRestaurant().subscribe({
+    this.dishService.getDishesOfOwnerRestaurant().subscribe({
       next: (data) => {
         this.dishesOfRestaurant.set(data);
       },

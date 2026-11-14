@@ -7,7 +7,7 @@ import { DishResponseDTO } from '../../../../../types/dish/dish-repsonse';
 import { UpdateDishRequestDTO } from '../../../../../types/dish/update-dish-request';
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { MessageError } from '../../../../message-error/message-error';
 
@@ -21,7 +21,7 @@ import { MessageError } from '../../../../message-error/message-error';
 export class OwnerUpdateDish {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly restaurantService = inject(RestaurantService);
+  private readonly dishService = inject(DishService);
   private readonly exceptionService = inject(ExceptionService);
   private readonly utilityService = inject(UtilityService);
 
@@ -57,7 +57,7 @@ export class OwnerUpdateDish {
   }
 
   loadDish(id: number) {
-    this.restaurantService.getDishById(id).subscribe({
+    this.dishService.getDishById(id).subscribe({
       next: (dish) => {
         this.dish.set(dish);
         this.imagePath.set(dish.imageLink);
@@ -79,7 +79,7 @@ export class OwnerUpdateDish {
   }
 
   loadDishCategories() {
-    this.restaurantService.getDishesOfOwnerRestaurant().subscribe({
+    this.dishService.getDishesOfOwnerRestaurant().subscribe({
       next: (data) => {
         this.dishCategories.set(data.categories);
       },
@@ -164,7 +164,7 @@ export class OwnerUpdateDish {
       return;
     }
 
-    this.restaurantService
+    this.dishService
       .updateDishById(dish.id, this.generateFormDataUpdateDishRequest(changes))
       .subscribe({
         next: () => {

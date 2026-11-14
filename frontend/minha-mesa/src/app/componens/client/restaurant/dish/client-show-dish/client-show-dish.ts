@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { DishResponseDTO } from '../../../../../types/dish/dish-repsonse';
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
@@ -17,7 +17,7 @@ import { MessageError } from '../../../../message-error/message-error';
 })
 export class ClientShowDish {
   private readonly route = inject(ActivatedRoute);
-  private readonly restaurantService = inject(RestaurantService);
+  private readonly dishService = inject(DishService);
   private readonly exceptionService = inject(ExceptionService);
   private readonly utilityService = inject(UtilityService);
 
@@ -46,7 +46,7 @@ export class ClientShowDish {
   }
 
   loadDish(dishId: number, restaurantId: number) {
-    this.restaurantService.getDishById(dishId).subscribe({
+    this.dishService.getDishById(dishId).subscribe({
       next: (dish) => {
         this.dish.set(dish);
         this.loading.set(false);
