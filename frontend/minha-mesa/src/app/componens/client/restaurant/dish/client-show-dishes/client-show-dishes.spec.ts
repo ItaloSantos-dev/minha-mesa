@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { of } from 'rxjs';
-import { RestaurantService } from '../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { DishResponseDTO } from '../../../../types/dish/dish-repsonse';
 import { DishesOfRestauranteResponseDTO } from '../../../../types/dish/dishes-of-restaurant-response';
 import { DishCategoryResponseDTO } from '../../../../types/dish_category/dish-category-response';
@@ -70,7 +70,7 @@ describe('ClientShowDishes', () => {
           useValue: { paramMap: of(convertToParamMap({ id: '42' })) },
         },
         {
-          provide: RestaurantService,
+          provide: DishService,
           useValue: {
             getDishesOfRestaurant: (id: number) => {
               requestedRestaurantId = id;

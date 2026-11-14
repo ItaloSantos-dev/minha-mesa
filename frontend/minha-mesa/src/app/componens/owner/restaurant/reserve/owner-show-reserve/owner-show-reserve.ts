@@ -4,6 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReserveStatus } from '../../../../../types/enums/reserve-status';
 import { ReserveResponseDTO } from '../../../../../types/reserve/reserve-response';
 import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { DayOfWeek } from '../../../../../types/enums/day-of-week';
 import { gsap } from 'gsap/gsap-core';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
@@ -45,6 +46,7 @@ export class OwnerShowReserve implements OnDestroy {
   private reserveService = inject(ReserveService);
 
   private restaurantService = inject(RestaurantService);
+  private dishService = inject(DishService);
   private reserveDishService = inject(ReserveDishService);
   readonly loading = signal(true);
   readonly loadingDishes = signal(false);
@@ -454,7 +456,7 @@ export class OwnerShowReserve implements OnDestroy {
 
   private loadAvailableDishes() {
     this.loadingDishes.set(true);
-    this.restaurantService.getDishesOfOwnerRestaurant().subscribe({
+    this.dishService.getDishesOfOwnerRestaurant().subscribe({
       next: (data: DishesOfRestauranteResponseDTO) => {
         const dishes = [
           ...data.categories.flatMap((category) => category.dishes),

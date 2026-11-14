@@ -3,9 +3,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 
 import { RestaurantService } from './restaurant-service';
+import { DishService } from '../dish-service/dish-service';
 
-describe('RestaurantService', () => {
+describe('RestaurantService and DishService', () => {
   let service: RestaurantService;
+  let dishService: DishService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -13,6 +15,7 @@ describe('RestaurantService', () => {
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
     service = TestBed.inject(RestaurantService);
+    dishService = TestBed.inject(DishService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
@@ -25,7 +28,7 @@ describe('RestaurantService', () => {
   });
 
   it('requests dishes using the restaurant id in the route', () => {
-    service.getDishesOfRestaurant(42).subscribe();
+    dishService.getDishesOfRestaurant(42).subscribe();
 
     const request = httpTestingController.expectOne(
       'http://localhost:8080/restaurants/42/dishes',
@@ -35,7 +38,7 @@ describe('RestaurantService', () => {
   });
 
   it('requests dishes for the authenticated restaurant', () => {
-    service.getDishesOfOwnerRestaurant().subscribe();
+    dishService.getDishesOfOwnerRestaurant().subscribe();
 
     const request = httpTestingController.expectOne(
       'http://localhost:8080/restaurants/dishes',
@@ -49,7 +52,7 @@ describe('RestaurantService', () => {
     formData.append('data', new Blob(['{}'], { type: 'application/json' }));
     formData.append('image', new File(['image'], 'dish.png', { type: 'image/png' }));
 
-    service.createDish(formData).subscribe();
+    dishService.createDish(formData).subscribe();
 
     const request = httpTestingController.expectOne('http://localhost:8080/dishes');
     expect(request.request.method).toBe('POST');

@@ -8,7 +8,7 @@ import { UpdateDishCategoryResponseDTO } from '../../../../../types/dish_categor
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
 import { DishCategoryService } from '../../../../../service/dish-category-service/dish-category-service';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { MessageError } from '../../../../message-error/message-error';
 
@@ -22,7 +22,7 @@ import { MessageError } from '../../../../message-error/message-error';
 export class OwnerUpdateDishCategory {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly restaurantService = inject(RestaurantService);
+  private readonly dishService = inject(DishService);
   private readonly dishCategoryService = inject(DishCategoryService);
   private readonly exceptionService = inject(ExceptionService);
   private readonly utilityService = inject(UtilityService);
@@ -77,7 +77,7 @@ export class OwnerUpdateDishCategory {
   }
 
   loadAvailableDishes() {
-    this.restaurantService.getDishesOfOwnerRestaurant().subscribe({
+    this.dishService.getDishesOfOwnerRestaurant().subscribe({
       next: (data) => {
         this.availableDishes.set(data.dishesWithoutCategories);
       },

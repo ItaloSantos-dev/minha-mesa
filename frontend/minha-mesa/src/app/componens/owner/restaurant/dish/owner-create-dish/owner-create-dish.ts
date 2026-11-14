@@ -6,7 +6,7 @@ import { DishCategoryResponseDTO } from '../../../../../types/dish_category/dish
 import { CreateDishRequestDTO } from '../../../../../types/dish/create-dish-request';
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { MessageError } from '../../../../message-error/message-error';
 
@@ -18,7 +18,7 @@ import { MessageError } from '../../../../message-error/message-error';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OwnerCreateDish {
-  private readonly restaurantService = inject(RestaurantService);
+  private readonly dishService = inject(DishService);
   private readonly exceptionService = inject(ExceptionService);
   private readonly utilityService = inject(UtilityService);
   private readonly router = inject(Router);
@@ -49,7 +49,7 @@ export class OwnerCreateDish {
   }
 
   loadDishCategories() {
-    this.restaurantService.getDishesOfOwnerRestaurant().subscribe({
+    this.dishService.getDishesOfOwnerRestaurant().subscribe({
       next: (data) => {
         this.dishCategories.set(data.categories);
       },
@@ -110,7 +110,7 @@ export class OwnerCreateDish {
       return;
     }
 
-    this.restaurantService.createDish(this.generateFormDataCreateDishRequest()).subscribe({
+    this.dishService.createDish(this.generateFormDataCreateDishRequest()).subscribe({
       next: () => {
         void this.router.navigate([UtilityService.pathsOfApplication.OWNER_SHOW_DISHES]);
       },

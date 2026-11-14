@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 
 import { OwnerCreateDish } from './owner-create-dish';
 
 describe('OwnerCreateDish', () => {
   let component: OwnerCreateDish;
   let fixture: ComponentFixture<OwnerCreateDish>;
-  const restaurantService = {
+  const dishService = {
     getDishesOfOwnerRestaurant: () =>
       of({ categories: [], dishesWithoutCategories: [] }),
     createDish: () => of({}),
@@ -19,7 +19,7 @@ describe('OwnerCreateDish', () => {
       imports: [OwnerCreateDish],
       providers: [
         provideRouter([]),
-        { provide: RestaurantService, useValue: restaurantService },
+        { provide: DishService, useValue: dishService },
       ],
     })
     .compileComponents();

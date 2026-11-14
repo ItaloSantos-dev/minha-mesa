@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { RestaurantService } from '../../../../../service/restaurant-service/restaurant-service';
+import { DishService } from '../../../../../service/dish-service/dish-service';
 import { ExceptionService } from '../../../../../service/exception-service/exception-service';
 import { UtilityService } from '../../../../../service/utility-service/utility-service';
 import { ExceptionResponse } from '../../../../../types/exception/excpetion-response';
@@ -22,7 +22,7 @@ export class OwnerShowRatesDish {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly restaurantService = inject(RestaurantService);
+  private readonly dishService = inject(DishService);
   private readonly exceptionService = inject(ExceptionService);
   private readonly utilityService = inject(UtilityService);
 
@@ -48,7 +48,7 @@ export class OwnerShowRatesDish {
 
   loadRates(page: number) {
     this.isLoading.set(true);
-    this.restaurantService.getRatesOfDish(this.dishId, page, PAGE_SIZE).subscribe({
+    this.dishService.getRatesOfDish(this.dishId, page, PAGE_SIZE).subscribe({
       next: (rates) => {
         this.rates.set(rates);
         this.haveMoreRates.set(rates.length === PAGE_SIZE);

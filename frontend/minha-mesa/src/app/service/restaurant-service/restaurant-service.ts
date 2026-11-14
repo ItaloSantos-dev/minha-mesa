@@ -9,9 +9,6 @@ import { ReserveResponseDTO } from '../../types/reserve/reserve-response';
 import { TableResponseDTO } from '../../types/table/table-response';
 import { WorkingScheduleResponseDTO } from '../../types/working_schedule/working-schedule-response';
 import { ScheduleExceptionResponseDTO } from '../../types/schedule_exception/schedule-exception-response';
-import { DishesOfRestauranteResponseDTO } from '../../types/dish/dishes-of-restaurant-response';
-import { DishResponseDTO } from '../../types/dish/dish-repsonse';
-import { RateDishResponseDTO } from '../../types/rate_dish/rate-dish-response';
 
 @Injectable({
   providedIn: 'root',
@@ -87,44 +84,6 @@ export class RestaurantService {
   getRestaurantbyId(id:number):Observable<RestaurantResponseDTO>{
     return this.httpClient.get<RestaurantResponseDTO>(
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.FIND(id)
-    )
-  }
-
-  getDishesOfRestaurant(id:number):Observable<DishesOfRestauranteResponseDTO>{
-    return this.httpClient.get<DishesOfRestauranteResponseDTO>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.DISHES(id)
-    )
-  }
-
-  getDishesOfOwnerRestaurant():Observable<DishesOfRestauranteResponseDTO>{
-    return this.httpClient.get<DishesOfRestauranteResponseDTO>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.OWNER_DISHES
-    )
-  }
-
-  createDish(data:FormData):Observable<DishResponseDTO>{
-    return this.httpClient.post<DishResponseDTO>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.CREATE,
-      data
-    )
-  }
-
-  getDishById(id:number):Observable<DishResponseDTO>{
-    return this.httpClient.get<DishResponseDTO>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.FIND(id)
-    )
-  }
-
-  getRatesOfDish(id:number, page:number, size:number):Observable<RateDishResponseDTO[]>{
-    return this.httpClient.get<RateDishResponseDTO[]>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.RATES(id) + this.generatePageable(page, size)
-    )
-  }
-
-  updateDishById(id:number, data:FormData):Observable<DishResponseDTO>{
-    return this.httpClient.patch<DishResponseDTO>(
-      this.url + API_BACK_CONFIG.ENDPOINTS.DISH.UPDATE(id),
-      data
     )
   }
 
