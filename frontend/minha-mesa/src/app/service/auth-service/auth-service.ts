@@ -14,24 +14,15 @@ export class AuthService {
 
   private httpClient = inject(HttpClient);
 
-  getToken():string|null{
-    return localStorage.getItem(this.LOCALSTORAGETOKENKEY)
-  }
+  
 
-  clearToken(){
-    localStorage.removeItem(this.LOCALSTORAGETOKENKEY);
-  }
-
-  login(data:LoginRequestDTO):Observable<string>{
+  login(data:LoginRequestDTO):Observable<void>{
     localStorage.clear()
-    return this.httpClient.post(API_BACK_CONFIG.URL + API_BACK_CONFIG.ENDPOINTS.AUTH.LOGIN, data, {responseType:'text'});
+    return this.httpClient.post<void>(API_BACK_CONFIG.URL + API_BACK_CONFIG.ENDPOINTS.AUTH.LOGIN, data);
   }
 
   register(data: RegisterRequestDTO):Observable<UserResponseDTO>{
     return this.httpClient.post<UserResponseDTO>(API_BACK_CONFIG.URL + API_BACK_CONFIG.ENDPOINTS.AUTH.REGISTER, data);
   }
 
-  setToken(token:string){
-    localStorage.setItem('token', token);
-  }
 }

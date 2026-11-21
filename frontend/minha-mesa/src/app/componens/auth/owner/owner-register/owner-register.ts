@@ -252,7 +252,6 @@ export class OwnerRegister {
     if (this.formRegisterOwner.invalid) 
       return;
 
-    this.authService.clearToken();
     this.restaurantService.createRestaurant(this.generateFormDataCreateRestaurantRequest()).subscribe({
       next:(data) =>{
         this.formShow.set(0);
