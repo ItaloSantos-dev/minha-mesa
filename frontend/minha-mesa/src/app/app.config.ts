@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideNgxMask } from 'ngx-mask';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@angular/common/http';
 import { credentialsInterceptor } from './security/credentials-interceptor';
 
 export const appConfig: ApplicationConfig = {

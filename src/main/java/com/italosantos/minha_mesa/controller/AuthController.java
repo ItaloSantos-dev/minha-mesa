@@ -4,6 +4,7 @@ import com.italosantos.minha_mesa.dto.auth.LoginRequestDTO;
 import com.italosantos.minha_mesa.dto.auth.LoginResponseDTO;
 import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
+import com.italosantos.minha_mesa.dto.tokens.TokenData;
 import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.infra.SecurityConfiguration;
 import com.italosantos.minha_mesa.model.UserModel;
@@ -21,6 +22,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.Duration;
+
 @Tag(
         name = "01 - Autenticação",
         description = "Operações relacionadas a autenticação de usuário"
@@ -49,15 +53,26 @@ public class AuthController {
     })
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletResponse response){
-        String token = this.authService.login(loginRequestDTO, response);
-        ResponseCookie cookie = ResponseCookie.from(SecurityConfiguration.accessTokenCookieKeyName, token)
+        TokenData tokenData = this.authService.login(loginRequestDTO, response);
+        ResponseCookie accesTokenCookie = ResponseCookie.from(SecurityConfiguration.accessTokenCookieKeyName, tokenData.accessToken())
                 .httpOnly(true)
                 .secure(false)
                 .path("/")
+                .maxAge(Duration.ofHours(3).getSeconds())
                 .sameSite("Strict")
                 .build();
+
+        ResponseCookie xsrfTokenCookie = ResponseCookie.from(SecurityConfiguration.xsrfTokenCookieKeyName, tokenData.xsrfToken())
+                .httpOnly(false)
+                .secure(false)
+                .path("/")
+                .maxAge(Duration.ofHours(3).getSeconds())
+                .sameSite("Strict")
+                .build();
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .header(HttpHeaders.SET_COOKIE, accesTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, xsrfTokenCookie.toString())
                 .build();
     }
 

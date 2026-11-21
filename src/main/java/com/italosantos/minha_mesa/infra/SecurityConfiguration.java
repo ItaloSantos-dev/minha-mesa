@@ -23,13 +23,15 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-    private final SecurityTokenFilter securityTokenFilter;
+    private final SecurityTokenAccessFilter securityTokenAccessFilter;
+    private final SecurityTokenXsrfFilter securityTokenXsrfFilter;
     private final RateLimitFilter rateLimitFilter;
     public static String accessTokenCookieKeyName = "access_token";
     public static String xsrfTokenCookieKeyName = "XSRF-TOKEN";
 
-    public SecurityConfiguration(SecurityTokenFilter securityTokenFilter, RateLimitFilter rateLimitFilter) {
-        this.securityTokenFilter = securityTokenFilter;
+    public SecurityConfiguration(SecurityTokenAccessFilter securityTokenAccessFilter, SecurityTokenXsrfFilter securityTokenXsrfFilter, RateLimitFilter rateLimitFilter) {
+        this.securityTokenAccessFilter = securityTokenAccessFilter;
+        this.securityTokenXsrfFilter = securityTokenXsrfFilter;
         this.rateLimitFilter = rateLimitFilter;
     }
 
@@ -39,8 +41,9 @@ public class SecurityConfiguration {
                 .cors(cors ->cors.configurationSource(this.corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(this.securityTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(this.rateLimitFilter, SecurityTokenFilter.class)
+                .addFilterBefore(this.securityTokenAccessFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(this.securityTokenXsrfFilter, SecurityTokenAccessFilter.class)
+                .addFilterBefore(this.rateLimitFilter, SecurityTokenXsrfFilter.class)
                 .authorizeHttpRequests(authorization -> authorization
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/tables/*").permitAll()
