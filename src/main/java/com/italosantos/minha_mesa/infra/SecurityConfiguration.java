@@ -25,6 +25,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfiguration {
     private final SecurityTokenFilter securityTokenFilter;
     private final RateLimitFilter rateLimitFilter;
+    public static String accessTokenCookieKeyName = "access_token";
+    public static String xsrfTokenCookieKeyName = "XSRF-TOKEN";
 
     public SecurityConfiguration(SecurityTokenFilter securityTokenFilter, RateLimitFilter rateLimitFilter) {
         this.securityTokenFilter = securityTokenFilter;

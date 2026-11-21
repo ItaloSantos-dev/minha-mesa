@@ -7,6 +7,7 @@ import com.italosantos.minha_mesa.exception.UserAlreadyRegisterException;
 import com.italosantos.minha_mesa.mapper.UserMapper;
 import com.italosantos.minha_mesa.model.UserModel;
 import com.italosantos.minha_mesa.repository.UserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,7 +31,7 @@ public class AuthService {
     }
 
 
-    public String login(LoginRequestDTO loginRequestDTO){
+    public String login(LoginRequestDTO loginRequestDTO, HttpServletResponse response){
         Authentication credential = new UsernamePasswordAuthenticationToken(loginRequestDTO.email(), loginRequestDTO.password());
         Authentication auth = this.authenticationManager.authenticate(credential);
         String token = this.tokenService.generateToken( (UserModel) auth.getPrincipal());

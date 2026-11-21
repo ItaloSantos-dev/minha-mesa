@@ -58,10 +58,7 @@ export class UserLogin {
       return;
     }
     this.authService.login(this.generateLoginRequest()).subscribe({
-      next:(token) =>{
-        console.log("Deu bom");
-        
-        this.authService.setToken(token);
+      next:() =>{
         this.router.navigate([UtilityService.pathsOfApplication.CLIENT_HOME])
       },
       error:(erro: HttpErrorResponse)=>{

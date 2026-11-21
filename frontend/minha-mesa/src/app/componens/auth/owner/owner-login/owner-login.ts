@@ -45,8 +45,7 @@ export class OwnerLogin {
     if (!this.formLoginOwner.valid)
       return
     this.authservice.login(this.generateLoginRequest()).subscribe({
-      next:(data) =>{
-        this.authservice.setToken(data);
+      next:() =>{
         this.router.navigate(['owner', 'restaurant', 'dashboard'])
       },
       error:(erro: HttpErrorResponse)=>{
