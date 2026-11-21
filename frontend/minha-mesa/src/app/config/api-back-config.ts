@@ -24,6 +24,7 @@ export const API_BACK_CONFIG = {
             OWNER_DISHES: '/restaurants/dishes',
             DASHBOARD : '/restaurants/dashboard',
             RESERVES : '/restaurants/reserves',
+            CLIENTS : '/restaurants/clients',
             TABLES : '/restaurants/tables',
             WORKING_SCHEDULES:'/restaurants/working-scheduleds',
             SCHEDULE_EXCEPTIONS:'/restaurants/schedule-exceptions',

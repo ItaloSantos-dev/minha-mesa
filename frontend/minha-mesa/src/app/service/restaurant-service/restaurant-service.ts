@@ -9,6 +9,7 @@ import { ReserveResponseDTO } from '../../types/reserve/reserve-response';
 import { TableResponseDTO } from '../../types/table/table-response';
 import { WorkingScheduleResponseDTO } from '../../types/working_schedule/working-schedule-response';
 import { ScheduleExceptionResponseDTO } from '../../types/schedule_exception/schedule-exception-response';
+import { UserForOwnerResponseDTO } from '../../types/user/user-for-owner-response';
 
 @Injectable({
   providedIn: 'root',
@@ -44,6 +45,12 @@ export class RestaurantService {
     
     return this.httpClient.get<ReserveResponseDTO[]>(
       this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.RESERVES + this.generatePageable(page)
+    )
+  }
+
+  getClientsOfRestaurant():Observable<UserForOwnerResponseDTO[]>{
+    return this.httpClient.get<UserForOwnerResponseDTO[]>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.CLIENTS
     )
   }
 

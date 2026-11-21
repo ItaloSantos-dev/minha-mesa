@@ -12,6 +12,7 @@ export class UtilityService {
   static pathsOfApplication ={
     OWNER_DASHBOARD: 'owner/restaurant/dashboard',
     OWNER_SHOW_RESERVES: 'owner/restaurant/reservations',
+    OWNER_SHOW_CLIENTS: 'owner/restaurant/clients',
     OWNER_SHOW_DISHES: 'owner/restaurant/dishes',
     OWNER_SHOW_DISH_CATEGORIES: 'owner/restaurant/dish-categories',
     OWNER_SHOW_TABLES: 'owner/restaurant/tables',
@@ -29,7 +30,8 @@ export class UtilityService {
     DISHES: 3,
     TABLES: 4,
     WORKING_SCHEDULES: 5,
-    SCHEDULE_EXCEPTIONS: 6
+    SCHEDULE_EXCEPTIONS: 6,
+    CLIENTS: 7
   };
 
   private updateCurrentPageSubject = new Subject<number>();

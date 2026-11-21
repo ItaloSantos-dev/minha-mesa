@@ -11,6 +11,7 @@ import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
+import com.italosantos.minha_mesa.dto.user.UserForOwnerResponse;
 import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
@@ -37,6 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -311,6 +313,30 @@ public class RestaurantService {
 
 
         return this.getDishesOfRestaurant(ownerModel.getRestaurantModel(), false);
+    }
+
+    public List<UserForOwnerResponse> getClientsOfRestaurant(UserModel userModel){
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(NotPermitedException::new);
+
+        List<UserModel> users = this.userRepository.findUsersWhereHaveReserveInRestaurant(ownerModel.getRestaurantModel().getId());
+
+        List<UserForOwnerResponse> response = new ArrayList<>();
+
+        for (UserModel user : users){
+            Integer reserveQuantity = user.getReserveModels().stream()
+                    .filter(r -> r.getTableModel().getRestaurantModel().getId().equals(ownerModel.getRestaurantModel().getId()))
+                    .toList()
+                    .size();
+
+            response.add(new UserForOwnerResponse(
+                    user.getName(),
+                    user.getPhone(),
+                    reserveQuantity
+            ));
+        }
+
+        return response;
     }
 
 

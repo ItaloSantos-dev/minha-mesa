@@ -10,6 +10,8 @@ import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
+import com.italosantos.minha_mesa.dto.user.UserForOwnerResponse;
+import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
@@ -339,6 +341,15 @@ public class RestaurantController {
                 userModel, restaurantSlug, dishSlug
         ));
 
+    }
+
+    @GetMapping("/clients")
+    public ResponseEntity<List<UserForOwnerResponse>> getClientsOfRestaurant(
+            @AuthenticationPrincipal UserModel userModel
+    ){
+        return ResponseEntity.ok(
+                this.restaurantService.getClientsOfRestaurant(userModel)
+        );
     }
 
 
