@@ -6,6 +6,9 @@ import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.TableModel;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Component
 public class TableMapper {
     public TableModel createToModel(CreateTableRequestDTO createTableRequestDTO, RestaurantModel restaurantModel){
@@ -14,6 +17,7 @@ public class TableMapper {
         tableModel.setNumber(createTableRequestDTO.number());
         tableModel.setActive(true);
         tableModel.setRestaurantModel(restaurantModel);
+        tableModel.setCreatedAt(Instant.now());
         return tableModel;
     }
 

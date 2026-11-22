@@ -14,7 +14,9 @@ import com.italosantos.minha_mesa.repository.OwnerRepository;
 import com.italosantos.minha_mesa.repository.ScheduleExceptionRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 @Service
@@ -60,6 +62,7 @@ public class ScheduleExceptionService {
 
         scheduleException.setActive(!scheduleException.isActive());
 
+        scheduleException.setUpdatedAt(Instant.now());
         this.scheduleExceptionRepository.save(scheduleException);
 
 

@@ -6,6 +6,9 @@ import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.WorkingScheduleModel;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Component
 public class WorkingScheduleMapper {
     public WorkingScheduleModel createToModel(CreateWorkingScheduleResquestDTO createWorkingScheduleResquestDTO, RestaurantModel restaurantModel){
@@ -14,6 +17,7 @@ public class WorkingScheduleMapper {
         workingScheduleModel.setRestaurantModel(restaurantModel);
         workingScheduleModel.setTimeStart(createWorkingScheduleResquestDTO.timeStart());
         workingScheduleModel.setTimeEnd(createWorkingScheduleResquestDTO.timeEnd());
+        workingScheduleModel.setCreatedAt(Instant.now());
         return workingScheduleModel;
     }
 

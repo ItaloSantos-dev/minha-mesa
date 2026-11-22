@@ -11,6 +11,8 @@ import com.italosantos.minha_mesa.model.RestaurantModel;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -32,6 +34,7 @@ public class DishMapper {
         dishModel.setPreparationTime(createDishRequestDTO.preparationTime());
         dishModel.setImagePath(imagePath);
         dishModel.setRestaurantModel(restaurantModel);
+        dishModel.setCreatedAt(Instant.now());
         return dishModel;
     }
 
@@ -82,6 +85,8 @@ public class DishMapper {
 
         if (newImagePath != null)
             dishModel.setImagePath(newImagePath);
+
+        dishModel.setUpdatedAt(Instant.now());
 
         return dishModel;
 

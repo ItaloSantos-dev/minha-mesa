@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.Normalizer;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -211,6 +213,7 @@ public class DishCategoryService {
             dishCategoryModel.setImagePath(newImagePath);
             this.imageService.deleteImage(oldImagePath);
         }
+        dishCategoryModel.setUpdatedAt(Instant.now());
 
         return this.dishCategoryMapper.modelToResponse(this.dishCategoryRepository.save(dishCategoryModel), imageLink, this.dishService.getDishesByDishCategoryId(dishCategoryModel.getId()));
     }

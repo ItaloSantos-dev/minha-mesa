@@ -6,6 +6,7 @@ import com.italosantos.minha_mesa.model.enums.ReserveDishStatus;
 import jakarta.annotation.Nullable;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 public record ReserveDishResponseDTO(
@@ -18,7 +19,7 @@ public record ReserveDishResponseDTO(
         Integer quantityCanceled,
         Integer quantityPending,
         BigDecimal priceFinal,
-        LocalDateTime createdAt,
+        Instant createdAt,
         ReserveDishStatus status,
 
         @Nullable 

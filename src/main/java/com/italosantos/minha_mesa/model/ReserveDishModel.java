@@ -10,6 +10,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Table(name = "tb_reserve_dish")
@@ -50,8 +51,11 @@ public class ReserveDishModel {
     private Integer canceledQuantity = 0;
 
     @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @OneToOne(mappedBy = "reserveDishModel")
     private RateDishModel rateDishModel;
+
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 }
