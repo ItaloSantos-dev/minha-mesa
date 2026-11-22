@@ -1,25 +1,24 @@
-import { AfterViewInit, Component, ElementRef, HostListener, inject, signal, viewChild, ViewChild, ViewChildren } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { AfterViewInit, Component, ElementRef, inject, ViewChild } from '@angular/core';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollNavigationService } from '../../../../service/scroll-navigation-service/scroll-navigation-service';
-import { TestimonialCard } from "./coverflow-carousel/testimonial-card/testimonial-card";
-import { CoverflowCarousel } from "./coverflow-carousel/coverflow-carousel";
-import { Features } from "./features/features";
-import { ContactUs } from "./contact-us/contact-us";
+import { AboutUsSection } from './about-us-section/about-us-section';
+import { ContactUs } from './contact-us/contact-us';
+import { CoverflowCarousel } from './coverflow-carousel/coverflow-carousel';
+import { Features } from './features/features';
+import { HeroSection } from './hero-section/hero-section';
 
 gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'app-landing-home',
-  imports: [RouterLink, TestimonialCard, CoverflowCarousel, Features, ContactUs],
+  imports: [HeroSection, AboutUsSection, CoverflowCarousel, Features, ContactUs],
   templateUrl: './landing-home.html',
   styleUrl: './landing-home.css',
 })
 
 export class LandingHome implements AfterViewInit{
   private scrollNavigationService = inject(ScrollNavigationService);
-  
 
   @ViewChild('scrollContainer') scrollContainer!: ElementRef<HTMLDivElement>;
 
@@ -35,26 +34,11 @@ export class LandingHome implements AfterViewInit{
     }
   }
 
-  @ViewChild('heroSection')
-  heroSectionDiv!: ElementRef<HTMLElement>;
+  @ViewChild(HeroSection)
+  heroSectionComponent!: HeroSection;
 
-  @ViewChild('ballBlue')
-  ballBlueDiv!: ElementRef<HTMLElement>;
-
-  @ViewChild('ballOrange')
-  ballOrangeDiv!: ElementRef<HTMLElement>;
-
-  @ViewChild('ballYellow')
-  ballYellowDiv!: ElementRef<HTMLElement>;
-
-  @ViewChild('aboutUsSection')
-  aboutUsSectiondiv!: ElementRef<HTMLElement>;
-
-  @ViewChild('cardReserve')
-  cardReserveDiv !: ElementRef<HTMLElement>
-
-  @ViewChild('cardTable')
-  cardTableDiv !: ElementRef<HTMLElement>
+  @ViewChild(AboutUsSection)
+  aboutUsSectionComponent!: AboutUsSection;
 
   @ViewChild('horizontalScrollDiv')
   horizontalScrollDiv !: ElementRef<HTMLElement>
@@ -88,7 +72,7 @@ export class LandingHome implements AfterViewInit{
   ngAfterViewInit(): void {
     
     ScrollTrigger.create({
-      trigger: this.heroSectionDiv.nativeElement,
+      trigger: this.heroSectionComponent.heroSectionDiv.nativeElement,
       start: 'top top',
       end: 'bottom top',
       snap: {
@@ -99,13 +83,12 @@ export class LandingHome implements AfterViewInit{
 
 
 
-    const ballBlue = this.ballBlueDiv.nativeElement;
-    const ballOrange = this.ballOrangeDiv.nativeElement;
-    const ballYellow = this.ballYellowDiv.nativeElement;
-
-    const aboutUsSection = this.aboutUsSectiondiv.nativeElement;
-    const cardReserve = this.cardReserveDiv.nativeElement;
-    const cardTable = this.cardTableDiv.nativeElement;
+    const aboutUsSection = this.aboutUsSectionComponent.aboutUsSectionDiv.nativeElement;
+    const ballBlue = this.aboutUsSectionComponent.ballBlueDiv.nativeElement;
+    const ballOrange = this.aboutUsSectionComponent.ballOrangeDiv.nativeElement;
+    const ballYellow = this.aboutUsSectionComponent.ballYellowDiv.nativeElement;
+    const cardReserve = this.aboutUsSectionComponent.cardReserveDiv.nativeElement;
+    const cardTable = this.aboutUsSectionComponent.cardTableDiv.nativeElement;
 
     // animações da seção sobre
     gsap.timeline({
@@ -332,7 +315,7 @@ export class LandingHome implements AfterViewInit{
   private navigateToSection(section: string): void {
     if (section==='heroSection') {
       window.scrollTo({
-        top: this.heroSectionDiv.nativeElement.offsetTop,
+        top: this.heroSectionComponent.heroSectionDiv.nativeElement.offsetTop,
         behavior: 'smooth'
       });
     }

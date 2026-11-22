@@ -1,0 +1,69 @@
+<section
+  id="aboutUsSection"
+  #aboutUsSection
+  class="relative flex h-screen w-full items-center justify-between overflow-hidden"
+>
+  <div
+    class="absolute left-0 top-0 h-[50vh] w-[40vw] opacity-60 [background-image:radial-gradient(rgba(3,120,166,0.15)_1px,transparent_1px)] [background-size:24px_24px]"
+  ></div>
+
+  <div #ballOrange class="sacale-100 absolute right-[10%] top-[18%] h-5 w-5 rounded-full bg-(--color-primary)"></div>
+  <div #ballYellow class="sacale-100 absolute left-[50%] top-[12%] h-3 w-3 rounded-full bg-(--color-highlight)"></div>
+  <div #ballBlue class="sacale-100 absolute bottom-[38%] left-[5%] h-4 w-4 rounded-full bg-(--color-secondary)"></div>
+
+  <div class="relative z-10 flex w-full flex-col items-start gap-6 rounded-2xl bg-white/20 p-6 backdrop-blur-xl sm:ms-[10vw] md:w-1/2 lg:w-[35vw]">
+    <span class="font-[var(--font-heading)] text-sm font-extrabold uppercase tracking-widest text-[var(--color-secondary)] md:text-base">
+      Sobre Nós
+    </span>
+
+    <h2 class="font-[var(--font-display)] text-4xl leading-tight text-gray-900 md:text-5xl lg:text-6xl">
+      Seu restaurante merece uma gestão à altura do seu
+      <span class="text-[var(--color-primary)]">sucesso.</span>
+    </h2>
+
+    <p class="font-[var(--font-body)] text-lg leading-relaxed text-gray-800 md:text-xl">
+      Com o Minha Mesa, você organiza suas reservas,
+      gerencia mesas e horários e mantém tudo sob controle
+      em um só lugar. Menos complicação na gestão e mais
+      tempo para cuidar do que realmente importa: oferecer
+      uma experiência incrível aos seus clientes.
+    </p>
+
+    <div class="mt-4 flex flex-wrap items-center gap-6">
+      <div class="flex items-center gap-2 font-[var(--font-heading)] text-lg font-bold text-[var(--color-highlight)]">
+        <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462 c.969 0 1.371 1.24.588 1.81l-2.8 2.034 a1 1 0 00-.364 1.118l1.07 3.292 c.3.921-.755 1.688-1.54 1.118l-2.8-2.034 a1 1 0 00-1.175 0l-2.8 2.034 c-.784.57-1.838-.197-1.539-1.118l1.07-3.292 a1 1 0 00-.364-1.118L2.98 8.72 c-.783-.57-.38-1.81.588-1.81h3.461 a1 1 0 00.951-.69l1.07-3.292z"></path>
+        </svg>
+        <span>Organização Garantida</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="hidden sm:block">
+    <div #cardReserve class="absolute right-[28vw] top-[18vh] z-20 rotate-3 rounded-2xl border border-white/40 bg-white/70 px-4 py-3 shadow-xl backdrop-blur-xl">
+      <div class="flex items-center gap-3">
+        <div class="h-3 w-3 animate-pulse rounded-full bg-green-500 shadow-sm"></div>
+        <div>
+          <p class="text-sm font-bold text-gray-800">Reserva confirmada</p>
+          <span class="text-xs text-gray-500">Mesa 08 · 19:30</span>
+        </div>
+      </div>
+    </div>
+
+    <div #cardTable class="absolute bottom-[20vh] right-[8vw] z-20 -rotate-3 rounded-2xl border border-white/40 bg-white/70 px-4 py-3 shadow-xl backdrop-blur-xl">
+      <div class="flex items-center gap-3">
+        <div class="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--color-secondary)]/10">
+          <span class="font-bold text-[var(--color-secondary)]">08</span>
+        </div>
+        <div>
+          <p class="text-sm font-bold text-gray-800">Mesa ocupada</p>
+          <span class="text-xs text-gray-500">4 clientes</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-0 -right-10">
+    <img class="hidden -scale-x-100 object-cover sm:block lg:h-[90vh]" src="/images/vetor/garcom-vetor.png" alt="" />
+  </div>
+</section>
