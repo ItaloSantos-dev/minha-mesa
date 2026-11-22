@@ -1,15 +1,11 @@
 package com.italosantos.minha_mesa.service;
 
-import com.italosantos.minha_mesa.dto.auth.RegisterRequestDTO;
 import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
 import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
 import com.italosantos.minha_mesa.dto.dish_category.DishCategoryResponseDTO;
-import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
-import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.UpdateRestaurantRequestDTO;
-import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.dto.user.UserForOwnerResponse;
@@ -17,11 +13,11 @@ import com.italosantos.minha_mesa.dto.user.UserResponseDTO;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
-import com.italosantos.minha_mesa.infra.RedisCacheConfig;
+import com.italosantos.minha_mesa.infra.cache.CacheName;
+import com.italosantos.minha_mesa.infra.cache.RedisCacheConfig;
 import com.italosantos.minha_mesa.infra.storage.MediaPath;
 import com.italosantos.minha_mesa.mapper.*;
 import com.italosantos.minha_mesa.model.*;
-import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.model.enums.UserRole;
 import com.italosantos.minha_mesa.repository.*;
 import com.italosantos.minha_mesa.utility.RestaurantUtility;
@@ -29,16 +25,11 @@ import com.italosantos.minha_mesa.utility.SlugUtility;
 import org.jspecify.annotations.Nullable;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +114,7 @@ public class RestaurantService {
         return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
     }
     @Cacheable(
-            value = RedisCacheConfig.RESTAURANTCACHENAME,
+            value = CacheName.RESTAURANTCACHENAME,
             key = "#id"
     )
 
@@ -159,7 +150,7 @@ public class RestaurantService {
 
 
     @Cacheable(
-            value = RedisCacheConfig.RESERVESRESTAURANTCACHENAME,
+            value = CacheName.RESERVESRESTAURANTCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
     )
     public List<ReserveResponseDTO> getReservesOfRestaurant(UserModel userModel, Pageable pageable){
@@ -226,7 +217,7 @@ public class RestaurantService {
 
     @Cacheable(
             key = "#userModel.id",
-            value = RedisCacheConfig.TABLESOFRESTAURANTCACHENAME
+            value = CacheName.TABLESOFRESTAURANTCACHENAME
     )
     public List<TableResponseDTO> getTablesOfRestaurantById(@AuthenticationPrincipal UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
@@ -239,7 +230,7 @@ public class RestaurantService {
 
     @Cacheable(
             key = "#search + '-' + #pageable.pageNumber",
-            value = RedisCacheConfig.RESTAURANTSEARCHEDCACHENAME
+            value = CacheName.RESTAURANTSEARCHEDCACHENAME
     )
     public List<RestaurantResponseDTO> getRestaurantsLikeName(String search, Pageable pageable){
         List<RestaurantModel> restaurants = this.restaurantRepository.findByNameContainingIgnoreCaseAndActiveTrue(search, pageable);

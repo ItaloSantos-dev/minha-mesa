@@ -4,7 +4,7 @@ import com.italosantos.minha_mesa.dto.reserve.CreateReserveRequestDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveUpdateResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
-import com.italosantos.minha_mesa.infra.RedisCacheConfig;
+import com.italosantos.minha_mesa.infra.cache.CacheName;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.DayOfWeek;
@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.Optional;
 
 @Service
@@ -83,8 +81,8 @@ public class ReserveService {
                 .orElseThrow(ResourceNotFoundException::new);
         this.validateParams(createReserveRequestDTO, tableModel );
         ReserveModel reserveModel = this.reserveMapper.createToModel(createReserveRequestDTO, tableModel, userModel);
-        this.cacheService.deleteCache(RedisCacheConfig.RESERVESUSERSCACHENAME);
-        this.cacheService.deleteCache(RedisCacheConfig.RESERVESRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.RESERVESUSERSCACHENAME);
+        this.cacheService.deleteCache(CacheName.RESERVESRESTAURANTCACHENAME);
 
         return this.reserveMapper.modelToResponse(this.reserveRepository.save(reserveModel));
     }
@@ -153,8 +151,8 @@ public class ReserveService {
         }
         reserveModel.setUpdatedAt(Instant.now());
         reserveModel = this.reserveRepository.save(reserveModel);
-        this.cacheService.deleteCache(RedisCacheConfig.RESERVESUSERSCACHENAME);
-        this.cacheService.deleteCache(RedisCacheConfig.RESERVESRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.RESERVESUSERSCACHENAME);
+        this.cacheService.deleteCache(CacheName.RESERVESRESTAURANTCACHENAME);
 
         return new ReserveUpdateResponseDTO(
                 menssage,

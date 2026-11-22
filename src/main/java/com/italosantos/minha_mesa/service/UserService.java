@@ -1,15 +1,11 @@
 package com.italosantos.minha_mesa.service;
 
-import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
-import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
-import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.user.dashboard.DashboardUserResponseDTO;
 import com.italosantos.minha_mesa.exception.ResourceNotFoundException;
-import com.italosantos.minha_mesa.infra.RedisCacheConfig;
-import com.italosantos.minha_mesa.mapper.DishMapper;
-import com.italosantos.minha_mesa.mapper.RateDishMapper;
+import com.italosantos.minha_mesa.infra.cache.CacheName;
+import com.italosantos.minha_mesa.infra.cache.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.mapper.RestaurantMapper;
 import com.italosantos.minha_mesa.model.*;
@@ -53,7 +49,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Cacheable(
-            value = RedisCacheConfig.RESERVESUSERSCACHENAME,
+            value = CacheName.RESERVESUSERSCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
 
     )

@@ -1,7 +1,8 @@
 package com.italosantos.minha_mesa.service;
 
 import com.italosantos.minha_mesa.exception.RequestRateLimitExceededException;
-import com.italosantos.minha_mesa.infra.RedisCacheConfig;
+import com.italosantos.minha_mesa.infra.cache.CacheName;
+import com.italosantos.minha_mesa.infra.cache.RedisCacheConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class RateLimitService {
 
     private void rateLimitLogin(HttpServletRequest request)throws RequestRateLimitExceededException{
         String ipOfRequest = request.getRemoteAddr();
-        String key = RedisCacheConfig.REQUESTSLOGINCACHENAME + "::" + ipOfRequest;
+        String key = CacheName.REQUESTSLOGINCACHENAME + "::" + ipOfRequest;
         Long quantityRequest = this.stringRedisTemplate.opsForValue().increment(key);
 
         if (quantityRequest==1)
@@ -44,7 +45,7 @@ public class RateLimitService {
 
     private void rateLimitGet(HttpServletRequest request){
         String ipOfRequest = request.getRemoteAddr();
-        String key = RedisCacheConfig.REQUESTSGETCACHENAME + "::" + ipOfRequest;
+        String key = CacheName.REQUESTSGETCACHENAME + "::" + ipOfRequest;
         Long quantityRequest = this.stringRedisTemplate.opsForValue().increment(key);
         if (quantityRequest==1)
             this.stringRedisTemplate.expire(key, Duration.ofMinutes(1));
@@ -55,7 +56,7 @@ public class RateLimitService {
 
     private void rateLimitOthersMethods(HttpServletRequest request){
         String ipOfRequest = request.getRemoteAddr();
-        String key = RedisCacheConfig.REQUESTSOTHERSMETHODSCACHENAME + request.getMethod().toLowerCase() + "::" + ipOfRequest;
+        String key = CacheName.REQUESTSOTHERSMETHODSCACHENAME + request.getMethod().toLowerCase() + "::" + ipOfRequest;
         Long quantityRequest = this.stringRedisTemplate.opsForValue().increment(key);
         if (quantityRequest==1)
             this.stringRedisTemplate.expire(key, Duration.ofMinutes(1));

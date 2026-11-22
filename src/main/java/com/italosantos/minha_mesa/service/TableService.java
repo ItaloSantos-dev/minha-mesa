@@ -3,20 +3,19 @@ package com.italosantos.minha_mesa.service;
 import com.italosantos.minha_mesa.dto.table.CreateTableRequestDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.exception.*;
-import com.italosantos.minha_mesa.infra.RedisCacheConfig;
+import com.italosantos.minha_mesa.infra.cache.CacheName;
+import com.italosantos.minha_mesa.infra.cache.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.TableMapper;
 import com.italosantos.minha_mesa.model.*;
 import com.italosantos.minha_mesa.model.enums.DayOfWeek;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.repository.*;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
@@ -50,8 +49,8 @@ public class TableService {
         if (this.tableRepository.existsByNumberAndRestaurantModelOwnerModelId(createTableRequestDTO.number(), ownerModel.getId()))
             throw new AlreadyExistTableWithNumberException();
         TableModel tableModel = this.tableMapper.createToModel(createTableRequestDTO, ownerModel.getRestaurantModel());
-        this.cacheService.deleteCache(RedisCacheConfig.TABLEAVALIABLECACHENAME);
-        this.cacheService.deleteCache(RedisCacheConfig.TABLESOFRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.TABLEAVALIABLECACHENAME);
+        this.cacheService.deleteCache(CacheName.TABLESOFRESTAURANTCACHENAME);
         return this.tableMapper.modelToResponse(this.tableRepository.save(tableModel));
     }
 
@@ -67,8 +66,8 @@ public class TableService {
         tableModel.setUpdatedAt(Instant.now());
 
         tableModel.setActive(!tableModel.getActive());
-        this.cacheService.deleteCache(RedisCacheConfig.TABLEAVALIABLECACHENAME);
-        this.cacheService.deleteCache(RedisCacheConfig.TABLESOFRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.TABLEAVALIABLECACHENAME);
+        this.cacheService.deleteCache(CacheName.TABLESOFRESTAURANTCACHENAME);
         this.tableRepository.save(tableModel);
     }
 
@@ -113,7 +112,7 @@ public class TableService {
     }
 
     @Cacheable(
-            value = RedisCacheConfig.TABLEAVALIABLECACHENAME,
+            value = CacheName.TABLEAVALIABLECACHENAME,
             key = "#restaurantId + '-' + #capacity + '-' + #date + '-' + #timeStart + '-' + #timeEnd + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
     )
     public List<TableResponseDTO> getTablesAvaliables(

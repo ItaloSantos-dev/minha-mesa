@@ -1,4 +1,4 @@
-package com.italosantos.minha_mesa.infra;
+package com.italosantos.minha_mesa.infra.cache;
 
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.*;
 import tools.jackson.databind.JavaType;
 import tools.jackson.databind.ObjectMapper;
@@ -20,18 +18,8 @@ import java.util.List;
 
 @Configuration
 public class RedisCacheConfig {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    public final static String RESERVESUSERSCACHENAME = "reserves-user";
-    public final static String RESERVESRESTAURANTCACHENAME = "reserves-restaurant";
-    public final static String RESTAURANTCACHENAME = "restaurant";
-    public final static String REQUESTSLOGINCACHENAME = "requests-login";
-    public final static String REQUESTSGETCACHENAME = "requests-get";
-    public final static String REQUESTSOTHERSMETHODSCACHENAME = "requests-";
-    public final static String TABLEAVALIABLECACHENAME = "table-avaliables";
-    public final static String DASHBOARDRESTAURANTCACHENAME = "dashboard-restaurant";
-    public final static String TABLESOFRESTAURANTCACHENAME = "tables-restaurant";
-    public final static String RESTAURANTSEARCHEDCACHENAME = "restaurant-search";
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Bean
     public RedisCacheManager redisCacheManager(
@@ -50,35 +38,35 @@ public class RedisCacheConfig {
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(defaultConfig)
                 .withCacheConfiguration(
-                        RESERVESUSERSCACHENAME,
+                        CacheName.RESERVESUSERSCACHENAME,
                         this.reserveListCacheConfig(defaultConfig)
                 )
                 .withCacheConfiguration(
-                        RESERVESRESTAURANTCACHENAME,
+                        CacheName.RESERVESRESTAURANTCACHENAME,
                         this.reserveListCacheConfig(defaultConfig)
                 )
                 .withCacheConfiguration(
-                        RESTAURANTCACHENAME,
+                        CacheName.RESTAURANTCACHENAME,
                         this.restaurantCacheConfig(defaultConfig)
                 )
                 .withCacheConfiguration(
-                        REQUESTSLOGINCACHENAME,
+                        CacheName.REQUESTSLOGINCACHENAME,
                         this.requestLoginCacheConfig()
                 )
                 .withCacheConfiguration(
-                        TABLEAVALIABLECACHENAME,
+                        CacheName.TABLEAVALIABLECACHENAME,
                         this.tableListCacheConfig(defaultConfig)
                 )
                 .withCacheConfiguration(
-                        DASHBOARDRESTAURANTCACHENAME,
+                        CacheName.DASHBOARDRESTAURANTCACHENAME,
                         this.dashboardRestaurantCacheConfig(defaultConfig)
                 )
                 .withCacheConfiguration(
-                        TABLESOFRESTAURANTCACHENAME,
+                        CacheName.TABLESOFRESTAURANTCACHENAME,
                         this.tableListCacheConfig(defaultConfig)
                 )
                 .withCacheConfiguration(
-                        RESTAURANTSEARCHEDCACHENAME,
+                        CacheName.RESTAURANTSEARCHEDCACHENAME,
                         this.restaurantListCacheConfig(defaultConfig)
                 )
                 .build();

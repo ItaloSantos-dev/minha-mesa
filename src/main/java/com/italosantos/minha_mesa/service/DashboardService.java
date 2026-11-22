@@ -4,7 +4,8 @@ import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.real_time_tables_data.RealTimeTablesData;
 import com.italosantos.minha_mesa.exception.UserIsNotOwnerException;
-import com.italosantos.minha_mesa.infra.RedisCacheConfig;
+import com.italosantos.minha_mesa.infra.cache.CacheName;
+import com.italosantos.minha_mesa.infra.cache.RedisCacheConfig;
 import com.italosantos.minha_mesa.mapper.ReserveMapper;
 import com.italosantos.minha_mesa.model.OwnerModel;
 import com.italosantos.minha_mesa.model.TableModel;
@@ -16,8 +17,6 @@ import com.italosantos.minha_mesa.repository.TableRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -38,7 +37,7 @@ public class DashboardService {
 
 
     @Cacheable(
-            value = RedisCacheConfig.DASHBOARDRESTAURANTCACHENAME,
+            value = CacheName.DASHBOARDRESTAURANTCACHENAME,
             key = "#userModel.id"
     )
     public DashboardRestaurantResponseDTO getDashboardRestaurantByUserModel(UserModel userModel){
