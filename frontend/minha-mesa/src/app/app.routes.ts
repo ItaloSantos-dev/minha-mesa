@@ -105,6 +105,12 @@ export const routes: Routes = [
                         component:OwnerDashboard
                     },
                     {
+                        path:'update',
+                        loadComponent: () => import(
+                            './componens/owner/restaurant/owner-update-restaurant/owner-update-restaurant'
+                        ).then((component) => component.OwnerUpdateRestaurant)
+                    },
+                    {
                         path:'tables',
                         component:OwnerShowTables
                     },

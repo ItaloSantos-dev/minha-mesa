@@ -15,6 +15,9 @@ export const API_BACK_CONFIG = {
         },
         RESTAURANT: {
             CREATE : '/restaurants',
+            ME: '/restaurants/me',
+            UPDATE: '/restaurants',
+            DEACTIVATE: '/restaurants',
             FINDBYSLUG: (slug:string) : string =>{
                 return `/restaurants/${slug}`
             },

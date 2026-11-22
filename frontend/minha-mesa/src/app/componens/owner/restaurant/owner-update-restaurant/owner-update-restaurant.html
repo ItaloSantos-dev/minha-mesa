@@ -1,0 +1,227 @@
+<app-message-error />
+
+<main class="min-h-full bg-[radial-gradient(circle_at_100%_0%,color-mix(in_srgb,var(--color-highlight)_12%,transparent),transparent_28rem)] px-5 py-10 pb-12 [font-family:var(--font-body)] text-(--color-coffee) sm:px-[4vw] max-[760px]:px-4 max-[760px]:py-6 max-[760px]:pb-8">
+  <header class="mb-8">
+    <a
+      [routerLink]="'/owner/restaurant/dashboard'"
+      class="mb-4 inline-flex items-center gap-2 rounded-lg px-2 py-2 text-sm font-semibold text-(--color-secondary) transition hover:bg-white/70 hover:text-(--color-primary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+    >
+      <i class="bi bi-arrow-left" aria-hidden="true"></i>
+      Voltar ao painel
+    </a>
+    <p class="mb-[.35rem] text-[.7rem] font-bold uppercase tracking-[.14em] text-(--color-secondary)">Configurações do restaurante</p>
+    <h1 class="mb-2 [font-family:var(--font-heading)] text-[clamp(2rem,4vw,3.5rem)] font-semibold leading-[1.05] text-(--color-primary)">Editar restaurante</h1>
+    <p class="mb-0 text-[.85rem] text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]">Atualize os dados e as imagens do seu restaurante.</p>
+  </header>
+
+  @if (loading()) {
+    <div class="rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 px-5 py-10 text-center text-sm text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]" role="status">
+      Carregando dados do restaurante...
+    </div>
+  } @else if (loadFailed()) {
+    <div class="rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 px-5 py-10 text-center text-sm text-[color-mix(in_srgb,var(--color-coffee)_70%,transparent)]" role="alert">
+      Não foi possível carregar os dados do restaurante. Use a navegação para voltar e tente novamente.
+    </div>
+  } @else if (restaurant(); as restaurant) {
+    @if (successMessage()) {
+      <p class="mb-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800" role="status">
+        {{ successMessage() }}
+      </p>
+    }
+
+    <form
+      class="grid gap-6 rounded-2xl border border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] bg-white/80 p-5 shadow-[0_.8rem_2rem_rgba(90,69,60,.06)] sm:p-8"
+      [formGroup]="form"
+      (ngSubmit)="ngOnSubmit()"
+      novalidate
+    >
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <h2 class="[font-family:var(--font-heading)] text-xl font-semibold text-(--color-primary)">Dados gerais</h2>
+        <span
+          class="rounded-full px-3 py-1 text-xs font-bold"
+          [class]="restaurant.active ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'"
+        >
+          {{ restaurant.active ? 'Restaurante ativo' : 'Restaurante inativo' }}
+        </span>
+      </div>
+
+      <div class="grid gap-5 md:grid-cols-2">
+        <label class="grid content-start gap-2 text-sm font-semibold" for="restaurant-name">
+          Nome do restaurante
+          <input
+            id="restaurant-name"
+            type="text"
+            formControlName="name"
+            class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+          />
+          @if (form.controls.name.touched && form.controls.name.hasError('required')) {
+            <span class="text-xs font-medium text-[#a23b31]" role="alert">Informe o nome do restaurante.</span>
+          }
+        </label>
+
+        <label class="grid content-start gap-2 text-sm font-semibold" for="restaurant-phone">
+          Telefone
+          <input
+            id="restaurant-phone"
+            type="tel"
+            formControlName="phone"
+            maxlength="11"
+            class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+          />
+          @if (form.controls.phone.touched && form.controls.phone.hasError('required')) {
+            <span class="text-xs font-medium text-[#a23b31]" role="alert">Informe o telefone do restaurante.</span>
+          }
+          @if (form.controls.phone.touched && (form.controls.phone.hasError('minlength') || form.controls.phone.hasError('maxlength'))) {
+            <span class="text-xs font-medium text-[#a23b31]" role="alert">Informe um telefone com 8 a 11 dígitos.</span>
+          }
+        </label>
+
+        <label class="grid content-start gap-2 text-sm font-semibold md:col-span-2" for="restaurant-address">
+          Endereço
+          <input
+            id="restaurant-address"
+            type="text"
+            formControlName="address"
+            class="w-full rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_18%,transparent)] bg-white px-3 py-2.5 text-sm font-normal outline-none transition focus:border-(--color-secondary) focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+          />
+          @if (form.controls.address.touched && form.controls.address.hasError('required')) {
+            <span class="text-xs font-medium text-[#a23b31]" role="alert">Informe o endereço do restaurante.</span>
+          }
+        </label>
+      </div>
+
+      <div class="grid gap-5 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] pt-6 md:grid-cols-2">
+        <div class="grid content-start gap-2">
+          <label class="text-sm font-semibold" for="restaurant-profile-image">Foto de perfil do restaurante</label>
+          <label
+            for="restaurant-profile-image"
+            class="group relative grid min-h-48 cursor-pointer place-items-center overflow-hidden rounded-xl border-2 border-dashed border-[color-mix(in_srgb,var(--color-coffee)_20%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_35%,white)] text-center transition hover:border-(--color-primary)"
+          >
+            @if (profileImagePath()) {
+              <img
+                [src]="profileImagePath()"
+                alt="Pré-visualização da foto de perfil do restaurante"
+                class="absolute inset-0 h-full w-full object-contain"
+              />
+              <span class="absolute bottom-3 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-(--color-coffee) shadow">
+                Clique para trocar a imagem
+              </span>
+            } @else {
+              <span class="px-5 py-8">
+                <i class="bi bi-cloud-arrow-up mb-3 block text-3xl text-(--color-secondary)" aria-hidden="true"></i>
+                <span class="block text-sm font-semibold">Clique para selecionar uma imagem</span>
+              </span>
+            }
+            <input
+              id="restaurant-profile-image"
+              name="imagePerfil"
+              type="file"
+              accept="image/*"
+              class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              (change)="onFileSelected($event, 'profile')"
+            />
+          </label>
+        </div>
+
+        <div class="grid content-start gap-2">
+          <label class="text-sm font-semibold" for="restaurant-banner-image">Banner do restaurante</label>
+          <label
+            for="restaurant-banner-image"
+            class="group relative grid min-h-48 cursor-pointer place-items-center overflow-hidden rounded-xl border-2 border-dashed border-[color-mix(in_srgb,var(--color-coffee)_20%,transparent)] bg-[color-mix(in_srgb,var(--color-background)_35%,white)] text-center transition hover:border-(--color-primary)"
+          >
+            @if (bannerImagePath()) {
+              <img
+                [src]="bannerImagePath()"
+                alt="Pré-visualização do banner do restaurante"
+                class="absolute inset-0 h-full w-full object-contain"
+              />
+              <span class="absolute bottom-3 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-(--color-coffee) shadow">
+                Clique para trocar a imagem
+              </span>
+            } @else {
+              <span class="px-5 py-8">
+                <i class="bi bi-cloud-arrow-up mb-3 block text-3xl text-(--color-secondary)" aria-hidden="true"></i>
+                <span class="block text-sm font-semibold">Clique para selecionar uma imagem</span>
+              </span>
+            }
+            <input
+              id="restaurant-banner-image"
+              name="imageBanner"
+              type="file"
+              accept="image/*"
+              class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              (change)="onFileSelected($event, 'banner')"
+            />
+          </label>
+        </div>
+      </div>
+
+      <footer class="flex justify-end gap-3 border-t border-[color-mix(in_srgb,var(--color-coffee)_10%,transparent)] pt-5 max-[480px]:flex-col-reverse">
+        <a
+          [routerLink]="'/owner/restaurant/dashboard'"
+          class="inline-flex cursor-pointer items-center justify-center rounded-lg border border-[color-mix(in_srgb,var(--color-coffee)_15%,transparent)] px-4 py-2.5 text-sm font-semibold transition hover:bg-[color-mix(in_srgb,var(--color-coffee)_6%,white)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary)"
+        >
+          Cancelar
+        </a>
+        <button
+          type="submit"
+          [disabled]="saving() || deactivating()"
+          class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-(--color-primary) px-4 py-2.5 text-sm font-bold text-white transition hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <i class="bi bi-check-lg" aria-hidden="true"></i>
+          {{ saving() ? 'Salvando...' : 'Salvar alterações' }}
+        </button>
+      </footer>
+    </form>
+
+    <section class="mt-8 rounded-2xl border border-amber-300 bg-amber-50 p-5 text-amber-950 shadow-[0_.8rem_2rem_rgba(90,69,60,.04)] sm:p-7" aria-labelledby="deactivate-restaurant-title">
+      <h2 id="deactivate-restaurant-title" class="mb-2 flex items-center gap-2 [font-family:var(--font-heading)] text-xl font-semibold">
+        <i class="bi bi-exclamation-triangle-fill text-amber-700" aria-hidden="true"></i>
+        Desativar restaurante
+      </h2>
+      <p class="mb-4 text-sm leading-6">
+        A desativação <strong>não exclui nenhum dado</strong> e não altera as informações já cadastradas; apenas muda o estado de ativação do restaurante e dos elementos relacionados.
+      </p>
+      <ul class="mb-4 grid list-disc gap-1 pl-5 text-sm leading-6">
+        <li>Todas as mesas serão desativadas.</li>
+        <li>Todos os pratos serão desativados.</li>
+        <li>Todas as categorias serão desativadas.</li>
+        <li>Todas as exceções de funcionamento serão desativadas.</li>
+      </ul>
+      <p class="mb-5 text-sm leading-6">
+        Quando o restaurante for ativado novamente, a reativação de cada mesa, prato, categoria e exceção deverá ser feita manualmente pelo proprietário.
+      </p>
+      @if (restaurant.active) {
+        <button
+          type="button"
+          [disabled]="deactivating() || saving()"
+          (click)="deactivateRestaurant()"
+          class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-red-300 bg-white px-4 py-2.5 text-sm font-bold text-red-800 transition hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          <i class="bi bi-power" aria-hidden="true"></i>
+          {{ deactivating() ? 'Desativando...' : 'Desativar restaurante' }}
+        </button>
+      } @else {
+        <div class="grid justify-items-start gap-3">
+          <p class="rounded-lg bg-white/70 px-4 py-3 text-sm font-semibold" role="status">
+            Este restaurante está inativo.
+          </p>
+          @if (activationFailed()) {
+            <p class="text-sm font-semibold text-[#a23b31]" role="alert">
+              Não foi possível confirmar a ativação. Tente novamente ou entre em contato com o suporte.
+            </p>
+          }
+          <button
+            type="button"
+            [disabled]="activating() || saving()"
+            (click)="activateRestaurant()"
+            class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-(--color-primary) px-4 py-2.5 text-sm font-bold text-white transition hover:bg-(--color-primary-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-secondary) disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <i class="bi bi-power" aria-hidden="true"></i>
+            {{ activating() ? 'Ativando...' : 'Ativar restaurante' }}
+          </button>
+        </div>
+      }
+    </section>
+  }
+</main>

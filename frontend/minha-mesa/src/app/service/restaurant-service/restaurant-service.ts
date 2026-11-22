@@ -1,15 +1,16 @@
+import { HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { API_BACK_CONFIG } from '../../config/api-back-config';
 import { CreateRestaurantRequestDTO } from '../../types/restaurant/create-restaurant-request';
-import { Observable } from 'rxjs';
+import { catchError, concatMap, Observable, of, throwError } from 'rxjs';
 import { RestaurantResponseDTO } from '../../types/restaurant/restaurant-response';
-import { HttpClient } from '@angular/common/http';
 import { DashboardResponseDTO } from '../../types/restaurant/dashboard/dashboard-response';
 import { ReserveResponseDTO } from '../../types/reserve/reserve-response';
 import { TableResponseDTO } from '../../types/table/table-response';
 import { WorkingScheduleResponseDTO } from '../../types/working_schedule/working-schedule-response';
 import { ScheduleExceptionResponseDTO } from '../../types/schedule_exception/schedule-exception-response';
 import { UserForOwnerResponseDTO } from '../../types/user/user-for-owner-response';
+import { UpdateRestaurantRequestDTO } from '../../types/restaurant/update-restaurant-request';
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +29,50 @@ export class RestaurantService {
       API_BACK_CONFIG.URL + 
       API_BACK_CONFIG.ENDPOINTS.RESTAURANT.CREATE,
       data
+    );
+  }
+
+  getRestaurantOfOwner():Observable<RestaurantResponseDTO>{
+    return this.httpClient.get<RestaurantResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.ME
+    );
+  }
+
+  updateRestaurant(data:FormData):Observable<RestaurantResponseDTO>{
+    return this.httpClient.patch<RestaurantResponseDTO>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.UPDATE,
+      data
+    );
+  }
+
+  activateRestaurant():Observable<RestaurantResponseDTO>{
+    const formData = new FormData();
+    const activateRequest: UpdateRestaurantRequestDTO = { updateActive: true };
+    formData.append(
+      'data',
+      new Blob([JSON.stringify(activateRequest)], { type: 'application/json' }),
+    );
+
+    return this.updateRestaurant(formData);
+  }
+
+  deactivateRestaurant():Observable<RestaurantResponseDTO>{
+    const formData = new FormData();
+    const deactivateRequest: Partial<UpdateRestaurantRequestDTO> = { updateActive: true };
+    formData.append(
+      'data',
+      new Blob([JSON.stringify(deactivateRequest)], { type: 'application/json' }),
+    );
+
+    return this.httpClient.delete<void>(
+      this.url + API_BACK_CONFIG.ENDPOINTS.RESTAURANT.DEACTIVATE
+    ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCode.Conflict) return of(undefined);
+        return throwError(() => error);
+      }),
+      // The backend disables related resources in the update path after the restaurant is inactive.
+      concatMap(() => this.updateRestaurant(formData))
     );
   }
 

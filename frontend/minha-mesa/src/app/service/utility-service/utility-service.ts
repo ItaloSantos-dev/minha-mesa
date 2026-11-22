@@ -18,6 +18,7 @@ export class UtilityService {
     OWNER_SHOW_TABLES: 'owner/restaurant/tables',
     OWNER_SHOW_WORKING_SCHEDULES: 'owner/restaurant/working-schedules',
     OWNER_SHOW_SCHEDULE_EXCEPTIONS: 'owner/restaurant/schedule-exceptions',
+    OWNER_UPDATE_RESTAURANT: 'owner/restaurant/update',
     CLIENT_HOME: 'client/home',
     CLIENT_SHOW_RESERVES: 'client/reservations',
     CLIENT_SHOW_DISHES: (slug:string):string =>{return `client/restaurants/${slug}/dishes`}

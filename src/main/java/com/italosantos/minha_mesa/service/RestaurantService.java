@@ -387,7 +387,7 @@ public class RestaurantService {
         if (!restaurantModel.getActive() && Boolean.FALSE.equals(updateRestaurantRequestDTO.updateActive()))
             throw new NotPermitedException("Não é possível alterar dados se seu restaurante estiver desativado");
 
-        if (Boolean.TRUE.equals(updateRestaurantRequestDTO.updateActive()) && !ownerModel.getRestaurantModel().getActive()){
+        if (Boolean.TRUE.equals(updateRestaurantRequestDTO.updateActive()) && ownerModel.getRestaurantModel().getActive()){
                 restaurantModel.setActive(false);
                 this.desactiveResourcesOfRestaurant(restaurantModel);
                 restaurantModel = this.restaurantRepository.save(restaurantModel);
