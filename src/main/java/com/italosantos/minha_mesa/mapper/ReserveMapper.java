@@ -10,6 +10,7 @@ import com.italosantos.minha_mesa.model.enums.DayOfWeek;
 import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class ReserveMapper {
         reserveModel.setTimeStart(createReserveRequestDTO.timeStart());
         reserveModel.setTimeEnd(createReserveRequestDTO.timeEnd());
         reserveModel.setObservation(createReserveRequestDTO.observation()==null ? null : createReserveRequestDTO.observation());
-        reserveModel.setCreatedAt(LocalDateTime.now());
+        reserveModel.setCreatedAt(Instant.now());
         reserveModel.setNumberOfPeople(createReserveRequestDTO.peoples());
         reserveModel.setNumberOfPeople(createReserveRequestDTO.peoples());
         reserveModel.setStatus(ReserveStatus.SCHEDULED);

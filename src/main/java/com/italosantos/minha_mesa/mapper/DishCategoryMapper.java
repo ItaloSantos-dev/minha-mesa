@@ -8,6 +8,8 @@ import com.italosantos.minha_mesa.model.DishModel;
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -26,7 +28,7 @@ public class DishCategoryMapper {
         dishCategoryModel.setActive(true);
         dishCategoryModel.setSlug(slug);
         dishCategoryModel.setImagePath(imagePath);
-
+        dishCategoryModel.setCreatedAt(Instant.now());
         if (dishModels!=null)
             dishCategoryModel.setDishModels(dishModels);
 

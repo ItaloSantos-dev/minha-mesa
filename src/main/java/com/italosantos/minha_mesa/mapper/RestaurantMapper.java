@@ -11,6 +11,8 @@ import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.service.ImageService;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -30,6 +32,7 @@ public class RestaurantMapper {
         restaurantModel.setActive(true);
         restaurantModel.setImagePerfilPath(imagePerfilPath);
         restaurantModel.setImageBannerPath(imageBannerPath);
+        restaurantModel.setCreatedAt(Instant.now());
         return restaurantModel;
     }
 
@@ -71,6 +74,7 @@ public class RestaurantMapper {
         if (imageBannerPath!=null)
             restaurantModel.setImageBannerPath(imageBannerPath);
 
+        restaurantModel.setUpdatedAt(Instant.now());
         return restaurantModel;
     }
 }

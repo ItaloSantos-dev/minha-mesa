@@ -7,6 +7,9 @@ import com.italosantos.minha_mesa.model.enums.UserRole;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Component
 public class UserMapper {
     public UserModel registerToModel(RegisterRequestDTO registerRequestDTO, PasswordEncoder encoder){
@@ -16,6 +19,7 @@ public class UserMapper {
         userModel.setPhone(registerRequestDTO.phone());
         userModel.setPassword(encoder.encode(registerRequestDTO.password()));
         userModel.setRole(UserRole.USER);
+        userModel.setCreatedAt(Instant.now());
         return userModel;
     }
 

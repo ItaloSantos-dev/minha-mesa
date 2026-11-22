@@ -6,6 +6,9 @@ import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.model.ScheduleExceptionModel;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+
 @Component
 public class ScheduleExceptionMapper {
     public ScheduleExceptionModel createToModel (CreateScheduleExceptionDTO createScheduleExceptionDTO, RestaurantModel restaurantModel){
@@ -13,6 +16,7 @@ public class ScheduleExceptionMapper {
         scheduleExceptionModel.setDate(createScheduleExceptionDTO.date());
         scheduleExceptionModel.setReason(createScheduleExceptionDTO.reason());
         scheduleExceptionModel.setRestaurantModel(restaurantModel);
+        scheduleExceptionModel.setCreatedAt(Instant.now());
         return scheduleExceptionModel;
     }
 

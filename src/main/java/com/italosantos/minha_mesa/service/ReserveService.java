@@ -12,7 +12,9 @@ import com.italosantos.minha_mesa.model.enums.ReserveStatus;
 import com.italosantos.minha_mesa.repository.*;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -149,7 +151,7 @@ public class ReserveService {
             menssage = "O status da reserva foi alterado com sucesso";
             reserveModel.setStatus(newStatus);
         }
-
+        reserveModel.setUpdatedAt(Instant.now());
         reserveModel = this.reserveRepository.save(reserveModel);
         this.cacheService.deleteCache(RedisCacheConfig.RESERVESUSERSCACHENAME);
         this.cacheService.deleteCache(RedisCacheConfig.RESERVESRESTAURANTCACHENAME);

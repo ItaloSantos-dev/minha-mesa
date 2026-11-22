@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Table(name = "tb_rate_dish")
@@ -25,7 +26,7 @@ public class RateDishModel {
     private Integer rating;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Column(name = "comment", columnDefinition = "TEXT")
     private String comment;

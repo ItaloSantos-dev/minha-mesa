@@ -10,6 +10,7 @@ import com.italosantos.minha_mesa.model.enums.ReserveDishStatus;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Component
@@ -30,8 +31,9 @@ public class ReserveDishMapper {
         reserveDishModel.setDishModel(dishModel);
         reserveDishModel.setDishPrice(dishModel.getPrice());
         reserveDishModel.setQuantity(createReserveDishRequestDTO.quantity());
-        reserveDishModel.setCreatedAt(LocalDateTime.now());
+        reserveDishModel.setCreatedAt(Instant.now());
         reserveDishModel.setStatus(ReserveDishStatus.PENDING);
+        reserveDishModel.setCreatedAt(Instant.now());
         return reserveDishModel;
     }
 
@@ -68,6 +70,8 @@ public class ReserveDishMapper {
 
         if (updateReserveDishRequestDTO.addCompletedQuantity() != null)
             reserveDishModel.setCompletedQuantity(reserveDishModel.getCompletedQuantity() + updateReserveDishRequestDTO.addCompletedQuantity());
+
+        reserveDishModel.setUpdatedAt(Instant.now());
 
         return reserveDishModel;
     }

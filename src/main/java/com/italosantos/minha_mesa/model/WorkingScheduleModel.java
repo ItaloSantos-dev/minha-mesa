@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Table(name = "tb_working_schedule")
@@ -34,6 +36,10 @@ public class WorkingScheduleModel {
 
     @Column(name = "time_end", nullable = false)
     private LocalTime timeEnd;
+
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
+
 
 
 }

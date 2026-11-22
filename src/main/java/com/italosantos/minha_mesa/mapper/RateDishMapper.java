@@ -6,6 +6,7 @@ import com.italosantos.minha_mesa.model.RateDishModel;
 import com.italosantos.minha_mesa.model.ReserveDishModel;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Component
@@ -16,7 +17,7 @@ public class RateDishMapper {
         rateDishModel.setReserveDishModel(reserveDishModel);
         rateDishModel.setRating(createRateDishRequestDTO.rating());
         rateDishModel.setComment(createRateDishRequestDTO.comment());
-        rateDishModel.setCreatedAt(LocalDateTime.now());
+        rateDishModel.setCreatedAt(Instant.now());
         return  rateDishModel;
     }
 
