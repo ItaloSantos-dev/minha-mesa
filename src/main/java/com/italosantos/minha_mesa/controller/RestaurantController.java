@@ -7,6 +7,7 @@ import com.italosantos.minha_mesa.dto.exception.ExceptionResponse;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.UpdateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
@@ -36,6 +37,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -92,6 +94,38 @@ public class RestaurantController {
         RestaurantResponseDTO restaurantResponseDTO = this.restaurantService.createRestaurant(createRestaurantRequestDTO, userModel, imagePerfil, imageBanner);
 
         return ResponseEntity.created(URI.create("/restaurants" + restaurantResponseDTO.id())).body(restaurantResponseDTO);
+    }
+
+
+
+    @SecurityRequirement(name = "Bearer Authentication")
+    @Operation(
+            summary = "Atualiza os dados do restaurante",
+            description = "Retorna os dados atualizados do restaurante cadastrado"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Restaurante atualizado com sucesso"),
+            @ApiResponse(
+                    responseCode = "403", description = "Usuário que fez a requisição não possui um restaurante cadastrado",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "409", description = "Conflito ao atualizar os dados do restaurante",
+                    content = @Content(
+                            schema = @Schema(implementation = ExceptionResponse.class)
+                    )
+            ),
+    })
+    @PatchMapping
+    public ResponseEntity<RestaurantResponseDTO> updateRestaurant(
+            @AuthenticationPrincipal UserModel userModel,
+            @RequestPart(name="data", required = false) UpdateRestaurantRequestDTO updateRestaurantRequestDTO,
+            @RequestPart(name = "imagePerfil", required = false) MultipartFile imagePerfil,
+            @RequestPart(name = "imageBanner", required = false) MultipartFile imageBanner
+    ){
+        return ResponseEntity.ok(this.restaurantService.updateRestaurant(userModel, updateRestaurantRequestDTO, imagePerfil, imageBanner));
     }
 
 
@@ -350,6 +384,11 @@ public class RestaurantController {
         return ResponseEntity.ok(
                 this.restaurantService.getClientsOfRestaurant(userModel)
         );
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<RestaurantResponseDTO> getRestaurantOfOwner(@AuthenticationPrincipal UserModel userModel){
+        return ResponseEntity.ok(this.restaurantService.getRestaurantOfOwner(userModel));
     }
 
 

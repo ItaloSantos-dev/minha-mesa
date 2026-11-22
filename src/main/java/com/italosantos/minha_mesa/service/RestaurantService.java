@@ -8,6 +8,7 @@ import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.UpdateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
@@ -60,9 +61,12 @@ public class RestaurantService {
     private final RestaurantUtility restaurantUtility;
     private final DishMapper dishMapper;
     private final DishCategoryMapper dishCategoryMapper;
+    private final TableRepository tableRepository;
+    private final DishRepository dishRepository;
+    private final DishCategoryRepository dishCategoryRepository;
 
 
-    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper, ImageService imageService, RestaurantUtility restaurantUtility, DishMapper dishMapper, DishCategoryMapper dishCategoryMapper) {
+    public RestaurantService(OwnerService ownerService, RestaurantMapper restaurantMapper, RestaurantRepository restaurantRepository, OwnerRepository ownerRepository, ReserveRepository reserveRepository, WorkingScheduleRepository workingScheduleRepository, ReserveMapper reserveMapper, WorkingScheduleMapper workingScheduleMapper, AuthService authService, UserRepository userRepository, TableMapper tableMapper, ScheduleExceptionRepository scheduleExceptionRepository, ScheduleExceptionMapper scheduleExceptionMapper, ImageService imageService, RestaurantUtility restaurantUtility, DishMapper dishMapper, DishCategoryMapper dishCategoryMapper, TableRepository tableRepository, DishRepository dishRepository, DishCategoryRepository dishCategoryRepository) {
         this.ownerService = ownerService;
         this.restaurantMapper = restaurantMapper;
         this.restaurantRepository = restaurantRepository;
@@ -80,6 +84,9 @@ public class RestaurantService {
         this.restaurantUtility = restaurantUtility;
         this.dishMapper = dishMapper;
         this.dishCategoryMapper = dishCategoryMapper;
+        this.tableRepository = tableRepository;
+        this.dishRepository = dishRepository;
+        this.dishCategoryRepository = dishCategoryRepository;
     }
 
 
@@ -108,12 +115,10 @@ public class RestaurantService {
         String imageBannerPath = this.imageService.uploadImage(imageBanner, MediaPath.RESTAURANT_BANNER_PATH);
 
         RestaurantModel restaurantModel = this.restaurantMapper.createToModel(createRestaurantRequestDTO, ownerModel, imagePerfilPath, imageBannerPath, SlugUtility.generateRestaurantSlug(createRestaurantRequestDTO.name()));
+        this.restaurantRepository.save(restaurantModel);
 
         String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
         String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
-        this.restaurantRepository.save(restaurantModel);
-
-
 
         return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
     }
@@ -337,6 +342,106 @@ public class RestaurantService {
         }
 
         return response;
+    }
+
+    private void desactiveResourcesOfRestaurant(RestaurantModel restaurantModel){
+        List<TableModel> saveTables = restaurantModel.getTableModels().stream()
+                .filter(t -> t.getActive())
+                .peek(t -> t.setActive(false))
+                .toList();
+
+        List<DishCategoryModel> saveCategorys = restaurantModel.getDishCategoryModels().stream()
+                .filter(c -> c.getActive())
+                .peek(c -> c.setActive(false))
+                .toList();
+
+        List<DishModel> saveDihses = restaurantModel.getDishModels().stream()
+                .filter(d -> d.getActive())
+                .peek(d -> d.setActive(false))
+                .toList();
+
+        List<ScheduleExceptionModel> saveExceptions = restaurantModel.getScheduleExceptionModelList().stream()
+                .filter(c -> c.isActive())
+                .peek(c -> c.setActive(false))
+                .toList();
+
+        this.tableRepository.saveAll(saveTables);
+        this.dishCategoryRepository.saveAll(saveCategorys);
+        this.dishRepository.saveAll(saveDihses);
+        this.scheduleExceptionRepository.saveAll(saveExceptions);
+    }
+
+    public RestaurantResponseDTO updateRestaurant(UserModel userModel, UpdateRestaurantRequestDTO updateRestaurantRequestDTO, MultipartFile imageBanner, MultipartFile imagePerfil){
+        if (
+                imageBanner==null && imagePerfil==null && (updateRestaurantRequestDTO==null || (updateRestaurantRequestDTO.name()==null && updateRestaurantRequestDTO.updateActive()==null &&
+                updateRestaurantRequestDTO.phone()==null && updateRestaurantRequestDTO.address()==null))
+
+        )
+            throw new IllegalParameterException("Nenhum campo de modificação");
+
+        OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new);
+
+        RestaurantModel restaurantModel = ownerModel.getRestaurantModel();
+
+        if (!restaurantModel.getActive() && Boolean.FALSE.equals(updateRestaurantRequestDTO.updateActive()))
+            throw new NotPermitedException("Não é possível alterar dados se seu restaurante estiver desativado");
+
+        if (Boolean.TRUE.equals(updateRestaurantRequestDTO.updateActive()) && !ownerModel.getRestaurantModel().getActive()){
+                restaurantModel.setActive(false);
+                this.desactiveResourcesOfRestaurant(restaurantModel);
+                restaurantModel = this.restaurantRepository.save(restaurantModel);
+                return this.restaurantMapper.modelToResponse(restaurantModel, null, null, null);
+        }
+        String newSlug = null;
+
+        if (updateRestaurantRequestDTO.name()!=null){
+            if (this.restaurantRepository.existsByName(updateRestaurantRequestDTO.name()))
+                throw new AlreadyExistsRestaurantWithNameException();
+            newSlug = SlugUtility.generateRestaurantSlug(updateRestaurantRequestDTO.name());
+        }
+
+        if (this.restaurantRepository.existsByPhone(updateRestaurantRequestDTO.phone()))
+            throw new AlreadyExistsRestaurantWithPhoneException();
+
+        String imageBannerPath = null;
+        if (imageBanner!=null){
+            imageBannerPath = this.imageService.uploadImage(imageBanner, MediaPath.RESTAURANT_BANNER_PATH);
+            this.imageService.deleteImage(restaurantModel.getImageBannerPath());
+        }
+
+        String imagePerfilPath = null;
+        if (imagePerfil!=null){
+            imagePerfilPath = this.imageService.uploadImage(imagePerfil, MediaPath.RESTAURANT_PERFIL_PATH);
+            this.imageService.deleteImage(restaurantModel.getImagePerfilPath());
+        }
+
+        restaurantModel = this.restaurantMapper.updateToModel(
+                restaurantModel,
+                updateRestaurantRequestDTO,
+                newSlug,
+                imagePerfilPath,
+                imageBannerPath
+        );
+
+        this.restaurantRepository.save(restaurantModel);
+
+        String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
+        String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
+
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
+
+    }
+
+    public RestaurantResponseDTO getRestaurantOfOwner(UserModel userModel){
+        RestaurantModel restaurantModel = this.ownerRepository.findByUserModelId(userModel.getId())
+                .orElseThrow(UserIsNotOwnerException::new)
+                .getRestaurantModel();
+
+        String imagePerfilUrl = this.imageService.getAssignedUrl(restaurantModel.getImagePerfilPath());
+        String imageBannerUrl = this.imageService.getAssignedUrl(restaurantModel.getImageBannerPath());
+
+        return this.restaurantMapper.modelToResponse(restaurantModel, imagePerfilUrl, imageBannerUrl, this.restaurantUtility.getBestsRatingOfRestaurant(restaurantModel));
     }
 
 

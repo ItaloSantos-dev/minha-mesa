@@ -35,5 +35,7 @@ public interface RestaurantRepository extends JpaRepository<RestaurantModel, Int
 
     boolean existsByName(String name);
 
+    boolean existsByPhone(String phone);
+
     Optional<RestaurantModel> findBySlug(String slug);
 }

@@ -5,6 +5,7 @@ import com.italosantos.minha_mesa.dto.rate_dish.RateDishResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.BestRatingsRestaurant;
 import com.italosantos.minha_mesa.dto.restaurant.CreateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.restaurant.UpdateRestaurantRequestDTO;
 import com.italosantos.minha_mesa.model.OwnerModel;
 import com.italosantos.minha_mesa.model.RestaurantModel;
 import com.italosantos.minha_mesa.service.ImageService;
@@ -47,5 +48,29 @@ public class RestaurantMapper {
                         .toList(),
                 bestRatings
         );
+    }
+
+    public RestaurantModel updateToModel(RestaurantModel restaurantModel, UpdateRestaurantRequestDTO updateRestaurantRequestDTO, String slug, String imagePerfilPath, String imageBannerPath){
+        if (updateRestaurantRequestDTO.name()!=null){
+            restaurantModel.setName(updateRestaurantRequestDTO.name());
+            restaurantModel.setSlug(slug);
+        }
+
+        if (Boolean.TRUE.equals(updateRestaurantRequestDTO.updateActive()))
+            restaurantModel.setActive(!restaurantModel.getActive());
+
+        if (updateRestaurantRequestDTO.phone()!=null)
+            restaurantModel.setPhone(updateRestaurantRequestDTO.phone());
+
+        if (updateRestaurantRequestDTO.address()!=null)
+            restaurantModel.setAddress(updateRestaurantRequestDTO.address());
+
+        if (imagePerfilPath!=null)
+            restaurantModel.setImagePerfilPath(imagePerfilPath);
+
+        if (imageBannerPath!=null)
+            restaurantModel.setImageBannerPath(imageBannerPath);
+
+        return restaurantModel;
     }
 }

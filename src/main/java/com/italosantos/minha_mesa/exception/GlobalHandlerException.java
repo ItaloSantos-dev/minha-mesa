@@ -138,4 +138,10 @@ public class GlobalHandlerException {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
 
     }
+
+    @ExceptionHandler(AlreadyExistsRestaurantWithPhoneException.class)
+    public ResponseEntity<ExceptionResponse> handlerAlreadyExistsRestaurantWithPhoneException(AlreadyExistsRestaurantWithPhoneException exception){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(HttpStatus.CONFLICT, exception.getMessage()));
+
+    }
 }
