@@ -9,6 +9,7 @@ import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionRespon
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
 import com.italosantos.minha_mesa.dto.user.UserForOwnerResponse;
 import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
+import org.jspecify.annotations.Nullable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -25,300 +26,165 @@ import java.util.List;
 public class RedisCacheConfig {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Duration defaultTtl = Duration.ofMinutes(5);
 
     @Bean
     public RedisCacheManager redisCacheManager(
             RedisConnectionFactory redisConnectionFactory
-    ) {
+    )  {
         RedisCacheConfiguration defaultConfig =
                 RedisCacheConfiguration.defaultCacheConfig()
                         .serializeKeysWith(
                                 RedisSerializationContext.SerializationPair
                                         .fromSerializer(new StringRedisSerializer())
-                        )
-                        .entryTtl(Duration.ofMinutes(5));
-
-
+                        );
 
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(defaultConfig)
                 .withCacheConfiguration(
                         CacheName.RESERVESUSERSCACHENAME,
-                        this.reserveListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(ReserveResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
                         CacheName.RESERVESRESTAURANTCACHENAME,
-                        this.reserveListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(ReserveResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
                         CacheName.RESTAURANTCACHENAME,
-                        this.restaurantCacheConfig(defaultConfig)
+                        generateCacheConfigOfUniqueClass(RestaurantResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
                         CacheName.REQUESTSLOGINCACHENAME,
-                        this.requestLoginCacheConfig()
+                        RedisCacheConfiguration.defaultCacheConfig()
+                                .serializeKeysWith(
+                                        RedisSerializationContext.SerializationPair
+                                                .fromSerializer(new StringRedisSerializer())
+                                )
+                                .entryTtl(Duration.ofMinutes(1))
                 )
                 .withCacheConfiguration(
                         CacheName.TABLEAVALIABLECACHENAME,
-                        this.tableListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(TableResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
                         CacheName.DASHBOARDRESTAURANTCACHENAME,
-                        this.dashboardRestaurantCacheConfig(defaultConfig)
+                        generateCacheConfigOfUniqueClass(
+                                DashboardRestaurantResponseDTO.class,
+                                defaultConfig,
+                                Duration.ofMinutes(5)
+                        )
                 )
                 .withCacheConfiguration(
                         CacheName.TABLESOFRESTAURANTCACHENAME,
-                        this.tableListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(TableResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
                         CacheName.RESTAURANTSEARCHEDCACHENAME,
-                        this.restaurantListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(
+                                RestaurantResponseDTO.class,
+                                defaultConfig,
+                                Duration.ofMinutes(5)
+                        )
                 )
                 .withCacheConfiguration(
                         CacheName.WORKINGDAYSRESTAURANTCACHENAME,
-                        this.workingDayListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(
+                                WorkingScheduleResponseDTO.class,
+                                defaultConfig,
+                                null
+                        )
                 )
                 .withCacheConfiguration(
                         CacheName.WORKINGDAYSRESTAURANTBYOWNERCACHENAME,
-                        this.workingDayListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(
+                                WorkingScheduleResponseDTO.class,
+                                defaultConfig,
+                                null
+                        )
                 )
                 .withCacheConfiguration(
                         CacheName.EXCEPTIONSRESTAURANTBYOWNERCACHENAME,
-                        this.scheduleExceptionListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(
+                                ScheduleExceptionResponseDTO.class,
+                                defaultConfig,
+                                null
+                        )
                 )
                 .withCacheConfiguration(
                         CacheName.DISHESBYRESTAURANTSLUGCACHENAME,
-                        this.dishesOfOwnerCacheConfig(defaultConfig)
+                        generateCacheConfigOfUniqueClass(
+                                DishesOfRestauranteResponseDTO.class,
+                                defaultConfig,
+                                null
+                        )
                 )
                 .withCacheConfiguration(
                         CacheName.DISHESBYOWNERCACHENAME,
-                        this.dishesOfOwnerCacheConfig(defaultConfig)
+                        generateCacheConfigOfUniqueClass(
+                                DishesOfRestauranteResponseDTO.class,
+                                defaultConfig,
+                                null
+                        )
                 )
                 .withCacheConfiguration(
                         CacheName.CLIENTSRESTAURANTBYOWNER,
-                        this.userForOwnerListCacheConfig(defaultConfig)
+                        generateCacheConfigOfListClass(
+                                UserForOwnerResponse.class,
+                                defaultConfig,
+                                null
+                        )
                 )
                 .withCacheConfiguration(
                         CacheName.RESTAURANTBYOWNERCACHENAME,
-                        this.restaurantCacheConfig(defaultConfig)
+                        generateCacheConfigOfUniqueClass(
+                                RestaurantResponseDTO.class,
+                                defaultConfig,
+                                null
+                        )
                 )
                 .build();
     }
 
-    private RedisCacheConfiguration dishesOfOwnerCacheConfig(RedisCacheConfiguration defaultConfig){
-
-        JavaType dishesOfRestaurantType =
+    private RedisCacheConfiguration generateCacheConfigOfUniqueClass(Class<?> clazz, RedisCacheConfiguration defaultConfig, @Nullable Duration ttl){
+        JavaType classType =
                 this.objectMapper.getTypeFactory()
                         .constructType(
-                                DishesOfRestauranteResponseDTO.class
+                                clazz
                         );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> dishesOfRestaurantSerializer =
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> typeSerializer =
                 new JacksonJsonRedisSerializer<>(
                         this.objectMapper,
-                        dishesOfRestaurantType
+                        classType
                 );
 
         return
                 defaultConfig.serializeValuesWith(
                         RedisSerializationContext.SerializationPair
-                                .fromSerializer(dishesOfRestaurantSerializer)
-                );
+                                .fromSerializer(typeSerializer)
+                )
+                .entryTtl(ttl!=null ? ttl : this.defaultTtl );
     }
 
-    private RedisCacheConfiguration userForOwnerListCacheConfig(RedisCacheConfiguration defaultConfig){
-        JavaType userForOwnerType =
+    private RedisCacheConfiguration generateCacheConfigOfListClass (Class<?> clazz, RedisCacheConfiguration defaultConfig, @Nullable Duration ttl){
+        JavaType classListType =
                 this.objectMapper.getTypeFactory()
                         .constructCollectionType(
                                 List.class,
-                                UserForOwnerResponse.class
+                                clazz
                         );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> userForOwnerSerializer =
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> classListSerializer =
                 new JacksonJsonRedisSerializer<>(
                         this.objectMapper,
-                        userForOwnerType
+                        classListType
                 );
 
         return
                 defaultConfig.serializeValuesWith(
                         RedisSerializationContext.SerializationPair
-                                .fromSerializer(userForOwnerSerializer)
-                );
+                                .fromSerializer(classListSerializer)
+                )
+                .entryTtl(ttl!=null ? ttl : this.defaultTtl );
     }
 
-    private RedisCacheConfiguration dishesListCacheConfig(RedisCacheConfiguration defaultConfig){
-        JavaType dishesType =
-                this.objectMapper.getTypeFactory()
-                        .constructCollectionType(
-                                List.class,
-                                DishResponseDTO.class
-                        );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> dishesSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        this.objectMapper,
-                        dishesType
-                );
-
-        return
-                defaultConfig.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(dishesSerializer)
-                );
-    }
-
-    private RedisCacheConfiguration scheduleExceptionListCacheConfig(RedisCacheConfiguration defaultConfig){
-        JavaType scheduleExceptionsType =
-                this.objectMapper.getTypeFactory()
-                        .constructCollectionType(
-                                List.class,
-                                ScheduleExceptionResponseDTO.class
-                        );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> scheduleExceptionsSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        this.objectMapper,
-                        scheduleExceptionsType
-                );
-
-        return
-                defaultConfig.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(scheduleExceptionsSerializer)
-                );
-    }
-
-    private RedisCacheConfiguration workingDayListCacheConfig(RedisCacheConfiguration defaultConfig){
-        JavaType workingDaysType =
-                this.objectMapper.getTypeFactory()
-                        .constructCollectionType(
-                                List.class,
-                                WorkingScheduleResponseDTO.class
-                        );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> workingDaysSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        this.objectMapper,
-                        workingDaysType
-                );
-
-        return
-                defaultConfig.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(workingDaysSerializer)
-                );
-    }
-
-    private RedisCacheConfiguration reserveListCacheConfig(RedisCacheConfiguration defaultConfig){
-        JavaType reservasUsuarioType =
-                this.objectMapper.getTypeFactory()
-                        .constructCollectionType(
-                                List.class,
-                                ReserveResponseDTO.class
-                        );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> reservasUsuarioSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        this.objectMapper,
-                        reservasUsuarioType
-                );
-
-        return
-                defaultConfig.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(reservasUsuarioSerializer)
-                );
-    }
-
-    private RedisCacheConfiguration restaurantListCacheConfig(RedisCacheConfiguration defaultConfig){
-        JavaType restauranType =
-                this.objectMapper.getTypeFactory()
-                        .constructCollectionType(
-                                List.class,
-                                RestaurantResponseDTO.class
-                        );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> restaurantsSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        this.objectMapper,
-                        restauranType
-                );
-
-        return
-                defaultConfig.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(restaurantsSerializer)
-                ).entryTtl(
-                        Duration.ofMinutes(5)
-                );
-    }
-
-    private RedisCacheConfiguration restaurantCacheConfig(RedisCacheConfiguration defaultConfig){
-
-        JavaType restaurantType =
-                this.objectMapper.getTypeFactory()
-                        .constructType(
-                                RestaurantResponseDTO.class
-                        );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> restaurantSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        this.objectMapper,
-                        restaurantType
-                );
-
-        return
-                defaultConfig.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(restaurantSerializer)
-                );
-    }
-
-
-
-    private RedisCacheConfiguration tableListCacheConfig(RedisCacheConfiguration defaultConfig){
-
-        JavaType tableType =
-                this.objectMapper.getTypeFactory()
-                        .constructCollectionType(
-                                List.class,
-                                TableResponseDTO.class
-                        );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> restaurantSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        this.objectMapper,
-                        tableType
-                );
-
-        return
-                defaultConfig.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(restaurantSerializer)
-                );
-    }
-
-
-
-    private RedisCacheConfiguration requestLoginCacheConfig(){
-        return RedisCacheConfiguration.defaultCacheConfig()
-                        .serializeKeysWith(
-                                RedisSerializationContext.SerializationPair
-                                        .fromSerializer(new StringRedisSerializer())
-                        )
-                        .entryTtl(Duration.ofMinutes(1));
-    }
-
-    private RedisCacheConfiguration dashboardRestaurantCacheConfig(RedisCacheConfiguration defaultConfig){
-
-        JavaType dashboardRestaurantType =
-                this.objectMapper.getTypeFactory()
-                        .constructType(
-                                DashboardRestaurantResponseDTO.class
-                        );
-        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> restaurantSerializer =
-                new JacksonJsonRedisSerializer<>(
-                        this.objectMapper,
-                        dashboardRestaurantType
-                );
-
-        return
-                defaultConfig.serializeValuesWith(
-                        RedisSerializationContext.SerializationPair
-                                .fromSerializer(restaurantSerializer)
-                ).entryTtl(Duration.ofMinutes(5));
-    }
 }
 
