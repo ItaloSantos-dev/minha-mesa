@@ -150,7 +150,7 @@ public class RestaurantService {
 
 
     @Cacheable(
-            value = CacheName.RESERVESRESTAURANTCACHENAME,
+            value = CacheName.RESERVESRESTAURANTBYOWNERCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
     )
     public List<ReserveResponseDTO> getReservesOfRestaurant(UserModel userModel, Pageable pageable){
@@ -175,7 +175,7 @@ public class RestaurantService {
 
 
     @Cacheable(
-            cacheNames = CacheName.WORKINGDAYSRESTAURANTCACHENAME,
+            cacheNames = CacheName.WORKINGDAYSBYRESTAURANTCACHENAME,
             key = "#id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
     )
     public List<WorkingScheduleResponseDTO> getDaysWorkingOfRestaurantById(Integer id, Pageable pageable){
@@ -190,7 +190,7 @@ public class RestaurantService {
     }
 
     @Cacheable(
-            cacheNames = CacheName.WORKINGDAYSRESTAURANTBYOWNERCACHENAME,
+            cacheNames = CacheName.WORKINGDAYSBYOWNERCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
     )
     public List<WorkingScheduleResponseDTO> getDaysWorkingOfRestaurantByUserModel(UserModel userModel, Pageable pageable){
@@ -206,7 +206,7 @@ public class RestaurantService {
 
 
     @Cacheable(
-            cacheNames = CacheName.EXCEPTIONSRESTAURANTBYOWNERCACHENAME,
+            cacheNames = CacheName.EXCEPTIONSBYOWNERCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
     )
     public List<ScheduleExceptionResponseDTO> getScheduleExceptionsOfRestaurantByUserModel(UserModel userModel, Pageable pageable){
@@ -231,7 +231,7 @@ public class RestaurantService {
 
     @Cacheable(
             key = "#userModel.id",
-            value = CacheName.TABLESOFRESTAURANTCACHENAME
+            value = CacheName.TABLESBYRESTAURANTCACHENAME
     )
     public List<TableResponseDTO> getTablesOfRestaurantById(@AuthenticationPrincipal UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
@@ -245,7 +245,7 @@ public class RestaurantService {
 
     @Cacheable(
             key = "#search + '-' + #pageable.pageNumber",
-            value = CacheName.RESTAURANTSEARCHEDCACHENAME
+            value = CacheName.RESTAURANTSBYSEARCHEDCACHENAME
     )
     public List<RestaurantResponseDTO> getRestaurantsLikeName(String search, Pageable pageable){
         List<RestaurantModel> restaurants = this.restaurantRepository.findByNameContainingIgnoreCaseAndActiveTrue(search, pageable);

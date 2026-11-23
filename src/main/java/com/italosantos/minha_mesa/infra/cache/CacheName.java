@@ -3,24 +3,41 @@ package com.italosantos.minha_mesa.infra.cache;
 import tools.jackson.databind.ObjectMapper;
 
 public class CacheName {
+    //RESERVES
+    public final static String RESERVESBYUSERSCACHENAME = "reserves-by-user";
+    public final static String RESERVESRESTAURANTBYOWNERCACHENAME = "reserves-by-owner";
 
-    public final static String RESERVESUSERSCACHENAME = "reserves-user";
-    public final static String RESERVESRESTAURANTCACHENAME = "reserves-restaurant";
+    //RESTAURANT
     public final static String RESTAURANTCACHENAME = "restaurant";
+    public final static String RESTAURANTSBYSEARCHEDCACHENAME = "restaurants-by-search";
+    public final static String RESTAURANTBYOWNERCACHENAME = "restaurant-by-owner";
+
+    //REQUESTS
     public final static String REQUESTSLOGINCACHENAME = "requests-login";
     public final static String REQUESTSGETCACHENAME = "requests-get";
     public final static String REQUESTSOTHERSMETHODSCACHENAME = "requests-";
-    public final static String TABLEAVALIABLECACHENAME = "table-avaliables";
-    public final static String DASHBOARDRESTAURANTCACHENAME = "dashboard-restaurant";
-    public final static String TABLESOFRESTAURANTCACHENAME = "tables-restaurant";
-    public final static String RESTAURANTSEARCHEDCACHENAME = "restaurant-search";
-    public final static String WORKINGDAYSRESTAURANTCACHENAME = "working-days-by-restaurant-id";
-    public final static String WORKINGDAYSRESTAURANTBYOWNERCACHENAME = "working-days-by-owner";
-    public final static String EXCEPTIONSRESTAURANTBYOWNERCACHENAME = "exceptions-by-owner";
+
+    //TABLES
+    public final static String TABLEAVALIABLESBYRESTAURANTCACHENAME = "table-avaliables-by-restaurant";
+    public final static String TABLESBYRESTAURANTCACHENAME = "tables-by-restaurant";
+
+    //DASHBOARD
+    public final static String DASHBOARDBYOWNERCACHENAME = "dashboard-by-owner";
+
+    //WORKINGDAYS
+    public final static String WORKINGDAYSBYRESTAURANTCACHENAME = "working-days-by-restaurant";
+    public final static String WORKINGDAYSBYOWNERCACHENAME = "working-days-by-owner";
+
+    //EXCEPTIONS
+    public final static String EXCEPTIONSBYOWNERCACHENAME = "exceptions-by-owner";
+
+    //DISHES
     public final static String DISHESBYRESTAURANTSLUGCACHENAME = "dishes-by-restaurant-slug";
     public final static String DISHESBYOWNERCACHENAME = "dishes-by-owner";
+
+    //CLIENTS
     public final static String CLIENTSRESTAURANTBYOWNER = "clients-by-owner";
-    public final static String RESTAURANTBYOWNERCACHENAME = "restaurant-by-owner";
+
 
 
 }

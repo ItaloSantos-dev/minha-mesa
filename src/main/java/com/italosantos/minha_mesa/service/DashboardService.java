@@ -37,7 +37,7 @@ public class DashboardService {
 
 
     @Cacheable(
-            value = CacheName.DASHBOARDRESTAURANTCACHENAME,
+            value = CacheName.DASHBOARDBYOWNERCACHENAME,
             key = "#userModel.id"
     )
     public DashboardRestaurantResponseDTO getDashboardRestaurantByUserModel(UserModel userModel){

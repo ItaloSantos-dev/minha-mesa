@@ -42,11 +42,11 @@ public class RedisCacheConfig {
         return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(defaultConfig)
                 .withCacheConfiguration(
-                        CacheName.RESERVESUSERSCACHENAME,
+                        CacheName.RESERVESBYUSERSCACHENAME,
                         generateCacheConfigOfListClass(ReserveResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
-                        CacheName.RESERVESRESTAURANTCACHENAME,
+                        CacheName.RESERVESRESTAURANTBYOWNERCACHENAME,
                         generateCacheConfigOfListClass(ReserveResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
@@ -63,11 +63,11 @@ public class RedisCacheConfig {
                                 .entryTtl(Duration.ofMinutes(1))
                 )
                 .withCacheConfiguration(
-                        CacheName.TABLEAVALIABLECACHENAME,
+                        CacheName.TABLEAVALIABLESBYRESTAURANTCACHENAME,
                         generateCacheConfigOfListClass(TableResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
-                        CacheName.DASHBOARDRESTAURANTCACHENAME,
+                        CacheName.DASHBOARDBYOWNERCACHENAME,
                         generateCacheConfigOfUniqueClass(
                                 DashboardRestaurantResponseDTO.class,
                                 defaultConfig,
@@ -75,11 +75,11 @@ public class RedisCacheConfig {
                         )
                 )
                 .withCacheConfiguration(
-                        CacheName.TABLESOFRESTAURANTCACHENAME,
+                        CacheName.TABLESBYRESTAURANTCACHENAME,
                         generateCacheConfigOfListClass(TableResponseDTO.class, defaultConfig, null)
                 )
                 .withCacheConfiguration(
-                        CacheName.RESTAURANTSEARCHEDCACHENAME,
+                        CacheName.RESTAURANTSBYSEARCHEDCACHENAME,
                         generateCacheConfigOfListClass(
                                 RestaurantResponseDTO.class,
                                 defaultConfig,
@@ -87,7 +87,7 @@ public class RedisCacheConfig {
                         )
                 )
                 .withCacheConfiguration(
-                        CacheName.WORKINGDAYSRESTAURANTCACHENAME,
+                        CacheName.WORKINGDAYSBYRESTAURANTCACHENAME,
                         generateCacheConfigOfListClass(
                                 WorkingScheduleResponseDTO.class,
                                 defaultConfig,
@@ -95,7 +95,7 @@ public class RedisCacheConfig {
                         )
                 )
                 .withCacheConfiguration(
-                        CacheName.WORKINGDAYSRESTAURANTBYOWNERCACHENAME,
+                        CacheName.WORKINGDAYSBYOWNERCACHENAME,
                         generateCacheConfigOfListClass(
                                 WorkingScheduleResponseDTO.class,
                                 defaultConfig,
@@ -103,7 +103,7 @@ public class RedisCacheConfig {
                         )
                 )
                 .withCacheConfiguration(
-                        CacheName.EXCEPTIONSRESTAURANTBYOWNERCACHENAME,
+                        CacheName.EXCEPTIONSBYOWNERCACHENAME,
                         generateCacheConfigOfListClass(
                                 ScheduleExceptionResponseDTO.class,
                                 defaultConfig,

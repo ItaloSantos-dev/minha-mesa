@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Cacheable(
-            value = CacheName.RESERVESUSERSCACHENAME,
+            value = CacheName.RESERVESBYUSERSCACHENAME,
             key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
 
     )

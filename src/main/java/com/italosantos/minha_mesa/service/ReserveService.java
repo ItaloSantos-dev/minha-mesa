@@ -81,8 +81,8 @@ public class ReserveService {
                 .orElseThrow(ResourceNotFoundException::new);
         this.validateParams(createReserveRequestDTO, tableModel );
         ReserveModel reserveModel = this.reserveMapper.createToModel(createReserveRequestDTO, tableModel, userModel);
-        this.cacheService.deleteCache(CacheName.RESERVESUSERSCACHENAME);
-        this.cacheService.deleteCache(CacheName.RESERVESRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.RESERVESBYUSERSCACHENAME);
+        this.cacheService.deleteCache(CacheName.RESERVESRESTAURANTBYOWNERCACHENAME);
 
         return this.reserveMapper.modelToResponse(this.reserveRepository.save(reserveModel));
     }
@@ -151,8 +151,8 @@ public class ReserveService {
         }
         reserveModel.setUpdatedAt(Instant.now());
         reserveModel = this.reserveRepository.save(reserveModel);
-        this.cacheService.deleteCache(CacheName.RESERVESUSERSCACHENAME);
-        this.cacheService.deleteCache(CacheName.RESERVESRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.RESERVESBYUSERSCACHENAME);
+        this.cacheService.deleteCache(CacheName.RESERVESRESTAURANTBYOWNERCACHENAME);
 
         return new ReserveUpdateResponseDTO(
                 menssage,

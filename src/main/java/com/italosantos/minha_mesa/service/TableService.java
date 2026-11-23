@@ -49,8 +49,8 @@ public class TableService {
         if (this.tableRepository.existsByNumberAndRestaurantModelOwnerModelId(createTableRequestDTO.number(), ownerModel.getId()))
             throw new AlreadyExistTableWithNumberException();
         TableModel tableModel = this.tableMapper.createToModel(createTableRequestDTO, ownerModel.getRestaurantModel());
-        this.cacheService.deleteCache(CacheName.TABLEAVALIABLECACHENAME);
-        this.cacheService.deleteCache(CacheName.TABLESOFRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.TABLEAVALIABLESBYRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.TABLESBYRESTAURANTCACHENAME);
         return this.tableMapper.modelToResponse(this.tableRepository.save(tableModel));
     }
 
@@ -66,8 +66,8 @@ public class TableService {
         tableModel.setUpdatedAt(Instant.now());
 
         tableModel.setActive(!tableModel.getActive());
-        this.cacheService.deleteCache(CacheName.TABLEAVALIABLECACHENAME);
-        this.cacheService.deleteCache(CacheName.TABLESOFRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.TABLEAVALIABLESBYRESTAURANTCACHENAME);
+        this.cacheService.deleteCache(CacheName.TABLESBYRESTAURANTCACHENAME);
         this.tableRepository.save(tableModel);
     }
 
@@ -112,7 +112,7 @@ public class TableService {
     }
 
     @Cacheable(
-            value = CacheName.TABLEAVALIABLECACHENAME,
+            value = CacheName.TABLEAVALIABLESBYRESTAURANTCACHENAME,
             key = "#restaurantId + '-' + #capacity + '-' + #date + '-' + #timeStart + '-' + #timeEnd + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
     )
     public List<TableResponseDTO> getTablesAvaliables(
