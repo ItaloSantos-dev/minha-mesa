@@ -173,6 +173,11 @@ public class RestaurantService {
         return this.reserveMapper.modelToResponse(reserveModel);
     }
 
+
+    @Cacheable(
+            cacheNames = CacheName.WORKINGDAYSRESTAURANTCACHENAME,
+            key = "#id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
+    )
     public List<WorkingScheduleResponseDTO> getDaysWorkingOfRestaurantById(Integer id, Pageable pageable){
         if (! this.restaurantRepository.existsById(id))
             throw new ResourceNotFoundException();
@@ -184,6 +189,10 @@ public class RestaurantService {
                 .toList();
     }
 
+    @Cacheable(
+            cacheNames = CacheName.WORKINGDAYSRESTAURANTBYOWNERCACHENAME,
+            key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
+    )
     public List<WorkingScheduleResponseDTO> getDaysWorkingOfRestaurantByUserModel(UserModel userModel, Pageable pageable){
         RestaurantModel restaurantModel = this.restaurantRepository.findByOwnerModelUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
@@ -195,6 +204,11 @@ public class RestaurantService {
                 .toList();
     }
 
+
+    @Cacheable(
+            cacheNames = CacheName.EXCEPTIONSRESTAURANTBYOWNERCACHENAME,
+            key = "#userModel.id + '-' + #pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort"
+    )
     public List<ScheduleExceptionResponseDTO> getScheduleExceptionsOfRestaurantByUserModel(UserModel userModel, Pageable pageable){
         RestaurantModel restaurantModel = this.restaurantRepository.findByOwnerModelUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
@@ -227,6 +241,7 @@ public class RestaurantService {
                 .map(this.tableMapper::modelToResponse)
                 .toList();
     }
+
 
     @Cacheable(
             key = "#search + '-' + #pageable.pageNumber",
@@ -291,6 +306,10 @@ public class RestaurantService {
         return this.getDishesOfRestaurant(restaurantModel, true);
     }
 
+    @Cacheable(
+            cacheNames = CacheName.DISHESBYRESTAURANTSLUGCACHENAME,
+            key = "#slug"
+    )
     public DishesOfRestauranteResponseDTO getDishesOfRestaurantByRestaurantSlug(String slug){
         RestaurantModel restaurantModel = this.restaurantRepository.findBySlug(slug)
                 .orElseThrow(ResourceNotFoundException::new);
@@ -303,6 +322,11 @@ public class RestaurantService {
         return this.getDishesOfRestaurant(restaurantModel, true);
     }
 
+
+    @Cacheable(
+            cacheNames = CacheName.DISHESBYOWNERCACHENAME,
+            key = "#userModel.id"
+    )
     public DishesOfRestauranteResponseDTO getDishesOfRestaurantByUserModel(UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new);
@@ -311,6 +335,10 @@ public class RestaurantService {
         return this.getDishesOfRestaurant(ownerModel.getRestaurantModel(), false);
     }
 
+    @Cacheable(
+            cacheNames = CacheName.CLIENTSRESTAURANTBYOWNER,
+            key = "#userModel.id"
+    )
     public List<UserForOwnerResponse> getClientsOfRestaurant(UserModel userModel){
         OwnerModel ownerModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(NotPermitedException::new);
@@ -424,6 +452,10 @@ public class RestaurantService {
 
     }
 
+    @Cacheable(
+            cacheNames = CacheName.RESTAURANTBYOWNERCACHENAME,
+            key = "#userModel.id"
+    )
     public RestaurantResponseDTO getRestaurantOfOwner(UserModel userModel){
         RestaurantModel restaurantModel = this.ownerRepository.findByUserModelId(userModel.getId())
                 .orElseThrow(UserIsNotOwnerException::new)

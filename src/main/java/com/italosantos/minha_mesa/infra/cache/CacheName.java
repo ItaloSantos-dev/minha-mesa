@@ -14,4 +14,13 @@ public class CacheName {
     public final static String DASHBOARDRESTAURANTCACHENAME = "dashboard-restaurant";
     public final static String TABLESOFRESTAURANTCACHENAME = "tables-restaurant";
     public final static String RESTAURANTSEARCHEDCACHENAME = "restaurant-search";
+    public final static String WORKINGDAYSRESTAURANTCACHENAME = "working-days-by-restaurant-id";
+    public final static String WORKINGDAYSRESTAURANTBYOWNERCACHENAME = "working-days-by-owner";
+    public final static String EXCEPTIONSRESTAURANTBYOWNERCACHENAME = "exceptions-by-owner";
+    public final static String DISHESBYRESTAURANTSLUGCACHENAME = "dishes-by-restaurant-slug";
+    public final static String DISHESBYOWNERCACHENAME = "dishes-by-owner";
+    public final static String CLIENTSRESTAURANTBYOWNER = "clients-by-owner";
+    public final static String RESTAURANTBYOWNERCACHENAME = "restaurant-by-owner";
+
+
 }

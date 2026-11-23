@@ -1,9 +1,14 @@
 package com.italosantos.minha_mesa.infra.cache;
 
+import com.italosantos.minha_mesa.dto.dish.DishResponseDTO;
+import com.italosantos.minha_mesa.dto.dish.DishesOfRestauranteResponseDTO;
 import com.italosantos.minha_mesa.dto.reserve.ReserveResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.RestaurantResponseDTO;
 import com.italosantos.minha_mesa.dto.restaurant.dashboard.DashboardRestaurantResponseDTO;
+import com.italosantos.minha_mesa.dto.schedule_exception.ScheduleExceptionResponseDTO;
 import com.italosantos.minha_mesa.dto.table.TableResponseDTO;
+import com.italosantos.minha_mesa.dto.user.UserForOwnerResponse;
+import com.italosantos.minha_mesa.dto.working_schedule.WorkingScheduleResponseDTO;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -69,7 +74,135 @@ public class RedisCacheConfig {
                         CacheName.RESTAURANTSEARCHEDCACHENAME,
                         this.restaurantListCacheConfig(defaultConfig)
                 )
+                .withCacheConfiguration(
+                        CacheName.WORKINGDAYSRESTAURANTCACHENAME,
+                        this.workingDayListCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        CacheName.WORKINGDAYSRESTAURANTBYOWNERCACHENAME,
+                        this.workingDayListCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        CacheName.EXCEPTIONSRESTAURANTBYOWNERCACHENAME,
+                        this.scheduleExceptionListCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        CacheName.DISHESBYRESTAURANTSLUGCACHENAME,
+                        this.dishesOfOwnerCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        CacheName.DISHESBYOWNERCACHENAME,
+                        this.dishesOfOwnerCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        CacheName.CLIENTSRESTAURANTBYOWNER,
+                        this.userForOwnerListCacheConfig(defaultConfig)
+                )
+                .withCacheConfiguration(
+                        CacheName.RESTAURANTBYOWNERCACHENAME,
+                        this.restaurantCacheConfig(defaultConfig)
+                )
                 .build();
+    }
+
+    private RedisCacheConfiguration dishesOfOwnerCacheConfig(RedisCacheConfiguration defaultConfig){
+
+        JavaType dishesOfRestaurantType =
+                this.objectMapper.getTypeFactory()
+                        .constructType(
+                                DishesOfRestauranteResponseDTO.class
+                        );
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> dishesOfRestaurantSerializer =
+                new JacksonJsonRedisSerializer<>(
+                        this.objectMapper,
+                        dishesOfRestaurantType
+                );
+
+        return
+                defaultConfig.serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(dishesOfRestaurantSerializer)
+                );
+    }
+
+    private RedisCacheConfiguration userForOwnerListCacheConfig(RedisCacheConfiguration defaultConfig){
+        JavaType userForOwnerType =
+                this.objectMapper.getTypeFactory()
+                        .constructCollectionType(
+                                List.class,
+                                UserForOwnerResponse.class
+                        );
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> userForOwnerSerializer =
+                new JacksonJsonRedisSerializer<>(
+                        this.objectMapper,
+                        userForOwnerType
+                );
+
+        return
+                defaultConfig.serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(userForOwnerSerializer)
+                );
+    }
+
+    private RedisCacheConfiguration dishesListCacheConfig(RedisCacheConfiguration defaultConfig){
+        JavaType dishesType =
+                this.objectMapper.getTypeFactory()
+                        .constructCollectionType(
+                                List.class,
+                                DishResponseDTO.class
+                        );
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> dishesSerializer =
+                new JacksonJsonRedisSerializer<>(
+                        this.objectMapper,
+                        dishesType
+                );
+
+        return
+                defaultConfig.serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(dishesSerializer)
+                );
+    }
+
+    private RedisCacheConfiguration scheduleExceptionListCacheConfig(RedisCacheConfiguration defaultConfig){
+        JavaType scheduleExceptionsType =
+                this.objectMapper.getTypeFactory()
+                        .constructCollectionType(
+                                List.class,
+                                ScheduleExceptionResponseDTO.class
+                        );
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> scheduleExceptionsSerializer =
+                new JacksonJsonRedisSerializer<>(
+                        this.objectMapper,
+                        scheduleExceptionsType
+                );
+
+        return
+                defaultConfig.serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(scheduleExceptionsSerializer)
+                );
+    }
+
+    private RedisCacheConfiguration workingDayListCacheConfig(RedisCacheConfiguration defaultConfig){
+        JavaType workingDaysType =
+                this.objectMapper.getTypeFactory()
+                        .constructCollectionType(
+                                List.class,
+                                WorkingScheduleResponseDTO.class
+                        );
+        JacksonJsonRedisSerializer<List<ReserveResponseDTO>> workingDaysSerializer =
+                new JacksonJsonRedisSerializer<>(
+                        this.objectMapper,
+                        workingDaysType
+                );
+
+        return
+                defaultConfig.serializeValuesWith(
+                        RedisSerializationContext.SerializationPair
+                                .fromSerializer(workingDaysSerializer)
+                );
     }
 
     private RedisCacheConfiguration reserveListCacheConfig(RedisCacheConfiguration defaultConfig){
